@@ -1,0 +1,251 @@
+{
+  "captured_at_utc": "2026-10-22T13:19:16.325752+00:00",
+  "source_kind": "validation_copy",
+  "source_process_id": 18184,
+  "session_id": "1833246157:5042182:1:00fbebb199cc48a28307345808e94fde",
+  "connected": true,
+  "coverage": {
+    "discovery_complete": true,
+    "generated_chunks_visited": 8987,
+    "charted_chunks_scanned": 3034,
+    "indexed_entities": 1962,
+    "resource_chunks": 144,
+    "scope": "charted terrain; player-force entities; inventories exclude belts, inserter hands, pipes and player inventories"
+  },
+  "lua_errors": {},
+  "topics": {
+    "status": {
+      "tick": 5058240,
+      "age_seconds": 2.388252,
+      "stale": false
+    },
+    "production": {
+      "tick": 5058245,
+      "age_seconds": 2.317892,
+      "stale": false
+    },
+    "machines": {
+      "tick": 5057934,
+      "age_seconds": 7.5079657,
+      "stale": false
+    },
+    "power": {
+      "tick": 5058241,
+      "age_seconds": 2.4197735,
+      "stale": false
+    },
+    "logistics": {
+      "tick": 5058053,
+      "age_seconds": 5.5524907,
+      "stale": false
+    },
+    "research": {
+      "tick": 5058082,
+      "age_seconds": 5.0704499,
+      "stale": false
+    },
+    "resources": {
+      "tick": 5057782,
+      "age_seconds": 10.0667961,
+      "stale": false
+    }
+  },
+  "counts": {
+    "assemblers": 215,
+    "furnaces": 161,
+    "machine_status_groups": 104,
+    "production_rows": 135,
+    "electric_networks": 7,
+    "logistic_networks": 1,
+    "trains": 2,
+    "requesters": 3,
+    "resource_chunk_rows": 149
+  },
+  "power_watts": {
+    "production": 33522931.15,
+    "consumption": 33522930.778918456
+  },
+  "active_production_examples": [
+    {
+      "name": "steam",
+      "kind": "fluid",
+      "quality": "normal",
+      "surface": "nauvis",
+      "force": "player",
+      "produced_per_minute": 32765.747534910835,
+      "consumed_per_minute": 32767.83961518605,
+      "produced_per_minute_5s": 33032.13652038575,
+      "consumed_per_minute_5s": 33031.87046813965,
+      "produced_per_minute_10m": 41819.75533696174,
+      "consumed_per_minute_10m": 40383.12906090418
+    },
+    {
+      "name": "water",
+      "kind": "fluid",
+      "quality": "normal",
+      "surface": "nauvis",
+      "force": "player",
+      "produced_per_minute": 5762.740592956543,
+      "consumed_per_minute": 5766.496296882629,
+      "produced_per_minute_5s": 6145.27552986145,
+      "consumed_per_minute_5s": 6183.153702020645,
+      "produced_per_minute_10m": 31485.475730895996,
+      "consumed_per_minute_10m": 30592.87574996948
+    },
+    {
+      "name": "iron-ore",
+      "kind": "item",
+      "quality": "normal",
+      "surface": "nauvis",
+      "force": "player",
+      "produced_per_minute": 1562.5,
+      "consumed_per_minute": 1564.5,
+      "produced_per_minute_5s": 1452,
+      "consumed_per_minute_5s": 1488,
+      "produced_per_minute_10m": 1514.8250000000003,
+      "consumed_per_minute_10m": 1517.6999999999998
+    },
+    {
+      "name": "iron-plate",
+      "kind": "item",
+      "quality": "normal",
+      "surface": "nauvis",
+      "force": "player",
+      "produced_per_minute": 1545,
+      "consumed_per_minute": 1562.9999999999998,
+      "produced_per_minute_5s": 1475.9999999999998,
+      "consumed_per_minute_5s": 1967.9999999999998,
+      "produced_per_minute_10m": 1499.6966666666667,
+      "consumed_per_minute_10m": 1513.41
+    },
+    {
+      "name": "copper-cable",
+      "kind": "item",
+      "quality": "normal",
+      "surface": "nauvis",
+      "force": "player",
+      "produced_per_minute": 1419.9999999999998,
+      "consumed_per_minute": 1416.9999999999998,
+      "produced_per_minute_5s": 1488,
+      "consumed_per_minute_5s": 1524,
+      "produced_per_minute_10m": 1401.6,
+      "consumed_per_minute_10m": 1392.58
+    },
+    {
+      "name": "stone",
+      "kind": "item",
+      "quality": "normal",
+      "surface": "nauvis",
+      "force": "player",
+      "produced_per_minute": 1060.4999999999998,
+      "consumed_per_minute": 1051,
+      "produced_per_minute_5s": 1044,
+      "consumed_per_minute_5s": 1056,
+      "produced_per_minute_10m": 1025.025,
+      "consumed_per_minute_10m": 1026.7250000000001
+    },
+    {
+      "name": "copper-plate",
+      "kind": "item",
+      "quality": "normal",
+      "surface": "nauvis",
+      "force": "player",
+      "produced_per_minute": 746,
+      "consumed_per_minute": 746.3333333333334,
+      "produced_per_minute_5s": 720,
+      "consumed_per_minute_5s": 792,
+      "produced_per_minute_10m": 749.8533333333334,
+      "consumed_per_minute_10m": 751.3299999999999
+    },
+    {
+      "name": "copper-ore",
+      "kind": "item",
+      "quality": "normal",
+      "surface": "nauvis",
+      "force": "player",
+      "produced_per_minute": 751.6666666666666,
+      "consumed_per_minute": 746,
+      "produced_per_minute_5s": 768,
+      "consumed_per_minute_5s": 720,
+      "produced_per_minute_10m": 750.3066666666667,
+      "consumed_per_minute_10m": 749.8533333333334
+    },
+    {
+      "name": "sulfuric-acid",
+      "kind": "fluid",
+      "quality": "normal",
+      "surface": "nauvis",
+      "force": "player",
+      "produced_per_minute": 150,
+      "consumed_per_minute": 525,
+      "produced_per_minute_5s": 0,
+      "consumed_per_minute_5s": 660,
+      "produced_per_minute_10m": 390,
+      "consumed_per_minute_10m": 492.9666666666667
+    },
+    {
+      "name": "electronic-circuit",
+      "kind": "item",
+      "quality": "normal",
+      "surface": "nauvis",
+      "force": "player",
+      "produced_per_minute": 408.66666666666663,
+      "consumed_per_minute": 358,
+      "produced_per_minute_5s": 431.99999999999994,
+      "consumed_per_minute_5s": 936.0000000000001,
+      "produced_per_minute_10m": 338.0016666666667,
+      "consumed_per_minute_10m": 311.1466666666667
+    }
+  ],
+  "http_cache_test": {
+    "concurrent_requests": 48,
+    "mcp_calls_before": 471,
+    "mcp_calls_after": 471,
+    "mcp_delta": 0
+  },
+  "sessions": {
+    "processes": [
+      {
+        "pid": 22824,
+        "executable": "D:\\SteamLibrary\\steamapps\\common\\Factorio\\bin\\x64\\Factorio.exe",
+        "window": "Factorio: Space Age 2.0.77",
+        "telemetry_associated": false
+      },
+      {
+        "pid": 18184,
+        "executable": "D:\\SteamLibrary\\steamapps\\common\\Factorio\\bin\\x64\\Factorio.exe",
+        "window": "Factorio Monitor — TELEMETRY VALIDATION COPY",
+        "telemetry_associated": true
+      }
+    ],
+    "telemetry_session": "1833246157:5042182:1:00fbebb199cc48a28307345808e94fde",
+    "source_kind": "validation_copy",
+    "mcp_connected": true
+  },
+  "live_collector_profile": {
+    "method": "LuaProfiler mean over 300 live game ticks; includes script export call, not external gateway work",
+    "last_samples_ms": [
+      0.221131,
+      0.141206,
+      0.183974,
+      0.177647,
+      0.146758,
+      0.202889,
+      0.154469,
+      0.196321,
+      0.20706,
+      0.170637,
+      0.23308,
+      0.191344,
+      0.184631,
+      0.227824,
+      0.175017,
+      0.189812,
+      0.218921,
+      0.185163,
+      0.246488,
+      0.126998
+    ],
+    "sample_mean_ms": 0.1890685
+  }
+}

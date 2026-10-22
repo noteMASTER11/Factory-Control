@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "before": {
+    "packets": 4,
+    "revision": 3036,
+    "session": "3807324555:31832443:2:fadf7ee1aa914058aefc7ba7542079f3",
+    "historySamples": 303,
+    "productionHistorySamples": 213,
+    "stockHistorySamples": 3,
+    "logisticsHistorySamples": 3,
+    "researchHistorySamples": 90,
+    "models": {
+      "overview": 4,
+      "energy": 4,
+      "production": 4,
+      "logistics": 3,
+      "research": 4,
+      "damage": 4
+    },
+    "activeView": "research",
+    "renders": {
+      "sessions": 2,
+      "overview": 4,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "research": 1,
+      "damage": 0
+    },
+    "visible": "research",
+    "mutations": {
+      "overview": 0,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "damage": 0,
+      "sessions": 0
+    }
+  },
+  "after": {
+    "packets": 7,
+    "revision": 3066,
+    "session": "3807324555:31832443:2:fadf7ee1aa914058aefc7ba7542079f3",
+    "historySamples": 306,
+    "productionHistorySamples": 216,
+    "stockHistorySamples": 5,
+    "logisticsHistorySamples": 5,
+    "researchHistorySamples": 92,
+    "models": {
+      "overview": 7,
+      "energy": 7,
+      "production": 7,
+      "logistics": 5,
+      "research": 7,
+      "damage": 7
+    },
+    "activeView": "research",
+    "renders": {
+      "sessions": 2,
+      "overview": 4,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "research": 4,
+      "damage": 0
+    },
+    "visible": "research",
+    "mutations": {
+      "overview": 0,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "damage": 0,
+      "sessions": 0
+    }
+  },
+  "checks": [
+    "live research and background history",
+    "only active DOM renders",
+    "force/surface isolation",
+    "pack and queue selection",
+    "both resolutions",
+    "modal 10 real seconds",
+    "no repeated-hit popup",
+    "red theme and lamp",
+    "live reconstruction costs",
+    "return without a damage tab",
+    "theme resets on end",
+    "manual normal mode survives further attacks and navigation",
+    "muted reconstruction still live",
+    "restart restores alerts"
+  ]
+}

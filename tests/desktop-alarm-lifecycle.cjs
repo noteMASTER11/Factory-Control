@@ -1,0 +1,38 @@
+const {chromium}=require('D:/ChatGPT/Tools/playwright-runner/node_modules/playwright');
+const assert=require('node:assert/strict'),fs=require('node:fs'),http=require('node:http'),path=require('node:path');
+(async()=>{
+ const web=path.resolve('src/Factorio.Desktop/Web'),fixture=`<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="typography.css"><link rel="stylesheet" href="app.css"><link rel="stylesheet" href="theme.css"><link rel="stylesheet" href="combat.css"></head><body><div class="console"><button id="sound-toggle"></button><input id="sound-volume" type="range"><button id="combat-indicator"><span class="combat-lamp"></span><span id="combat-indicator-label"></span></button><div id="combat-modal" hidden><h2 id="combat-modal-title"></h2><div id="combat-modal-location"></div><div id="combat-modal-losses"></div><span id="combat-countdown"></span><button id="combat-assess"></button><button id="combat-dismiss"></button><button id="combat-normal"></button></div></div></body></html>`;
+ const server=http.createServer((request,response)=>{
+  const relative=decodeURIComponent(new URL(request.url,'http://localhost').pathname);
+  if(relative==='/__combat-lifecycle.html'){response.setHeader('Content-Type','text/html');response.end(fixture);return;}
+  const file=path.resolve(web,'.'+relative);if(!file.startsWith(web+path.sep)){response.writeHead(403).end();return;}
+  try{response.setHeader('Content-Type',({'.js':'text/javascript','.json':'application/json','.css':'text/css','.ogg':'audio/ogg','.woff2':'font/woff2'})[path.extname(file)]||'application/octet-stream');response.end(fs.readFileSync(file));}catch{response.writeHead(404).end();}
+ });await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const base='http://127.0.0.1:'+server.address().port;
+ const browser=await chromium.launch({headless:true,executablePath:'D:/ChatGPT/Tools/playwright/chromium-1243/chrome-win64/chrome.exe',args:['--autoplay-policy=no-user-gesture-required']});let page;const errors=[];
+ try{
+  page=await browser.newPage();
+  page.on('pageerror',error=>errors.push(error.message));await page.goto(base+'/__combat-lifecycle.html');
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.evaluate(async()=>{
+   const {Localization}=await import('./i18n.js'),{TerminalSound}=await import('./sound.js'),{CombatAlert}=await import('./combat-alert.js'),{FrameClock}=await import('./frame-clock.js');
+   const i18n=await Localization.load(),sound=new TerminalSound(i18n);sound.output.gain.value=0;sound.setVolume(.2);sound.setEnabled(true);sound.setChannels({...sound.channels,alarm:true});await sound.ready;await sound.background();
+   window.alarmNow=0;const clock=new FrameClock(30),alert=new CombatAlert(i18n,clock,()=>{},{sound,now:()=>window.alarmNow});
+   window.alarmFixture={sound,alert,clock,episodes:[],background:sound.backgroundSource};
+   window.attackStep=(now,id,active=true,fresh=true)=>{window.alarmNow=now;const f=window.alarmFixture;if(id){for(const e of f.episodes)e.active=false;let episode=f.episodes.find(e=>e.id===id);if(!episode)f.episodes.push(episode={id,surface:'nauvis',force:'player',destroyed:1});episode.active=active;}else if(!active)for(const e of f.episodes)e.active=false;f.alert.accept({session:'isolated-lifecycle',available:true,fresh,active:f.episodes.some(e=>e.active),episodes:f.episodes.map(e=>({...e}))});f.alert.draw();};
+  });
+  const count=()=>page.evaluate(()=>window.alarmFixture.sound.played.alarm);
+  await page.evaluate(()=>attackStep(0,'1'));await page.waitForFunction(()=>window.alarmFixture.sound.played.alarm===1);assert(await page.locator('#combat-modal').isVisible());assert.equal(await page.locator('#combat-indicator').getAttribute('data-lit'),'true');
+  await page.evaluate(()=>attackStep(700));assert.equal(await page.locator('#combat-indicator').getAttribute('data-lit'),'false');
+  await page.evaluate(()=>attackStep(1200,'2'));assert.equal(await page.evaluate(()=>window.alarmFixture.alert.state.episode.id),'1');assert.equal(await count(),1);
+  await page.evaluate(()=>attackStep(1400,null,false));assert.equal(await page.evaluate(()=>window.alarmFixture.sound.alarmSource),null);assert.equal(await page.evaluate(()=>window.alarmFixture.sound.gate.busy),false);assert.equal(await page.locator('#combat-indicator').getAttribute('data-lit'),'false');
+  await page.waitForFunction(()=>[...window.alarmFixture.sound.sources].every(s=>s.channel!=='alarm'));assert(await page.evaluate(()=>window.alarmFixture.sound.backgroundSource===window.alarmFixture.background));assert(await page.locator('#combat-modal').isVisible(),'Attack end does not restart or extend the original ten-second window');
+  await page.evaluate(()=>attackStep(10000));assert(await page.locator('#combat-modal').isHidden());await page.evaluate(()=>attackStep(14999));assert(await page.locator('#combat-modal').isHidden());
+  await page.evaluate(()=>attackStep(15000,'3'));await page.waitForFunction(()=>window.alarmFixture.sound.played.alarm===2);assert.equal(await page.evaluate(()=>window.alarmFixture.alert.state.episode.id),'3');
+  await page.locator('#combat-dismiss').click();await page.evaluate(()=>attackStep(15500,'4'));assert(await page.locator('#combat-modal').isHidden());await page.evaluate(()=>attackStep(17000,null,false));assert.equal(await page.evaluate(()=>window.alarmFixture.sound.alarmSource),null);
+  await page.evaluate(()=>attackStep(29999));assert(await page.locator('#combat-modal').isHidden());await page.evaluate(()=>attackStep(30000));assert(await page.locator('#combat-modal').isVisible());assert.equal(await count(),2,'Ended notifications never play an attack alarm');
+  await page.evaluate(()=>attackStep(31000,'5'));await page.evaluate(()=>attackStep(40000));assert(await page.locator('#combat-modal').isHidden());await page.evaluate(()=>attackStep(44999));assert(await page.locator('#combat-modal').isHidden());await page.evaluate(()=>attackStep(45000));await page.waitForFunction(()=>window.alarmFixture.sound.played.alarm===3);
+  await page.locator('#combat-normal').click();assert(await page.locator('#combat-modal').isHidden());assert.equal(await page.evaluate(()=>window.alarmFixture.sound.alarmSource),null);assert(!await page.locator('.console').evaluate(el=>el.classList.contains('threat-active')));const lit=await page.locator('#combat-indicator').getAttribute('data-lit');await page.evaluate(()=>attackStep(45600));assert.notEqual(await page.locator('#combat-indicator').getAttribute('data-lit'),lit,'Manual normal mode keeps the actual attack lamp blinking');
+  await page.evaluate(()=>attackStep(46000,null,false));assert.equal(await page.locator('#combat-indicator').getAttribute('data-lit'),'false');await page.evaluate(()=>attackStep(47000,'6',true,false));assert.equal(await page.locator('#combat-indicator').getAttribute('data-lit'),'false','Stale telemetry cannot confirm a blinking attack');assert.equal(await count(),3);assert.deepEqual(errors,[]);
+  fs.writeFileSync('D:/ChatGPT/Projects/FactorioMonitor/docs/evidence/browser-alarm-lifecycle.json',JSON.stringify({passed:true,alarms:3,checks:['real Opus playback stops immediately on attack end','pending load cancellation in sound-channels.cjs','background source unchanged','original ten-second window','15-second opening-to-opening cooldown','new attacks coalesce','no ongoing-episode popup replay','ended notification is silent','active lamp blinks during manual normal mode','inactive/stale lamp is off','no overlap']},null,2));console.log('Attack alarm lifecycle in Chromium: all checks passed');
+ }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
+})().catch(error=>{console.error(error);process.exitCode=1;});

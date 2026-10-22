@@ -1,0 +1,327 @@
+{
+  "passed": true,
+  "probe": {
+    "pixels": 3132,
+    "restored": true,
+    "semanticUnchanged": true,
+    "selected": [
+      {
+        "original": "п",
+        "replacement": "N",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "Д",
+        "replacement": "D",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "О",
+        "replacement": "o",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "е",
+        "replacement": "E",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "Ы",
+        "replacement": "b",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "В",
+        "replacement": "B",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "C",
+        "replacement": "(",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "ы",
+        "replacement": "b",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "E",
+        "replacement": "e",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "Н",
+        "replacement": "H",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "н",
+        "replacement": "H",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "Р",
+        "replacement": "P",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "К",
+        "replacement": "K",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "Э",
+        "replacement": "e",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "з",
+        "replacement": "s",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "Ы",
+        "replacement": "b",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "Н",
+        "replacement": "H",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "Л",
+        "replacement": "l",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "е",
+        "replacement": "E",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "П",
+        "replacement": "N",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "1",
+        "replacement": "!",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "л",
+        "replacement": "l",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "F",
+        "replacement": "f",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "Ь",
+        "replacement": "b",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "Т",
+        "replacement": "t",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "е",
+        "replacement": "E",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "В",
+        "replacement": "B",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "О",
+        "replacement": "o",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "Н",
+        "replacement": "H",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "Ж",
+        "replacement": "#",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "О",
+        "replacement": "o",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "5",
+        "replacement": "s",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "F",
+        "replacement": "f",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "с",
+        "replacement": "c",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "ы",
+        "replacement": "b",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "т",
+        "replacement": "t",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "5",
+        "replacement": "s",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "0",
+        "replacement": "D",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "8",
+        "replacement": "B",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "2",
+        "replacement": "R",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "0",
+        "replacement": "D",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "0",
+        "replacement": "D",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "0",
+        "replacement": "D",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "0",
+        "replacement": "D",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "0",
+        "replacement": "D",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "0",
+        "replacement": "D",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "ь",
+        "replacement": "b",
+        "input": false,
+        "hidden": false
+      },
+      {
+        "original": "л",
+        "replacement": "l",
+        "input": false,
+        "hidden": false
+      }
+    ],
+    "offFrequency": true,
+    "offAmount": true,
+    "paused": true
+  },
+  "live": {
+    "active": true,
+    "characters": 48,
+    "pulses": 1,
+    "painted": 48,
+    "amount": 0.03,
+    "minInterval": 2166.6666666666665,
+    "maxInterval": 4333.333333333333,
+    "next": 10989.45107581799
+  },
+  "checks": [
+    "similar ASCII choices",
+    "visible glyph replacement",
+    "jitter",
+    "exact pixel restoration",
+    "semantic text unchanged",
+    "visible screen only",
+    "inputs and buttons excluded",
+    "bounded 48-character paint budget",
+    "frequency zero",
+    "amount zero",
+    "motion/transition pause",
+    "live Pixi upload",
+    "CRT off cancels",
+    "settings persistence"
+  ]
+}

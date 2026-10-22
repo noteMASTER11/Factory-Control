@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "executable": "D:\\ChatGPT\\Projects\\FactorioMonitor\\dist\\FactoryControl.exe",
+  "bytes": 179835904,
+  "sha256": "240de69c2dd9fc6d8f4860d9f8c1d453f468bc9f5633a03db907e94cfcbec26d",
+  "files": [
+    "FactoryControl.exe"
+  ],
+  "bridge": {
+    "service": "bridge",
+    "process_id": 23168,
+    "hosting": "desktop",
+    "state": "ready",
+    "source_kind": "game",
+    "directory": "D:\\ChatGPT\\Projects\\FactorioMonitor\\Data\\LiveGame\\script-output\\factory-telemetry",
+    "session_id": "3807324555:31832443:2:62e0d61f708849b88df43c4d98054103"
+  },
+  "gateway": {
+    "service": "gateway",
+    "process_id": 23168,
+    "hosting": "desktop",
+    "version": "0.1.0"
+  },
+  "connected": true,
+  "telemetry_ready": true,
+  "source_process_id": 17268,
+  "topics": [
+    "status",
+    "power",
+    "production",
+    "machines",
+    "logistics",
+    "research",
+    "resources",
+    "combat"
+  ],
+  "native_cache_exists": true,
+  "ports_released_after_close": true
+}

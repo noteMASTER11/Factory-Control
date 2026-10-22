@@ -1,0 +1,2 @@
+const assert=require('node:assert/strict');
+(async()=>{const {makeGlitchBlocks,insideQuad}=await import('../src/Factorio.Desktop/Web/vfx/glitch-geometry.js');for(let i=0;i<100;i++){const blocks=makeGlitchBlocks();assert(blocks.length>=2&&blocks.length<=4);for(const b of blocks){assert.equal(b.points.length,4);assert(Math.abs(b.shift)>=.55&&Math.abs(b.shift)<=1);const x=b.points.reduce((n,p)=>n+p[0],0)/4,y=b.points.reduce((n,p)=>n+p[1],0)/4;assert(insideQuad(x,y,b.points));assert(!insideQuad(-1,-1,b.points));}}console.log('Random quad glitches: all checks passed');})();

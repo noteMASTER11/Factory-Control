@@ -1,0 +1,7 @@
+const assert=require('node:assert/strict');
+(async()=>{const {TelemetryEngine}=await import('../src/Factorio.Desktop/Web/telemetry-engine.js');const e=new TelemetryEngine();const packet=(tick,session='a')=>({status:{session_id:session,revision:tick,topics:{research:{tick,written_at:new Date().toISOString(),payload:{data:{forces:[{force:'player',current:'research-speed-1',level:1,progress:.2,queue:[],ingredients:[]}]}}}}},sessions:{processes:[]}});
+ e.accept(packet(100));e.select('research');assert.equal(e.frame().view,'research');assert.equal(e.frame().model.current.name,'research-speed-1','Research-only sessions must work without a surface');
+ e.select('energy');const before=e.describe().models.research;e.accept(packet(400));e.accept(packet(400));assert.equal(e.describe().researchHistorySamples,2);assert(e.describe().models.research>before);assert(!JSON.stringify(e.frame()).includes('etaSeconds'),'Inactive research model must not be sent');
+ for(let i=1;i<=500;i++)e.accept(packet(400+i*300));assert(e.describe().researchHistorySamples<=450);
+ e.accept(packet(1,'b'));assert.equal(e.describe().researchHistorySamples,1);const p=packet(2,'b');p.researchHistory=[{session_id:'a',tick:1,payload:{data:{forces:[]}}}];e.accept(p);assert.equal(e.describe().researchHistorySamples,2);console.log('Research background processing: all checks passed');
+})().catch(e=>{console.error(e);process.exitCode=1;});

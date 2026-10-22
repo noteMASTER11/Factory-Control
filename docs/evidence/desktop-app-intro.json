@@ -1,0 +1,798 @@
+{
+  "passed": true,
+  "early": {
+    "intro": {
+      "active": true,
+      "stage": "boot",
+      "frames": 47,
+      "elapsed": 1526.2999999970198,
+      "readyAt": 88.10000000149012,
+      "tasks": {
+        "locale": {
+          "state": "ready",
+          "at": 30.5
+        },
+        "fonts": {
+          "state": "ready",
+          "at": 0.6999999955296516
+        },
+        "assets": {
+          "state": "ready",
+          "at": 12.600000001490116
+        },
+        "profile": {
+          "state": "ready",
+          "at": 33.5
+        },
+        "renderer": {
+          "state": "ready",
+          "at": 85.79999999701977
+        },
+        "audio": {
+          "state": "ready",
+          "at": 206.89999999850988
+        },
+        "worker": {
+          "state": "ready",
+          "at": 216.5
+        },
+        "gateway": {
+          "state": "ready",
+          "at": 196.60000000149012
+        },
+        "interface": {
+          "state": "ready",
+          "at": 88.10000000149012
+        }
+      },
+      "gearRows": 26,
+      "asciiCaptures": 0
+    },
+    "packets": 1,
+    "played": {
+      "alarm": 0,
+      "button": 0,
+      "background": 0,
+      "screenshow": 0,
+      "intro": 1,
+      "hover1": 0,
+      "hover2": 0,
+      "hover3": 0,
+      "hover4": 0,
+      "hover5": 0
+    },
+    "duration": 2,
+    "gear": 776,
+    "visibleLogs": 3
+  },
+  "normal": {
+    "intro": {
+      "active": false,
+      "stage": "done",
+      "frames": 137,
+      "elapsed": 4601.60000000149,
+      "readyAt": 88.10000000149012,
+      "finishedAt": 4514.10000000149,
+      "tasks": {
+        "locale": {
+          "state": "ready",
+          "at": 30.5
+        },
+        "fonts": {
+          "state": "ready",
+          "at": 0.6999999955296516
+        },
+        "assets": {
+          "state": "ready",
+          "at": 12.600000001490116
+        },
+        "profile": {
+          "state": "ready",
+          "at": 33.5
+        },
+        "renderer": {
+          "state": "ready",
+          "at": 85.79999999701977
+        },
+        "audio": {
+          "state": "ready",
+          "at": 206.89999999850988
+        },
+        "worker": {
+          "state": "ready",
+          "at": 216.5
+        },
+        "gateway": {
+          "state": "ready",
+          "at": 196.60000000149012
+        },
+        "interface": {
+          "state": "ready",
+          "at": 88.10000000149012
+        }
+      },
+      "gearRows": 26,
+      "asciiCaptures": 1
+    },
+    "sound": {
+      "enabled": true,
+      "channels": {
+        "background": true,
+        "button": true,
+        "hover": true,
+        "screenshow": true,
+        "intro": true,
+        "alarm": true
+      },
+      "booting": false,
+      "volume": 0.2,
+      "background": true,
+      "busy": false,
+      "state": "running",
+      "failed": false,
+      "played": {
+        "alarm": 0,
+        "button": 0,
+        "background": 1,
+        "screenshow": 0,
+        "intro": 1,
+        "hover1": 0,
+        "hover2": 0,
+        "hover3": 0,
+        "hover4": 0,
+        "hover5": 0
+      },
+      "buffers": {
+        "button": {
+          "duration": 0.24,
+          "sampleRate": 48000
+        },
+        "hover5": {
+          "duration": 0.3260625,
+          "sampleRate": 48000
+        },
+        "hover3": {
+          "duration": 0.12475,
+          "sampleRate": 48000
+        },
+        "hover1": {
+          "duration": 0.22877083333333334,
+          "sampleRate": 48000
+        },
+        "hover4": {
+          "duration": 0.20352083333333335,
+          "sampleRate": 48000
+        },
+        "hover2": {
+          "duration": 0.18045833333333333,
+          "sampleRate": 48000
+        },
+        "screenshow": {
+          "duration": 0.8500625,
+          "sampleRate": 48000
+        },
+        "intro": {
+          "duration": 2,
+          "sampleRate": 48000
+        },
+        "background": {
+          "duration": 30,
+          "sampleRate": 48000
+        },
+        "alarm": {
+          "duration": 28.9436875,
+          "sampleRate": 48000
+        }
+      }
+    },
+    "stages": [
+      {
+        "stage": "power",
+        "elapsed": 94.19999999552965
+      },
+      {
+        "stage": "power",
+        "elapsed": 132.29999999701977
+      },
+      {
+        "stage": "power",
+        "elapsed": 152
+      },
+      {
+        "stage": "power",
+        "elapsed": 181.10000000149012
+      },
+      {
+        "stage": "power",
+        "elapsed": 214.39999999850988
+      },
+      {
+        "stage": "power",
+        "elapsed": 247.69999999552965
+      },
+      {
+        "stage": "power",
+        "elapsed": 281
+      },
+      {
+        "stage": "power",
+        "elapsed": 314.29999999701977
+      },
+      {
+        "stage": "power",
+        "elapsed": 347.69999999552965
+      },
+      {
+        "stage": "power",
+        "elapsed": 381.1000000014901
+      },
+      {
+        "stage": "boot",
+        "elapsed": 414.3999999985099
+      },
+      {
+        "stage": "boot",
+        "elapsed": 447.69999999552965
+      },
+      {
+        "stage": "boot",
+        "elapsed": 481
+      },
+      {
+        "stage": "boot",
+        "elapsed": 514.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 547.6999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 581
+      },
+      {
+        "stage": "boot",
+        "elapsed": 614.3999999985099
+      },
+      {
+        "stage": "boot",
+        "elapsed": 647.7999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 681
+      },
+      {
+        "stage": "boot",
+        "elapsed": 714.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 747.6000000014901
+      },
+      {
+        "stage": "boot",
+        "elapsed": 781.1000000014901
+      },
+      {
+        "stage": "boot",
+        "elapsed": 814.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 847.6000000014901
+      },
+      {
+        "stage": "boot",
+        "elapsed": 881
+      },
+      {
+        "stage": "boot",
+        "elapsed": 914.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 947.6999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 981
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1014.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1047.6000000014901
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1081
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1114.1999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1147.6000000014901
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1181.1000000014901
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1214.1999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1247.6999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1281
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1314.5
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1348.1999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1380.8999999985099
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1414.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1447.6999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1481
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1514.3999999985099
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1547.6999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1581
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1614.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1647.5
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1681
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1714.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1747.6000000014901
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1781
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1814.1999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1847.6999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1881
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1914.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1947.6999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 1981.1000000014901
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2014.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2047.6999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2081
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2114.1999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2147.6999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2180.89999999851
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2214.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2247.60000000149
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2281
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2314.39999999851
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2347.60000000149
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2381
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2414.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2447.60000000149
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2481.10000000149
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2514.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2547.60000000149
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2580.89999999851
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2614.39999999851
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2647.5
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2682.7999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2714.39999999851
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2747.60000000149
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2780.89999999851
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2814.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2847.60000000149
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2880.89999999851
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2914.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2947.5
+      },
+      {
+        "stage": "boot",
+        "elapsed": 2980.89999999851
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3014.1999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3047.6999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3080.89999999851
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3114.1999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3147.60000000149
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3181
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3214.39999999851
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3247.60000000149
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3281
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3314.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3347.5
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3381
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3414.1999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3447.60000000149
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3481
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3514.1999999955297
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3547.5
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3580.89999999851
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3614.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3647.60000000149
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3681
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3714.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3747.60000000149
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3781
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3814.2999999970198
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3847.60000000149
+      },
+      {
+        "stage": "boot",
+        "elapsed": 3880.89999999851
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 3916.60000000149
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 3947.6999999955297
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 3981.39999999851
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4014.6999999955297
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4047.89999999851
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4081.39999999851
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4114.60000000149
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4147.89999999851
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4181.29999999702
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4214.60000000149
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4247.89999999851
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4281.5
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4314.5
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4347.89999999851
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4381.29999999702
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4414.5
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4447.79999999702
+      },
+      {
+        "stage": "reveal",
+        "elapsed": 4481
+      },
+      {
+        "stage": "done",
+        "elapsed": 4514.29999999702
+      }
+    ]
+  },
+  "reduced": {
+    "active": false,
+    "stage": "done",
+    "frames": 136,
+    "elapsed": 4960.69999999553,
+    "readyAt": 80.79999999701977,
+    "finishedAt": 4524.60000000149,
+    "tasks": {
+      "locale": {
+        "state": "ready",
+        "at": 20.69999999552965
+      },
+      "fonts": {
+        "state": "ready",
+        "at": 189.5
+      },
+      "assets": {
+        "state": "ready",
+        "at": 17.399999998509884
+      },
+      "profile": {
+        "state": "ready",
+        "at": 29.19999999552965
+      },
+      "renderer": {
+        "state": "ready",
+        "at": 78
+      },
+      "audio": {
+        "state": "ready",
+        "at": 167.79999999701977
+      },
+      "worker": {
+        "state": "ready",
+        "at": 210.60000000149012
+      },
+      "gateway": {
+        "state": "ready",
+        "at": 192.5
+      },
+      "interface": {
+        "state": "ready",
+        "at": 80.79999999701977
+      }
+    },
+    "gearRows": 26,
+    "asciiCaptures": 0
+  },
+  "failure": {
+    "stage": "failed",
+    "retry": true,
+    "text": "НЕ УДАЛОСЬ ЗАГРУЗИТЬ ТЕРМИНАЛ",
+    "gateway": "degraded"
+  },
+  "checks": [
+    "4.5-second sequence",
+    "real game gear in ASCII",
+    "localized terminal rows",
+    "real initialization and telemetry in parallel",
+    "first two seconds decoded",
+    "one intro sound",
+    "shared channel/volume",
+    "no double tab animation",
+    "background deferred",
+    "single 30 FPS clock",
+    "top-down real UI reveal",
+    "offline/fatal retry component",
+    "independent mute",
+    "reduced motion",
+    "1152 and 1024 layouts"
+  ]
+}

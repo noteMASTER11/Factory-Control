@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "alarms": 3,
+  "checks": [
+    "real Opus playback stops immediately on attack end",
+    "pending load cancellation in sound-channels.cjs",
+    "background source unchanged",
+    "original ten-second window",
+    "15-second opening-to-opening cooldown",
+    "new attacks coalesce",
+    "no ongoing-episode popup replay",
+    "ended notification is silent",
+    "active lamp blinks during manual normal mode",
+    "inactive/stale lamp is off",
+    "no overlap"
+  ]
+}

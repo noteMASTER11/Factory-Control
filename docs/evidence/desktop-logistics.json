@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "before": {
+    "packets": 1,
+    "revision": 986,
+    "session": "3807324555:31832443:1:624e1c8541b9485387056bfceeb951c8",
+    "historySamples": 198,
+    "productionHistorySamples": 104,
+    "stockHistorySamples": 1,
+    "logisticsHistorySamples": 1,
+    "models": {
+      "overview": 1,
+      "energy": 1,
+      "production": 1,
+      "logistics": 1
+    },
+    "activeView": "logistics",
+    "renders": {
+      "sessions": 2,
+      "overview": 1,
+      "energy": 0,
+      "production": 0,
+      "logistics": 1
+    },
+    "visible": "logistics",
+    "mutations": {
+      "overview": 0,
+      "energy": 0,
+      "production": 0,
+      "sessions": 0
+    }
+  },
+  "after": {
+    "packets": 3,
+    "revision": 1001,
+    "session": "3807324555:31832443:1:624e1c8541b9485387056bfceeb951c8",
+    "historySamples": 200,
+    "productionHistorySamples": 106,
+    "stockHistorySamples": 2,
+    "logisticsHistorySamples": 3,
+    "models": {
+      "overview": 3,
+      "energy": 3,
+      "production": 3,
+      "logistics": 3
+    },
+    "activeView": "logistics",
+    "renders": {
+      "sessions": 2,
+      "overview": 1,
+      "energy": 0,
+      "production": 0,
+      "logistics": 3
+    },
+    "visible": "logistics",
+    "mutations": {
+      "overview": 0,
+      "energy": 0,
+      "production": 0,
+      "sessions": 0
+    }
+  },
+  "checked": [
+    "live source and empty state",
+    "background history",
+    "hidden DOM unchanged",
+    "Russian search",
+    "quality-aware requests",
+    "network and train selection",
+    "map hit testing",
+    "scrolling",
+    "both resolutions",
+    "Pixi"
+  ]
+}

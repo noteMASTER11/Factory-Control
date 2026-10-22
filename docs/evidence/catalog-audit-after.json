@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "checked_names": 133,
+  "missing_names": [],
+  "missing_icons": [],
+  "catalog_icons": 2688,
+  "exe": "D:\\ChatGPT\\Projects\\FactorioMonitor\\dist\\FactoryControl.exe",
+  "bytes": 208589824,
+  "sha256": "f23592a5ed0554666dcc92f5dc6358a6147678648596f1a812a9df97ee95f3d7",
+  "matching_cache": [
+    "D:\\ChatGPT\\Cache\\FactorioMonitor\\Web\\1F0C79AB9B97E254B5871C9AF6BB043F09F48540FC3F346886FE9349A68E0531"
+  ],
+  "process_id": 10012,
+  "telemetry_ready": true
+}

@@ -1,0 +1,21 @@
+const assert=require('node:assert/strict');
+(async()=>{
+ const {TelemetryEngine}=await import('file:///D:/ChatGPT/Projects/FactorioMonitor/src/Factorio.Desktop/Web/telemetry-engine.js');
+ const engine=new TelemetryEngine(),at='2026-10-22T16:00:00Z';
+ const power=tick=>({topic:'power',tick,session_id:'a',written_at:at,payload:{data:{networks:[{id:1,surface:'nauvis',force:'player',production_watts:120,consumption_watts:100,producers:[{name:'solar-panel',watts:120}],consumers:[{name:'lab',watts:100}]}],accumulators:[{surface:'nauvis',force:'player',joules:1000,capacity_joules:2000}],nameplate_generators:[{surface:'nauvis',force:'player',network_id:1,name:'solar-panel',count:2,theoretical_max_watts:200}]}}});
+ const packet=(tick,session='a',reset=false)=>({status:{session_id:session,revision:tick,reset,connected:true,topics:{power:power(tick)}},sessions:{processes:[]}});
+ engine.accept(packet(100,'a',true));engine.select('sessions');
+ engine.accept(packet(200));engine.accept(packet(200));engine.accept(packet(300));
+ assert.equal(engine.describe().historySamples,3,'Repeated topics must not duplicate history');
+ assert(engine.describe().models.energy>=3&&engine.describe().models.overview>=3,'Inactive models must advance');
+ const hidden=engine.frame();assert.equal(hidden.view,'sessions');assert.equal(hidden.model,null,'Inactive view models must not be sent to the UI');
+ engine.select('energy');const frame=engine.frame();
+ assert.equal(frame.model.current.production,120);assert.equal(frame.model.current.capacity,2000);
+ assert.equal(frame.model.sources[0].count,2);assert.equal(frame.model.consumers[0].share,1);
+ engine.configure('energy',{network:'1'});
+ assert.equal(engine.frame().model.current.capacity,null,'Scope-wide battery values must not be assigned to one network');
+ for(let i=1;i<=2000;i++)engine.accept(packet(300+i*60));
+ assert(engine.describe().historySamples<=1800,'History must remain bounded');
+ engine.accept(packet(1,'b',true));assert.equal(engine.describe().historySamples,1,'A new game session must reset history');
+ console.log('Telemetry worker models: all checks passed');
+})().catch(e=>{console.error(e);process.exitCode=1;});

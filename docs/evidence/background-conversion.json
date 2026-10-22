@@ -1,0 +1,26 @@
+{
+  "sourceExcerptSeconds": 1.5,
+  "usableSourceSeconds": [
+    0.18,
+    1.15
+  ],
+  "fileSeconds": 30,
+  "introFadeSeconds": 0.75,
+  "loopStartSeconds": 0.75,
+  "loopEndSeconds": 29.75,
+  "loopSeconds": 29,
+  "codecGuardSeconds": 0.25,
+  "grainSeconds": 0.65,
+  "hopSeconds": 0.25,
+  "steadyRmsDb": -18.416375079047505,
+  "steady20msRmsDbPercentiles": [
+    -23.097408231318575,
+    -22.195393267925514,
+    -18.756614400631676,
+    -15.139853519623172,
+    -14.583300201646814
+  ],
+  "boundaryStep": 0.01610764733570888,
+  "interiorStepP99": 0.1841839716302715,
+  "peak": 0.5719174064106912
+}

@@ -1,0 +1,22 @@
+const assert=require('node:assert/strict');
+(async()=>{
+ const {researchModel,researchSample}=await import('../src/Factorio.Desktop/Web/research-model.js');const now=Date.now();
+ const env=(topic,data,tick=1800)=>({topic,tick,written_at:new Date(now).toISOString(),payload:{coverage:{discovery_complete:true},data}});
+ const ingredient={name:'automation-science-pack',amount:1};const current={force:'player',current:'mining-productivity-4',level:4,progress:.4,ingredients:[ingredient],queue:[{name:'mining-productivity-4',level:4,unit_count:1000,ingredients:[ingredient]},{name:'research-speed-5',level:5,unit_count:2000,ingredients:[ingredient]}]};
+ const flow=(surface,force,quality='normal')=>({surface,force,quality,name:ingredient.name,kind:'item',produced_per_minute:40,consumed_per_minute:50});
+ const topics={research:env('research',{forces:[current,{...current,force:'enemy',progress:.9}]}),production:env('production',{rows:[flow('nauvis','player'),flow('vulcanus','player'),flow('nauvis','enemy'),flow('nauvis','player','rare')]}),machines:env('machines',{collection_mode:'rolling',inventory_complete:true,stocks:[{surface:'nauvis',force:'player',name:ingredient.name,kind:'item',quality:'normal',count:200},{surface:'vulcanus',force:'player',name:ingredient.name,kind:'item',quality:'normal',count:100}],groups:[{surface:'nauvis',force:'player',name:'lab',type:'lab',status:'working',count:4},{surface:'vulcanus',force:'player',name:'biolab',type:'lab',status:'missing_science_packs',count:2}]})};
+ const history=[600,1200,1800].map((tick,i)=>researchSample(env('research',{forces:[{...current,progress:.2+i*.1}]},tick)));
+ let m=researchModel(topics,{force:'player',surface:'all',minutes:15},history,[],now);
+ assert.equal(m.current.progress,.4);assert.equal(m.queue.length,2,'Current technology must not be duplicated');assert.equal(m.queue[0].nominal[0].count,1000);assert.equal(m.etaSeconds,60,'20% in 20 game seconds leaves 60 game seconds');assert.equal(m.progressPerMinute,.6);
+ const red=m.packs.find(r=>r.name===ingredient.name&&r.quality==='normal');assert.equal(red.produced,80);assert.equal(red.consumed,100);assert.equal(red.stock,300);assert.equal(red.emptyMinutes,15);assert.equal(m.labs.total,6);assert.equal(m.labs.working,4);assert(m.packs.some(r=>r.quality==='rare'),'Qualities stay separate');
+ m=researchModel(topics,{force:'player',surface:'nauvis'},history,[],now);assert.equal(m.packs.find(r=>r.id===red.id).produced,40);assert.equal(m.current.progress,.4,'Surface selection must not restrict global research');assert.equal(m.labs.total,4);
+ const stop=history.map(p=>({...p,forces:p.forces.map(f=>({...f,progress:.4}))}));assert.equal(researchModel(topics,{force:'player'},stop,[],now).etaSeconds,null);
+ const switched=[history[0],{...history[1],forces:[{...current,current:'research-speed-5'}]},history[2]];assert.equal(researchModel(topics,{force:'player'},switched,[],now).etaSeconds,null,'Do not bridge across technologies');
+ const level=history.map((p,i)=>({...p,forces:p.forces.map(f=>({...f,level:i===0?3:4}))}));assert.equal(researchModel(topics,{force:'player'},level,[],now).etaSeconds,null);
+ const reset=history.map((p,i)=>({...p,forces:p.forces.map(f=>({...f,progress:[.9,.3,.4][i]}))}));assert.equal(researchModel(topics,{force:'player'},reset,[],now).etaSeconds,null,'Progress rollback starts a new segment');
+ assert.equal(researchModel(topics,{force:'player'},history,[],now+20000).etaSeconds,null);
+ const long=Array.from({length:19},(_,i)=>researchSample(env('research',{forces:[{...current,progress:.1+i/18*.3}]},i*3000)));const later={...topics,research:env('research',{forces:[current]},54000)};assert.equal(researchModel(later,{force:'player',minutes:30},long,[],now).progressHistory[0].tick,0,'The progress chart window must not be shortened to the ETA sampling window');
+ topics.machines.payload.data.inventory_complete=false;assert.equal(researchModel(topics,{force:'player'},history,[],now).packs.find(r=>r.id===red.id).stock,null);
+ const idle=researchModel({research:env('research',{forces:[{force:'player',progress:0,queue:[]}]})},{force:'player'},[],[],now);assert.equal(idle.current,null);assert.equal(idle.etaSeconds,null);assert.deepEqual(idle.queue,[]);
+ console.log('Research calculations: all checks passed');
+})().catch(e=>{console.error(e);process.exitCode=1;});

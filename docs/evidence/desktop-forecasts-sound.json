@@ -1,0 +1,123 @@
+{
+  "passed": true,
+  "before": {
+    "packets": 4,
+    "revision": 15837,
+    "session": "3807324555:31832443:2:fadf7ee1aa914058aefc7ba7542079f3",
+    "historySamples": 303,
+    "productionHistorySamples": 303,
+    "stockHistorySamples": 3,
+    "logisticsHistorySamples": 2,
+    "researchHistorySamples": 141,
+    "resourceCells": 1692,
+    "resourceHistorySamples": 225,
+    "models": {
+      "overview": 4,
+      "energy": 4,
+      "production": 4,
+      "logistics": 3,
+      "research": 4,
+      "resources": 2,
+      "forecasts": 4,
+      "damage": 4
+    },
+    "activeView": "forecasts",
+    "renders": {
+      "sessions": 2,
+      "overview": 4,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "research": 0,
+      "resources": 0,
+      "forecasts": 1,
+      "damage": 0
+    },
+    "visible": "forecasts",
+    "mutations": {
+      "overview": 0,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "research": 0,
+      "resources": 0,
+      "damage": 0,
+      "sessions": 0
+    }
+  },
+  "after": {
+    "packets": 7,
+    "revision": 15868,
+    "session": "3807324555:31832443:2:fadf7ee1aa914058aefc7ba7542079f3",
+    "historySamples": 306,
+    "productionHistorySamples": 306,
+    "stockHistorySamples": 4,
+    "logisticsHistorySamples": 4,
+    "researchHistorySamples": 141,
+    "resourceCells": 1692,
+    "resourceHistorySamples": 254,
+    "models": {
+      "overview": 7,
+      "energy": 7,
+      "production": 7,
+      "logistics": 5,
+      "research": 7,
+      "resources": 3,
+      "forecasts": 7,
+      "damage": 7
+    },
+    "activeView": "forecasts",
+    "renders": {
+      "sessions": 2,
+      "overview": 4,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "research": 0,
+      "resources": 0,
+      "forecasts": 3,
+      "damage": 0
+    },
+    "visible": "forecasts",
+    "mutations": {
+      "overview": 0,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "research": 0,
+      "resources": 0,
+      "damage": 0,
+      "sessions": 0
+    }
+  },
+  "decoded": {
+    "duration": 1.68,
+    "buffers": [
+      "button",
+      "background",
+      "alarm"
+    ],
+    "state": "running"
+  },
+  "checks": [
+    "live forecasts",
+    "only active DOM renders",
+    "keyboard selection",
+    "two resolutions",
+    "scenario math and reset",
+    "variance band and now marker",
+    "Russian search",
+    "scope and reserve isolation",
+    "real scrolling",
+    "actual Opus decode",
+    "30-second background from stationary first-1.5-second noise",
+    "native volume slider without labels",
+    "volume persistence",
+    "button audio on real click",
+    "one alarm per new modal",
+    "no alarm overlap or queue",
+    "mute stops sources and persists",
+    "normal mode stops alarm",
+    "stale and empty states"
+  ]
+}

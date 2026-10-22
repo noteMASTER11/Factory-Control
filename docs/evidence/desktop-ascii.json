@@ -1,0 +1,488 @@
+{
+  "passed": true,
+  "phases": [
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 8.400000005960464,
+      "asciiSource": "pixels",
+      "asciiCaptures": 1,
+      "sweep": {
+        "clearRows": 59,
+        "decodeRows": 65
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 26.700000002980232,
+      "asciiSource": "pixels",
+      "asciiCaptures": 1,
+      "sweep": {
+        "clearRows": 59,
+        "decodeRows": 65
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 55.900000005960464,
+      "asciiSource": "pixels",
+      "asciiCaptures": 1,
+      "sweep": {
+        "clearRows": 59,
+        "decodeRows": 65
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 89.40000000596046,
+      "asciiSource": "pixels",
+      "asciiCaptures": 1,
+      "sweep": {
+        "clearRows": 59,
+        "decodeRows": 65
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 122.5,
+      "asciiSource": "pixels",
+      "asciiCaptures": 1,
+      "sweep": {
+        "clearRows": 59,
+        "decodeRows": 65
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 155.70000000298023,
+      "asciiSource": "pixels",
+      "asciiCaptures": 1,
+      "sweep": {
+        "clearRows": 59,
+        "decodeRows": 65
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 191.5,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 222.5,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 257.1000000014901,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 289.20000000298023,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 322.70000000298023,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 356.20000000298023,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 389.1000000014901,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 424.20000000298023,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 457.20000000298023,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 489.1000000014901,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 522.6000000014901,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "boot",
+      "count": 2,
+      "elapsed": 555.8000000044703,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "signal",
+      "count": 2,
+      "elapsed": 589.1000000014901,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "signal",
+      "count": 2,
+      "elapsed": 622.9000000059605,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "signal",
+      "count": 2,
+      "elapsed": 656.4000000059605,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "signal",
+      "count": 2,
+      "elapsed": 689.8000000044703,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "signal",
+      "count": 2,
+      "elapsed": 724.2000000029802,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 0
+      }
+    },
+    {
+      "active": true,
+      "stage": "ascii",
+      "count": 2,
+      "elapsed": 758.3000000044703,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 0,
+        "decodeRows": 4
+      }
+    },
+    {
+      "active": true,
+      "stage": "ascii",
+      "count": 2,
+      "elapsed": 790,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 3,
+        "decodeRows": 11
+      }
+    },
+    {
+      "active": true,
+      "stage": "ascii",
+      "count": 2,
+      "elapsed": 824.2000000029802,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 10,
+        "decodeRows": 18
+      }
+    },
+    {
+      "active": true,
+      "stage": "ascii",
+      "count": 2,
+      "elapsed": 856.2000000029802,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 16,
+        "decodeRows": 24
+      }
+    },
+    {
+      "active": true,
+      "stage": "ascii",
+      "count": 2,
+      "elapsed": 889.4000000059605,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 23,
+        "decodeRows": 31
+      }
+    },
+    {
+      "active": true,
+      "stage": "ascii",
+      "count": 2,
+      "elapsed": 923.3000000044703,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 30,
+        "decodeRows": 38
+      }
+    },
+    {
+      "active": true,
+      "stage": "ascii",
+      "count": 2,
+      "elapsed": 957.5,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 37,
+        "decodeRows": 45
+      }
+    },
+    {
+      "active": true,
+      "stage": "ascii",
+      "count": 2,
+      "elapsed": 989.6000000014901,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 44,
+        "decodeRows": 52
+      }
+    },
+    {
+      "active": true,
+      "stage": "ascii",
+      "count": 2,
+      "elapsed": 1022.9000000059605,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 51,
+        "decodeRows": 59
+      }
+    },
+    {
+      "active": true,
+      "stage": "ascii",
+      "count": 2,
+      "elapsed": 1056.2000000029802,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 57,
+        "decodeRows": 65
+      }
+    },
+    {
+      "active": true,
+      "stage": "ascii",
+      "count": 2,
+      "elapsed": 1089.1000000014901,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 64,
+        "decodeRows": 65
+      }
+    },
+    {
+      "active": false,
+      "stage": "done",
+      "count": 2,
+      "elapsed": 1123.1000000014901,
+      "asciiSource": "pixels",
+      "asciiCaptures": 2,
+      "sweep": {
+        "clearRows": 64,
+        "decodeRows": 65
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "width": 1152,
+      "height": 864,
+      "active": true,
+      "stage": "ascii",
+      "count": 3,
+      "elapsed": 916.8999999985099,
+      "asciiSource": "pixels",
+      "asciiCaptures": 3,
+      "sweep": {
+        "clearRows": 29,
+        "decodeRows": 36
+      },
+      "textUnchanged": true,
+      "topAlpha": 0,
+      "bottomAlpha": 255,
+      "glyphCount": 9229,
+      "clip": ""
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "active": true,
+      "stage": "ascii",
+      "count": 4,
+      "elapsed": 917.6999999955297,
+      "asciiSource": "pixels",
+      "asciiCaptures": 4,
+      "sweep": {
+        "clearRows": 25,
+        "decodeRows": 32
+      },
+      "textUnchanged": true,
+      "topAlpha": 0,
+      "bottomAlpha": 255,
+      "glyphCount": 7181,
+      "clip": ""
+    }
+  ],
+  "fallback": {
+    "active": true,
+    "stage": "ascii",
+    "count": 8,
+    "elapsed": 916.3000000044703,
+    "asciiSource": "dom",
+    "asciiCaptures": 6,
+    "sweep": {
+      "clearRows": 29,
+      "decodeRows": 36
+    }
+  },
+  "checks": [
+    "BIOS then phosphor then ASCII 350 ms",
+    "one capture per open",
+    "top transparent / bottom opaque",
+    "sharp HTML unchanged",
+    "both resolutions",
+    "rapid navigation",
+    "resize cancellation",
+    "plain HTML fallback and input",
+    "reduced motion"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "value": 0,
+      "shift": 0,
+      "colored": 0
+    },
+    {
+      "value": 100,
+      "shift": 0.2,
+      "colored": 4
+    },
+    {
+      "value": 200,
+      "shift": 1.6,
+      "colored": 384
+    },
+    {
+      "value": 300,
+      "shift": 5.4,
+      "colored": 864
+    }
+  ],
+  "actual": {
+    "shift": 0.2,
+    "red": -0.2,
+    "blue": 0.2
+  }
+}

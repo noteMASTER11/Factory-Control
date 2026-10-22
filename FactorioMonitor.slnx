@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="src/Factorio.Core/Factorio.Core.csproj" />
+  <Project Path="src/Factorio.Bridge/Factorio.Bridge.csproj" />
+  <Project Path="src/Factorio.Gateway/Factorio.Gateway.csproj" />
+  <Project Path="src/Factorio.Desktop/Factorio.Desktop.csproj" />
+  <Project Path="tests/Factorio.Tests/Factorio.Tests.csproj" />
+  <Project Path="tests/Factorio.Desktop.Tests/Factorio.Desktop.Tests.csproj" />
+</Solution>

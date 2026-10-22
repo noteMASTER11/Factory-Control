@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "sequence": [
+    "hover1",
+    "hover3",
+    "hover5",
+    "hover4",
+    "hover2",
+    "hover5",
+    "hover4",
+    "hover3",
+    "hover1",
+    "hover2",
+    "hover4",
+    "hover3"
+  ],
+  "projection": {
+    "hover": "TR",
+    "click": null,
+    "readingHasNoAction": true,
+    "modal": "modal-button"
+  },
+  "checks": [
+    "energy source rows",
+    "production machines",
+    "logistics networks",
+    "research packs",
+    "forecasts",
+    "damage rows",
+    "KPI cards",
+    "detail label/value pairs",
+    "SVG map nodes",
+    "VFX groups",
+    "slider labels",
+    "modals",
+    "no repeated samples",
+    "same-row cells silent",
+    "telemetry updates preserve identity",
+    "disabled/inert/blank silent",
+    "CRT projection supports reading targets",
+    "reading targets never become click actions",
+    "hover channel mute"
+  ]
+}

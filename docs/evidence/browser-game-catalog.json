@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "labels": [
+    "Вода (бочка)",
+    "Попутный нефтяной газ (бочка)",
+    "Серная кислота (бочка)",
+    "Смазочная жидкость (бочка)",
+    "Строительный дрон",
+    "Ремонтный комплект",
+    "Сундук запроса",
+    "Вольфрамовая балка"
+  ],
+  "images": 13,
+  "decoded": true,
+  "recipe": "Опустошить бочку (Вода)",
+  "water": {
+    "sum": 3249866,
+    "visible": 2389
+  },
+  "acid": {
+    "sum": 3100347,
+    "visible": 2389
+  },
+  "robot": {
+    "sum": 2833571,
+    "visible": 1832
+  },
+  "checks": [
+    "Russian barrel labels",
+    "recipe names differ from item names",
+    "all list images decode",
+    "layered fluid colors differ",
+    "energy source/consumer icons",
+    "production machine/recipe icons",
+    "overview entity icons"
+  ]
+}

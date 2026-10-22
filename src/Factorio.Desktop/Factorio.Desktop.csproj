@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType><TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF><PlatformTarget>x64</PlatformTarget><ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>0.1.0</Version><Product>Factory Control</Product><Description>Factorio telemetry terminal for Windows</Description>
+  </PropertyGroup>
+  <ItemGroup><ProjectReference Include="../Factorio.Bridge/Factorio.Bridge.csproj" /><ProjectReference Include="../Factorio.Gateway/Factorio.Gateway.csproj" /></ItemGroup>
+  <ItemGroup><PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4258.31" /><PackageReference Include="System.Management" Version="10.0.0" /></ItemGroup>
+  <PropertyGroup Condition="'$(PortableBundle)' == 'true'">
+    <PublishSingleFile>true</PublishSingleFile><SelfContained>true</SelfContained>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <ItemGroup><Content Include="Web/**"><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory><CopyToPublishDirectory Condition="'$(PortableBundle)' != 'true'">PreserveNewest</CopyToPublishDirectory><CopyToPublishDirectory Condition="'$(PortableBundle)' == 'true'">Never</CopyToPublishDirectory><ExcludeFromSingleFile>true</ExcludeFromSingleFile></Content></ItemGroup>
+  <ItemGroup><EmbeddedResource Include="Web/locales/*.json"><LogicalName>Factorio.Desktop.Locales.%(Filename)%(Extension)</LogicalName></EmbeddedResource></ItemGroup>
+  <Target Name="BundleWebAssets" BeforeTargets="AssignTargetPaths" Condition="'$(PortableBundle)' == 'true'">
+    <MakeDir Directories="$(IntermediateOutputPath)" />
+    <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)/Web" DestinationFile="$(IntermediateOutputPath)factory-web.zip" Overwrite="true" />
+    <ItemGroup><EmbeddedResource Include="$(IntermediateOutputPath)factory-web.zip"><LogicalName>Factorio.Desktop.Web.zip</LogicalName></EmbeddedResource></ItemGroup>
+  </Target>
+</Project>

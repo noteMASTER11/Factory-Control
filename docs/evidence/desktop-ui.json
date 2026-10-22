@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "resolutions": [
+    "1152x864",
+    "1024x768"
+  ],
+  "checked": [
+    "native button toggle",
+    "F11/Esc",
+    "restore size",
+    "hover",
+    "process association",
+    "live API",
+    "overlay toggle",
+    "adaptive layout",
+    "bundled Cyrillic slab font",
+    "JSON localization and locale fallback"
+  ],
+  "captured_at": "2026-10-22T17:20:16.921Z"
+}

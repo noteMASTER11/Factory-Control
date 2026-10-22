@@ -1,0 +1,20 @@
+const assert=require('node:assert/strict');
+(async()=>{
+ const {LogisticsObservations,logisticsModel,logisticsSample}=await import('../src/Factorio.Desktop/Web/logistics-model.js');
+ const scope={surface:'nauvis',force:'player'},now=Date.now();
+ const topic=(tick=600,missing=70)=>({tick,written_at:new Date(now).toISOString(),payload:{coverage:{discovery_complete:true},data:{requesters_available:true,requests_tick:tick,requests:[{...scope,name:'iron-plate',quality:'normal',requested:100,present:10,incoming:20,missing,containers:2},{...scope,name:'iron-plate',quality:'rare',requested:5,present:0,incoming:0,missing:5,containers:1},{...scope,surface:'vulcanus',name:'copper-plate',missing:900}],networks:[{...scope,id:1,logistic_total:100,logistic_available:25,construction_total:20,construction_available:18,item_count:900},{...scope,id:2,logistic_total:10,logistic_available:0,construction_total:0,construction_available:0},{...scope,force:'enemy',id:3,logistic_total:9999}],trains:[{...scope,id:7,state:'wait_signal',speed:0,position:{x:40,y:80},destination:'Base',cargo:[]},{...scope,id:8,state:'on_the_path',speed:-.5,position:{x:80,y:180},cargo:[]}]}}});
+ const seen=new LogisticsObservations();let t=topic();seen.accept(t,now);
+ let m=logisticsModel({logistics:t},scope,{},[],seen,now);
+ assert.equal(m.summary.logisticTotal,110);assert.equal(m.summary.logisticAvailable,25);assert.equal(m.summary.constructionBusy,2);assert.equal(m.requests.length,2,'Do not combine qualities or surfaces');assert.equal(m.requests[0].waitingTicks,0);assert.equal(m.trains[1].kmh,108,'Negative direction must not produce negative speed');
+ assert(!m.issues.some(x=>x.kind==='train'&&x.train===7),'A momentary signal stop is normal, not a delivery problem');
+ t=topic(1200);seen.accept(t,now);m=logisticsModel({logistics:t},scope,{network:'1'},[logisticsSample(topic())],seen,now);
+ assert.equal(m.summary.logisticTotal,100);assert.equal(m.requests.length,2,'Network selection must not pretend to assign unlinked requests');assert.equal(m.requests[0].waitingTicks,600);assert.equal(m.history[0].busy,75);
+ assert(m.issues.some(x=>x.kind==='train'&&x.train===7));
+ const resolved=topic(1500,0);seen.accept(resolved,now);seen.accept(topic(1800),now);assert.equal(logisticsModel({logistics:topic(1800)},scope,{},[],seen,now).requests[0].waitingTicks,0,'A resolved request resets observed waiting');
+ const stale=logisticsModel({logistics:t},scope,{},[],seen,now+20000);assert.equal(stale.fresh,false);assert.equal(stale.requests[0].waitingTicks,null);assert.equal(stale.issues.length,0,'Stale data must not produce live warnings');
+ seen.accept(topic(4000),now);assert.equal(logisticsModel({logistics:topic(4000)},scope,{},[],seen,now).requests[0].waitingTicks,0,'A long observation gap must not count as continuous waiting');
+ const incomplete=topic();incomplete.payload.data.requesters_available=false;assert.equal(logisticsModel({logistics:incomplete},scope,{},[],seen,now).requestsAvailable,false);
+ const oldRequests=topic(3000);oldRequests.payload.data.sample_end_tick=1000;const old=logisticsModel({logistics:oldRequests},scope,{},[],seen,now);assert.equal(old.requestFresh,false);assert.equal(old.requestAgeTicks,2000,'Request scan age must stay distinct from the fresh network snapshot');
+ const empty=logisticsModel({},scope,{},[],seen,now);assert.equal(empty.available,false);assert.equal(empty.selectedTrain,null);assert.deepEqual(empty.requests,[]);
+ console.log('Logistics calculations: all checks passed');
+})().catch(e=>{console.error(e);process.exitCode=1;});

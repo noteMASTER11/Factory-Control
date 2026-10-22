@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "resolutions": [
+    "1152x864",
+    "1024x768"
+  ],
+  "checked": [
+    "real game telemetry",
+    "source selection",
+    "scope selector",
+    "energy history",
+    "materials",
+    "machine states",
+    "localized labels",
+    "F1/F9 navigation",
+    "no page overflow"
+  ]
+}

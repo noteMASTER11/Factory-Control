@@ -1,0 +1,21 @@
+export function asciiSweep(progress,rows,band=7){const end=Math.max(0,Math.min(1,progress))*(rows+band);return {clearRows:Math.max(0,Math.min(rows,Math.floor(end-band))),decodeRows:Math.max(0,Math.min(rows,Math.ceil(end)))};}
+export function pixelsToAscii(pixels,ramp){let result='';for(let i=0;i<pixels.length;i+=4){const light=(pixels[i]*.2126+pixels[i+1]*.7152+pixels[i+2]*.0722)*pixels[i+3]/255;const contrast=Math.max(0,Math.min(1,(light-6)/140));result+=ramp[Math.round(contrast*(ramp.length-1))];}return result;}
+
+// A short-lived ASCII mask. The live HTML, its text and input geometry remain intact.
+export class AsciiReveal {
+ constructor(settings){this.settings=settings;this.canvas=document.createElement('canvas');this.canvas.className='tab-boot-ascii';this.ctx=this.canvas.getContext('2d');this.sample=document.createElement('canvas');this.sampleCtx=this.sample.getContext('2d',{willReadFrequently:true});this.captures=0;}
+ capture(pane,source){const b=pane.getBoundingClientRect(),s=this.settings;this.width=Math.max(1,Math.round(b.width));this.height=Math.max(1,Math.round(b.height));this.cols=Math.max(24,Math.min(180,Math.floor(this.width/s.cellWidth)));this.rows=Math.max(12,Math.min(90,Math.floor(this.height/s.cellHeight)));this.cellW=this.width/this.cols;this.cellH=this.height/this.rows;this.canvas.width=this.width;this.canvas.height=this.height;const style=getComputedStyle(pane);this.ink=style.getPropertyValue('--cyan').trim();this.background=style.getPropertyValue('--bg').trim();this.glyphs=null;this.sourceMode='dom';
+  if(source?.width&&source?.height){try{this.sample.width=this.cols;this.sample.height=this.rows;this.sampleCtx.drawImage(source,b.x*source.width/innerWidth,b.y*source.height/innerHeight,b.width*source.width/innerWidth,b.height*source.height/innerHeight,0,0,this.cols,this.rows);const pixels=this.sampleCtx.getImageData(0,0,this.cols,this.rows).data;const glyphs=pixelsToAscii(pixels,s.ramp);if(glyphs.trim()){this.glyphs=glyphs;this.sourceMode='pixels';}}catch{/* Plain HTML and SVG renderers use the layout fallback below. */}}
+  if(!this.glyphs)this.fromLayout(pane,b);
+  this.ctx.font=`${Math.floor(this.cellH*.92)}px 'Iosevka Term Slab',monospace`;this.ctx.textBaseline='top';this.captures++;this.draw(0);
+ }
+ fromLayout(pane,bounds){const cells=Array(this.cols*this.rows).fill(this.settings.ramp[0]),put=(x,y,value)=>{if(x>=0&&x<this.cols&&y>=0&&y<this.rows)cells[y*this.cols+x]=value;},strong=this.settings.ramp.at(-2);
+  for(const panel of pane.querySelectorAll('.panel')){const r=panel.getBoundingClientRect(),x1=Math.floor((r.left-bounds.left)/this.cellW),x2=Math.floor((r.right-bounds.left)/this.cellW)-1,y1=Math.floor((r.top-bounds.top)/this.cellH),y2=Math.floor((r.bottom-bounds.top)/this.cellH)-1;for(let x=Math.max(0,x1);x<=Math.min(this.cols-1,x2);x++){put(x,y1,strong);put(x,y2,strong);}for(let y=Math.max(0,y1);y<=Math.min(this.rows-1,y2);y++){put(x1,y,strong);put(x2,y,strong);}}
+  const walker=document.createTreeWalker(pane,NodeFilter.SHOW_TEXT);let n,count=0;while((n=walker.nextNode())&&count<500){const text=n.textContent.trim();if(!text)continue;const range=document.createRange();range.selectNodeContents(n);const r=range.getBoundingClientRect();if(r.width<=0||r.height<=0||r.bottom<bounds.top||r.top>=bounds.bottom)continue;count++;const x=Math.floor((r.left-bounds.left)/this.cellW),y=Math.floor((r.top-bounds.top)/this.cellH);for(let i=0;i<Math.min(text.length,r.width/this.cellW);i++)if(text[i].trim())put(x+i,y,this.settings.ramp[1+text.charCodeAt(i)%(this.settings.ramp.length-1)]);}
+  this.glyphs=cells.join('');
+ }
+ draw(progress){const ctx=this.ctx,sweep=asciiSweep(progress,this.rows,this.settings.bandRows),top=sweep.clearRows*this.cellH;ctx.clearRect(0,0,this.width,this.height);ctx.fillStyle=this.background;ctx.fillRect(0,top,this.width,this.height-top);ctx.fillStyle=this.ink;const frame=Math.floor(progress*12);
+  for(let y=sweep.clearRows;y<sweep.decodeRows;y++){ctx.globalAlpha=.35+.65*(1-(y-sweep.clearRows)/Math.max(1,sweep.decodeRows-sweep.clearRows));for(let x=0;x<this.cols;x++){let glyph=this.glyphs[y*this.cols+x];if(glyph===this.settings.ramp[0])continue;if((x*17+y*31+frame)%7===0)glyph=this.settings.ramp[1+(x+y+frame)%(this.settings.ramp.length-1)];ctx.fillText(glyph,x*this.cellW,y*this.cellH);}}
+  ctx.globalAlpha=1;this.sweep=sweep;
+ }
+}

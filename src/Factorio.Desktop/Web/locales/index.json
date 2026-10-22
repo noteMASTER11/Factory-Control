@@ -1,0 +1,6 @@
+{
+  "defaultLocale": "ru-RU",
+  "locales": [
+    { "id": "ru-RU", "name": "Русский", "file": "ru-RU.json" }
+  ]
+}

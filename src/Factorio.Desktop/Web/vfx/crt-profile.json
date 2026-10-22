@@ -1,0 +1,31 @@
+{
+  "maxFramesPerSecond": 30,
+  "curvature": 0.0125,
+  "aberrationPixels": 1.4,
+  "fringeStrength": 0.48,
+  "phosphorBlur": 0.3,
+  "phosphorBloom": 0.08,
+  "imageSmoothing": 0.48,
+  "mapWidth": 384,
+  "mapHeight": 288,
+  "glitchMinIntervalMs": 5500,
+  "glitchMaxIntervalMs": 11000,
+  "glitchDurationMs": 240,
+  "glitchDisplacementPixels": 24,
+  "pixi": {
+    "rgbSplitPixels": 0.2,
+    "sharpen": 0.16,
+    "lineContrast": 0,
+    "fieldPeriodMs": 0,
+    "noise": 0.003,
+    "bandGlitchPixels": 0,
+    "blockGlitchPixels": 18
+  },
+  "tabAscii": {
+    "durationMs": 350,
+    "cellWidth": 8,
+    "cellHeight": 11,
+    "bandRows": 7,
+    "ramp": " .:-=+*#%@"
+  }
+}

@@ -1,0 +1,8 @@
+**/bin/
+**/obj/
+Data/
+out/
+dist/
+Validation/
+*.user
+*.log

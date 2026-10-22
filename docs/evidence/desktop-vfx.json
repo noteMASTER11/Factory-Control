@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "checked": [
+    "default enabled",
+    "RGB/lens pipeline",
+    "no blocked hit targets",
+    "unchanged layout",
+    "persisted toggle",
+    "reduced motion",
+    "live glitch pulse",
+    "1152x864",
+    "1024x768",
+    "fullscreen/Esc"
+  ],
+  "captured_at": "2026-10-22T16:37:58.761Z"
+}

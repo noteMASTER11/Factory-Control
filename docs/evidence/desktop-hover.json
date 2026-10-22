@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "sequence": [
+    "hover3",
+    "hover1",
+    "hover5",
+    "hover2",
+    "hover1",
+    "hover3",
+    "hover4",
+    "hover3",
+    "hover5",
+    "hover2",
+    "hover1",
+    "hover4",
+    "hover5",
+    "hover3",
+    "hover1",
+    "hover4",
+    "hover2",
+    "hover3",
+    "hover1",
+    "hover2",
+    "hover4",
+    "hover5",
+    "hover1",
+    "hover3",
+    "hover4",
+    "hover2",
+    "hover5",
+    "hover4",
+    "hover3",
+    "hover5",
+    "hover2",
+    "hover1",
+    "hover5",
+    "hover2",
+    "hover4"
+  ],
+  "decoded": {
+    "buffers": {
+      "hover3": {
+        "seconds": 0.12475,
+        "rate": 48000
+      },
+      "hover2": {
+        "seconds": 0.18045833333333333,
+        "rate": 48000
+      },
+      "hover1": {
+        "seconds": 0.22877083333333334,
+        "rate": 48000
+      },
+      "hover4": {
+        "seconds": 0.20352083333333335,
+        "rate": 48000
+      },
+      "hover5": {
+        "seconds": 0.3260625,
+        "rate": 48000
+      }
+    },
+    "hoverSources": 1
+  },
+  "checks": [
+    "native and CRT hover",
+    "no adjacent repeat",
+    "same control children stay silent",
+    "disabled controls stay silent",
+    "search/select/table rows",
+    "mute and no deferred replay",
+    "five Opus buffers",
+    "single hover source"
+  ]
+}

@@ -1,0 +1,12 @@
+/* Game views show operational information; diagnostics live on the connection screen. */
+.brand small{display:none}.screen-nav button{flex:1 1 0;min-width:70px;max-width:120px;padding:0 7px;letter-spacing:.5px}.screen-nav kbd{margin-right:5px}
+.overview-bottom{grid-template-columns:1fr}.overview-bottom>.panel:last-child{display:none}
+.energy-mini{grid-template-columns:1fr}.energy-mini>.panel:last-child{display:none}
+.energy-legend>span:last-child{display:none}
+body:has(#session-screen[hidden]) footer>.footer-key:nth-child(2){display:none}
+#overview-machine-coverage,#production-machine-note,#production-history-note,#production-stock-note{display:none}
+.energy-analysis{grid-template-rows:minmax(100px,1fr) minmax(100px,.8fr)}
+
+#sound-toggle{width:34px;min-width:34px;height:29px;margin-right:8px}.sound-cross{display:none}#sound-toggle[aria-pressed=false] .sound-waves{display:none}#sound-toggle[aria-pressed=false] .sound-cross{display:block}#sound-toggle[aria-pressed=false]{color:var(--muted)}
+
+#sound-toggle{margin-right:2px}#sound-volume{-webkit-appearance:none;appearance:none;width:65px;height:24px;margin:0 10px 0 0;padding:0;background:transparent;cursor:pointer;flex-shrink:0}#sound-volume::-webkit-slider-runnable-track{height:5px;border:1px solid var(--line);background:var(--panel)}#sound-volume::-webkit-slider-thumb{-webkit-appearance:none;width:7px;height:15px;margin-top:-6px;border:1px solid var(--cyan);background:#174557;border-radius:0}#sound-volume:hover::-webkit-slider-thumb{background:var(--cyan)}#sound-volume:focus-visible{outline:1px solid var(--cyan);outline-offset:2px}#sound-volume:disabled{opacity:.4;cursor:default}.threat-active #sound-volume::-webkit-slider-thumb{background:var(--line)}

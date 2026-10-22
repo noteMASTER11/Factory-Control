@@ -1,0 +1,70 @@
+{
+  "method": "Five independent runs of 6000 updates on the same save and game version; includes initial discovery. Benchmark mode on this installation does not export helper files, so disk output was tested separately in live SP and MP. Existing primary game process may influence host timings.",
+  "ticks_per_run": 6000,
+  "runs_per_mode": 5,
+  "baseline": {
+    "runs": [
+      {
+        "mean_ms": 0.771,
+        "min_ms": 0.274,
+        "max_ms": 2.944
+      },
+      {
+        "mean_ms": 0.757,
+        "min_ms": 0.291,
+        "max_ms": 2.756
+      },
+      {
+        "mean_ms": 0.784,
+        "min_ms": 0.297,
+        "max_ms": 2.339
+      },
+      {
+        "mean_ms": 0.758,
+        "min_ms": 0.269,
+        "max_ms": 2.77
+      },
+      {
+        "mean_ms": 0.778,
+        "min_ms": 0.252,
+        "max_ms": 2.478
+      }
+    ],
+    "mean_ms": 0.7696000000000001,
+    "max_observed_ms": 2.944
+  },
+  "collector": {
+    "runs": [
+      {
+        "mean_ms": 0.89,
+        "min_ms": 0.316,
+        "max_ms": 6.749
+      },
+      {
+        "mean_ms": 0.859,
+        "min_ms": 0.327,
+        "max_ms": 6.58
+      },
+      {
+        "mean_ms": 0.88,
+        "min_ms": 0.308,
+        "max_ms": 7.252
+      },
+      {
+        "mean_ms": 0.886,
+        "min_ms": 0.311,
+        "max_ms": 7.065
+      },
+      {
+        "mean_ms": 0.868,
+        "min_ms": 0.324,
+        "max_ms": 7.124
+      }
+    ],
+    "mean_ms": 0.8766,
+    "max_observed_ms": 7.252
+  },
+  "increment_mean_ms": 0.10699999999999998,
+  "relative_increment_percent": 13.903326403326401,
+  "increment_of_60ups_tick_budget_percent": 0.6419999999999999
+}

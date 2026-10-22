@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "groups": [
+    "optics",
+    "color",
+    "texture",
+    "glitches",
+    "symbols",
+    "opening"
+  ],
+  "sliders": 16,
+  "checks": [
+    "six categories",
+    "all sliders retained",
+    "mouse toggles",
+    "Space/Enter toggles",
+    "hidden controls collapse",
+    "values unchanged"
+  ]
+}

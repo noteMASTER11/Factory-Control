@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "executable": "D:\\ChatGPT\\Projects\\FactorioMonitor\\dist\\FactoryControl.exe",
+  "sha256": "179e5c5f2255597aa2de386fbc7a85ea65b4be4110a8361c13184439e38eff3d",
+  "assets": {
+    "interactive.js": "26caec8afafbc081b7e289ad48bfb15c1ed7a188a80577094e85818d58f15d47",
+    "sound.js": "967f06b233e38e01edcd8a6362fbe4636888647b0e140b16d1fa5260d427be8a",
+    "combat-alert.js": "0145e62a06dfe8018e91c6ab65ef6a393b994fa6143256d344638137417bbb89",
+    "alarm-state.js": "96205089522bdf64c0cea9c17a648433d8ccd5d6299cabc9c1afed7a52637313",
+    "app.js": "9e7103c487b312681747fbb4c8056355d145fe654afaf7e4ffef53af442392f5",
+    "vfx/pixi-overlay.js": "9d2e5c1573eecadf4b944f110a1adb7c1ea3084d11d633b17e2f4afc651d23d3"
+  },
+  "matching_cache": [
+    "D:\\ChatGPT\\Cache\\FactorioMonitor\\Web\\F5A93A00BBC5F7104172D855E2E6C3FD52148842AD5CF163B21119935259DAC5"
+  ],
+  "process_id": 23984,
+  "connected": true,
+  "telemetry_ready": true,
+  "source_process_id": 17268
+}

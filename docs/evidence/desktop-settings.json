@@ -1,0 +1,168 @@
+{
+  "passed": true,
+  "scales": [
+    {
+      "scale": 70,
+      "viewport": [
+        1645,
+        1234
+      ],
+      "card": {
+        "x": 462.8571472167969,
+        "y": 12.008929252624512,
+        "width": 720,
+        "height": 1210.2679443359375,
+        "top": 12.008929252624512,
+        "right": 1182.8571472167969,
+        "bottom": 1222.276873588562,
+        "left": 462.8571472167969
+      },
+      "console": {
+        "x": 0,
+        "y": 0,
+        "width": 1645,
+        "height": 1234.2857666015625,
+        "top": 0,
+        "right": 1645,
+        "bottom": 1234.2857666015625,
+        "left": 0
+      },
+      "done": {
+        "x": 1099.6429443359375,
+        "y": 1177.8348388671875,
+        "width": 65.80357360839844,
+        "height": 31.02678680419922,
+        "top": 1177.8348388671875,
+        "right": 1165.446517944336,
+        "bottom": 1208.8616256713867,
+        "left": 1099.6429443359375
+      }
+    },
+    {
+      "scale": 100,
+      "viewport": [
+        1152,
+        864
+      ],
+      "card": {
+        "x": 216,
+        "y": 12,
+        "width": 720,
+        "height": 840,
+        "top": 12,
+        "right": 936,
+        "bottom": 852,
+        "left": 216
+      },
+      "console": {
+        "x": 0,
+        "y": 0,
+        "width": 1152,
+        "height": 864,
+        "top": 0,
+        "right": 1152,
+        "bottom": 864,
+        "left": 0
+      },
+      "done": {
+        "x": 854,
+        "y": 808.8125,
+        "width": 65,
+        "height": 30.1875,
+        "top": 808.8125,
+        "right": 919,
+        "bottom": 839,
+        "left": 854
+      }
+    },
+    {
+      "scale": 175,
+      "viewport": [
+        658,
+        494
+      ],
+      "card": {
+        "x": 12.000000953674316,
+        "y": 12.000000953674316,
+        "width": 634.2857666015625,
+        "height": 469.71429443359375,
+        "top": 12.000000953674316,
+        "right": 646.2857675552368,
+        "bottom": 481.71429538726807,
+        "left": 12.000000953674316
+      },
+      "console": {
+        "x": 0,
+        "y": 0,
+        "width": 658,
+        "height": 493.71429443359375,
+        "top": 0,
+        "right": 658,
+        "bottom": 493.71429443359375,
+        "left": 0
+      },
+      "done": {
+        "x": 565.5714721679688,
+        "y": 439.8035888671875,
+        "width": 64.14286041259766,
+        "height": 29.33928680419922,
+        "top": 439.8035888671875,
+        "right": 629.7143325805664,
+        "bottom": 469.1428756713867,
+        "left": 565.5714721679688
+      }
+    }
+  ],
+  "runtime": {
+    "curvature": 0,
+    "rgb": -0.4,
+    "noise": 0,
+    "vignette": 0.4000000059604645,
+    "sharp": 1.96,
+    "glitch": 27,
+    "frequency": null,
+    "duration": 120
+  },
+  "color": {
+    "matrix": [
+      1.8,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    "enabled": true,
+    "r": 18875176,
+    "g": 8640,
+    "b": 13958
+  },
+  "checks": [
+    "gear before attack",
+    "language and CRT moved",
+    "1 percent native zoom",
+    "70/100/175 viewport bounds",
+    "five independent channels",
+    "stopping active alarm",
+    "no muted event replay",
+    "live shader parameters",
+    "actual RGB pixels",
+    "persistence",
+    "reset defaults",
+    "Escape closes settings in fullscreen"
+  ]
+}

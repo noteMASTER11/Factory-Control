@@ -1,0 +1,1 @@
+{"name":"factory-telemetry","version":"0.4.0","title":"Factory Telemetry Bridge","author":"FactorioMonitor","factorio_version":"2.0","dependencies":["base >= 2.0.77","? space-age >= 2.0.77","? quality >= 2.0.77"],"description":"Incremental read-only telemetry with bounded sampling, rolling inventory totals and explicit sample age. Adds no prototypes or gameplay changes."}

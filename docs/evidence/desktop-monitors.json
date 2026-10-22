@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "monitors": [
+    {
+      "device": "\\\\.\\DISPLAY1",
+      "dpi": 120,
+      "bounds": {
+        "Left": 0,
+        "Top": 0,
+        "Right": 2560,
+        "Bottom": 1600
+      },
+      "restored": true,
+      "maximizedRestored": true,
+      "nativeKeys": true
+    },
+    {
+      "device": "\\\\.\\DISPLAY2",
+      "dpi": 96,
+      "bounds": {
+        "Left": 2560,
+        "Top": 307,
+        "Right": 3712,
+        "Bottom": 1171
+      },
+      "restored": true,
+      "maximizedRestored": true,
+      "nativeKeys": true
+    }
+  ],
+  "captured_at": "2026-10-22T15:38:45.616Z"
+}

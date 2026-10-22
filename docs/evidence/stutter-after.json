@@ -1,0 +1,10 @@
+{
+  "source": "Data\\Diagnostics\\stutter\\v03-with-readers.csv",
+  "frames": 6193,
+  "measured_seconds": 39.997206899999995,
+  "p95_ms": 8.0683,
+  "p99_ms": 15.5032,
+  "p999_ms": 54.1022,
+  "max_ms": 95.1316,
+  "stalls_over_100ms": []
+}

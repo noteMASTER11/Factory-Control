@@ -1,0 +1,44 @@
+{
+  "url": "https://factory.local/index.html",
+  "modules": {
+    "alarm-state.js": "96205089522bdf64c0cea9c17a648433d8ccd5d6299cabc9c1afed7a52637313",
+    "combat-alert.js": "0145e62a06dfe8018e91c6ab65ef6a393b994fa6143256d344638137417bbb89",
+    "sound.js": "ff43c7ee4bbc284a4f007e6736cbb4497e818e3c5ba7a73da7b87c6be0586605"
+  },
+  "introHidden": true,
+  "telemetry": {
+    "packets": 31,
+    "revision": 396,
+    "session": "3807324555:31832443:2:07c3a049cdf74fa2997ceafe8e819c43",
+    "historySamples": 65,
+    "productionHistorySamples": 44,
+    "stockHistorySamples": 17,
+    "logisticsHistorySamples": 18,
+    "researchHistorySamples": 25,
+    "resourceCells": 1692,
+    "resourceHistorySamples": 422,
+    "models": {
+      "overview": 29,
+      "energy": 29,
+      "production": 33,
+      "logistics": 18,
+      "research": 29,
+      "resources": 7,
+      "forecasts": 29,
+      "damage": 29
+    },
+    "activeView": "research",
+    "renders": {
+      "sessions": 9,
+      "overview": 7,
+      "energy": 2,
+      "production": 9,
+      "logistics": 3,
+      "research": 13,
+      "resources": 0,
+      "forecasts": 0,
+      "damage": 0
+    },
+    "visible": "research"
+  }
+}

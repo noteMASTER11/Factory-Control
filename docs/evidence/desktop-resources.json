@@ -1,0 +1,101 @@
+{
+  "passed": true,
+  "before": {
+    "packets": 1,
+    "revision": 6657,
+    "session": "3807324555:31832443:2:fadf7ee1aa914058aefc7ba7542079f3",
+    "historySamples": 300,
+    "productionHistorySamples": 300,
+    "stockHistorySamples": 1,
+    "logisticsHistorySamples": 1,
+    "researchHistorySamples": 204,
+    "resourceCells": 1692,
+    "resourceHistorySamples": 225,
+    "models": {
+      "overview": 1,
+      "energy": 1,
+      "production": 1,
+      "logistics": 1,
+      "research": 1,
+      "resources": 1,
+      "damage": 1
+    },
+    "activeView": "resources",
+    "renders": {
+      "sessions": 2,
+      "overview": 1,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "research": 0,
+      "resources": 1,
+      "damage": 0
+    },
+    "visible": "resources",
+    "mutations": {
+      "overview": 0,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "research": 0,
+      "damage": 0,
+      "sessions": 0
+    }
+  },
+  "after": {
+    "packets": 7,
+    "revision": 6720,
+    "session": "3807324555:31832443:2:fadf7ee1aa914058aefc7ba7542079f3",
+    "historySamples": 306,
+    "productionHistorySamples": 306,
+    "stockHistorySamples": 5,
+    "logisticsHistorySamples": 5,
+    "researchHistorySamples": 204,
+    "resourceCells": 1692,
+    "resourceHistorySamples": 243,
+    "models": {
+      "overview": 7,
+      "energy": 7,
+      "production": 7,
+      "logistics": 5,
+      "research": 7,
+      "resources": 3,
+      "damage": 7
+    },
+    "activeView": "resources",
+    "renders": {
+      "sessions": 2,
+      "overview": 1,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "research": 0,
+      "resources": 3,
+      "damage": 0
+    },
+    "visible": "resources",
+    "mutations": {
+      "overview": 0,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "research": 0,
+      "damage": 0,
+      "sessions": 0
+    }
+  },
+  "checks": [
+    "actual resource chunks",
+    "background history",
+    "only active DOM renders",
+    "two resolutions without main scroll",
+    "map click and focus through CRT",
+    "grid toggle",
+    "Russian search and sort",
+    "surface and resource isolation",
+    "infinite-resource semantics",
+    "conditional forecast",
+    "real scroll",
+    "empty state"
+  ]
+}

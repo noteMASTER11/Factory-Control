@@ -1,0 +1,49 @@
+{
+  "alarm": {
+    "file": "alarm.ogg",
+    "gain": 0.8
+  },
+  "button": {
+    "file": "button.ogg",
+    "gain": 0.65
+  },
+  "notification": {
+    "file": "notification.ogg",
+    "gain": 0.8
+  },
+  "screenshow": {
+    "file": "screenshow.ogg",
+    "gain": 0.65
+  },
+  "background": {
+    "file": "background.ogg",
+    "gain": 0.18,
+    "loop": true,
+    "loopStart": 0.75,
+    "loopEnd": 29.75
+  },
+  "hover1": {
+    "file": "button-click-1.ogg",
+    "gain": 0.45
+  },
+  "hover2": {
+    "file": "button-click-2.ogg",
+    "gain": 0.45
+  },
+  "hover3": {
+    "file": "button-click-3.ogg",
+    "gain": 0.45
+  },
+  "hover4": {
+    "file": "button-click-4.ogg",
+    "gain": 0.45
+  },
+  "hover5": {
+    "file": "button-click-5.ogg",
+    "gain": 0.45
+  },
+  "intro": {
+    "file": "intro.ogg",
+    "gain": 0.75
+  }
+}

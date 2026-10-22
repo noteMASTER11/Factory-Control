@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "decoded": {
+    "duration": 0.8500625,
+    "rate": 48000,
+    "completion": {
+      "active": false,
+      "hidden": true
+    }
+  },
+  "checks": [
+    "play after completed reveal only",
+    "single completion",
+    "cancel stays silent",
+    "rapid navigation replaces pending sound",
+    "mute and no deferred replay",
+    "reduced motion completion",
+    "shared volume path"
+  ]
+}

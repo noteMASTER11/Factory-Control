@@ -1,0 +1,149 @@
+{
+  "source": "Data\\Diagnostics\\stutter\\v02-with-readers.csv",
+  "frames": 2538,
+  "measured_seconds": 21.438938,
+  "p95_ms": 7.7703,
+  "p99_ms": 16.7666,
+  "p999_ms": 658.9842,
+  "max_ms": 690.3042,
+  "stalls_over_100ms": [
+    {
+      "duration_ms": 653.6666,
+      "start_qpc_ms": 21026119.5099,
+      "exports": [
+        {
+          "qpc_ms": 21026755.0981,
+          "topic": "logistics",
+          "mtime_ns": 1792684736355929500,
+          "bytes": 9543805
+        }
+      ]
+    },
+    {
+      "duration_ms": 658.9842,
+      "start_qpc_ms": 21028948.9479,
+      "exports": [
+        {
+          "qpc_ms": 21028905.3124,
+          "topic": "machines",
+          "mtime_ns": 1792684738502229500,
+          "bytes": 95092
+        },
+        {
+          "qpc_ms": 21029598.5284,
+          "topic": "logistics",
+          "mtime_ns": 1792684739202631500,
+          "bytes": 9543805
+        }
+      ]
+    },
+    {
+      "duration_ms": 652.0795,
+      "start_qpc_ms": 21031529.4259,
+      "exports": [
+        {
+          "qpc_ms": 21031515.2633,
+          "topic": "status",
+          "mtime_ns": 1792684741115936700,
+          "bytes": 864
+        },
+        {
+          "qpc_ms": 21032162.8351,
+          "topic": "logistics",
+          "mtime_ns": 1792684741767669800,
+          "bytes": 9543680
+        },
+        {
+          "qpc_ms": 21032173.5208,
+          "topic": "logistics",
+          "mtime_ns": 1792684741767669800,
+          "bytes": 9543805
+        }
+      ]
+    },
+    {
+      "duration_ms": 660.243,
+      "start_qpc_ms": 21034167.829,
+      "exports": [
+        {
+          "qpc_ms": 21034816.1838,
+          "topic": "logistics",
+          "mtime_ns": 1792684744419368400,
+          "bytes": 9543805
+        }
+      ]
+    },
+    {
+      "duration_ms": 651.4813,
+      "start_qpc_ms": 21036758.3458,
+      "exports": [
+        {
+          "qpc_ms": 21037398.7989,
+          "topic": "logistics",
+          "mtime_ns": 1792684746997106300,
+          "bytes": 9543805
+        },
+        {
+          "qpc_ms": 21037409.9271,
+          "topic": "power",
+          "mtime_ns": 1792684747009092900,
+          "bytes": 4612
+        }
+      ]
+    },
+    {
+      "duration_ms": 690.3042,
+      "start_qpc_ms": 21039279.8034,
+      "exports": [
+        {
+          "qpc_ms": 21039957.1981,
+          "topic": "logistics",
+          "mtime_ns": 1792684749556474300,
+          "bytes": 9543805
+        },
+        {
+          "qpc_ms": 21040045.3438,
+          "topic": "production",
+          "mtime_ns": 1792684749647538800,
+          "bytes": 29555
+        }
+      ]
+    },
+    {
+      "duration_ms": 646.9052,
+      "start_qpc_ms": 21041787.3194,
+      "exports": [
+        {
+          "qpc_ms": 21042419.0725,
+          "topic": "logistics",
+          "mtime_ns": 1792684752021370600,
+          "bytes": 9543805
+        },
+        {
+          "qpc_ms": 21042451.8277,
+          "topic": "machines",
+          "mtime_ns": 1792684752048894200,
+          "bytes": 91629
+        }
+      ]
+    },
+    {
+      "duration_ms": 651.9779,
+      "start_qpc_ms": 21044355.8434,
+      "exports": [
+        {
+          "qpc_ms": 21044992.7849,
+          "topic": "logistics",
+          "mtime_ns": 1792684754595002700,
+          "bytes": 9543805
+        },
+        {
+          "qpc_ms": 21045048.0093,
+          "topic": "status",
+          "mtime_ns": 1792684754643118500,
+          "bytes": 864
+        }
+      ]
+    }
+  ]
+}

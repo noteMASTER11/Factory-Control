@@ -1,0 +1,139 @@
+{
+  "passed": true,
+  "before": {
+    "packets": 2,
+    "revision": 14037,
+    "session": "3807324555:31832443:2:fadf7ee1aa914058aefc7ba7542079f3",
+    "historySamples": 301,
+    "productionHistorySamples": 301,
+    "stockHistorySamples": 2,
+    "logisticsHistorySamples": 1,
+    "researchHistorySamples": 157,
+    "resourceCells": 1692,
+    "resourceHistorySamples": 225,
+    "models": {
+      "overview": 2,
+      "energy": 2,
+      "production": 14,
+      "logistics": 2,
+      "research": 2,
+      "resources": 2,
+      "forecasts": 2,
+      "damage": 2
+    },
+    "activeView": "production",
+    "renders": {
+      "sessions": 2,
+      "overview": 1,
+      "energy": 0,
+      "production": 11,
+      "logistics": 0,
+      "research": 0,
+      "resources": 0,
+      "forecasts": 0,
+      "damage": 0
+    },
+    "visible": "production",
+    "mutations": {
+      "sessions": 0,
+      "overview": 0,
+      "energy": 0,
+      "production": 0
+    },
+    "pixi": {
+      "renderer": "pixi",
+      "experimental": true,
+      "enabled": true,
+      "frames": 128,
+      "uploads": 28,
+      "elapsedMs": 4330.5,
+      "p50Ms": 0.20000000298023224,
+      "p95Ms": 2.399999998509884,
+      "htmlInCanvas": true,
+      "sourceResolution": 1,
+      "filterResolution": 1,
+      "sampling": "linear",
+      "sharpen": 0.16,
+      "webgl": true
+    }
+  },
+  "after": {
+    "packets": 4,
+    "revision": 14056,
+    "session": "3807324555:31832443:2:fadf7ee1aa914058aefc7ba7542079f3",
+    "historySamples": 303,
+    "productionHistorySamples": 303,
+    "stockHistorySamples": 3,
+    "logisticsHistorySamples": 3,
+    "researchHistorySamples": 157,
+    "resourceCells": 1692,
+    "resourceHistorySamples": 261,
+    "models": {
+      "overview": 4,
+      "energy": 4,
+      "production": 16,
+      "logistics": 4,
+      "research": 4,
+      "resources": 3,
+      "forecasts": 4,
+      "damage": 4
+    },
+    "activeView": "production",
+    "renders": {
+      "sessions": 2,
+      "overview": 1,
+      "energy": 0,
+      "production": 14,
+      "logistics": 0,
+      "research": 0,
+      "resources": 0,
+      "forecasts": 0,
+      "damage": 0
+    },
+    "visible": "production",
+    "mutations": {
+      "sessions": 0,
+      "overview": 0,
+      "energy": 0,
+      "production": 480
+    },
+    "pixi": {
+      "renderer": "pixi",
+      "experimental": true,
+      "enabled": true,
+      "frames": 338,
+      "uploads": 32,
+      "elapsedMs": 11341.800000000745,
+      "p50Ms": 0.19999999925494194,
+      "p95Ms": 1.1000000014901161,
+      "htmlInCanvas": true,
+      "sourceResolution": 1,
+      "filterResolution": 1,
+      "sampling": "linear",
+      "sharpen": 0.16,
+      "webgl": true
+    }
+  },
+  "glitch": {
+    "offset": 0,
+    "blocks": 3,
+    "contrast": 0,
+    "lineWidth": 0
+  },
+  "checked": [
+    "native mouse clicks",
+    "Russian text input",
+    "select menus",
+    "real scrolling",
+    "production filters and selection",
+    "one rendering tab",
+    "history bootstrap",
+    "both resolutions",
+    "native fullscreen cycles",
+    "resize hit regions",
+    "30 FPS",
+    "BIOS and phosphor transition",
+    "block glitches without interlacing",
+    "HTML fallback"
+  ]
+}

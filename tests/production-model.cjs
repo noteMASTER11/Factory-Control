@@ -1,0 +1,28 @@
+const assert=require('node:assert/strict');
+(async()=>{
+ const {productionModel}=await import('../src/Factorio.Desktop/Web/production-model.js');
+ const now=Date.now(),scope={id:'["nauvis","player"]',surface:'nauvis',force:'player'};
+ const row=(name,kind='item',quality='normal')=>({name,kind,quality,surface:'nauvis',force:'player',produced_per_minute:80,consumed_per_minute:100,produced_per_minute_10m:110,consumed_per_minute_10m:100});
+ const env=(topic,data,tick=1000)=>({topic,tick,written_at:new Date(now).toISOString(),payload:{coverage:{discovery_complete:true},data}});
+ const groups=[{name:'electric-furnace',type:'furnace',surface:'nauvis',force:'player',recipe:'iron-plate',count:12,status:'no_ingredients',ingredients:[{name:'iron-ore',type:'item'}],products:[{name:'iron-plate',type:'item'}],examples:[{x:1,y:2}]}];
+ const topics={production:env('production',{rows:[row('iron-plate'),row('iron-plate','item','rare'),row('steam','fluid')]}),machines:env('machines',{inventory_complete:true,collection_mode:'rolling',sample_window_ticks:6000,groups,stocks:[{...row('iron-plate'),count:200},{...row('iron-plate','item','rare'),count:50}]})};
+ const opts={selected:'item|iron-plate|normal',filter:'all',search:'',units:'minute',rateWindow:'1m',minutes:15};
+ let m=productionModel(topics,scope,opts,[],[],now);
+ assert.equal(m.selected.stock,200);assert.equal(m.selected.balance,-20);assert.equal(m.selected.emptyMinutes,10);assert.equal(m.selected.coverage,80);
+ assert.equal(m.rows.length,3,'Quality must not be discarded or mixed');assert.equal(m.selectedGroups[0].count,12);assert.equal(m.blockers.length,1);assert.equal(m.chain.inputs[0].name,'iron-ore');assert.equal(m.chain.outputs.length,0);
+ groups[0].ingredients.push({name:'iron-plate',type:'item'});
+ m=productionModel(topics,scope,opts,[],[],now);assert.equal(m.blockers.length,1,'A recycling recipe must not repeat its machine group');
+ groups[0].ingredients.pop();
+ m=productionModel(topics,scope,{...opts,rateWindow:'10m',filter:'deficit'},[],[],now);
+ assert.equal(m.rows.length,0,'10-minute balance must use native 10-minute rates');assert.equal(m.selected,null,'Empty filters must clear selected detail');
+ m=productionModel(topics,scope,{...opts,filter:'fluid'},[],[],now);assert.equal(m.rows.length,1);assert.equal(m.selected.kind,'fluid');
+ const history=[{tick:500,rows:[{...row('iron-plate'),produced_per_minute:70}]},{tick:800,rows:[{...row('iron-plate'),surface:'vulcanus',produced_per_minute:900}]}];
+ m=productionModel(topics,scope,opts,history,[{tick:500,complete:true,stocks:[{...row('iron-plate'),count:300},{...row('iron-plate'),surface:'vulcanus',count:9999}]}],now);
+ assert.equal(m.history[0].produced,70);assert.equal(m.history[1].produced,null,'History must not borrow measurements from another surface');assert.equal(m.stockHistory[0].value,300);
+ topics.machines.payload.data.inventory_complete=false;
+ m=productionModel(topics,scope,opts,[],[],now);assert.equal(m.selected.stock,null);assert.equal(m.selected.emptyMinutes,null,'Incomplete stock must not produce a depletion forecast');
+ topics.machines.payload.data.inventory_complete=true;topics.machines.written_at=new Date(now-16000).toISOString();
+ m=productionModel(topics,scope,opts,[],[],now);assert.equal(m.selected.stock,null,'Stale inventory is not zero');
+ topics.production.written_at=new Date(now-16000).toISOString();m=productionModel(topics,scope,opts,[],[],now);assert.equal(m.fresh,false);assert.equal(m.selected.emptyMinutes,null);
+ console.log('Production calculations: all checks passed');
+})().catch(e=>{console.error(e);process.exitCode=1;});

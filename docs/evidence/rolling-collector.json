@@ -1,0 +1,26 @@
+{
+  "lua_cases": [
+    "replace/remove inventory and machine contributions",
+    "discard unreadable entities and mark incomplete",
+    "publish partial sweep with bounded entity budget"
+  ],
+  "frame_limit": 30,
+  "date": "2026-10-22T15:38:49.5876846+00:00",
+  "source_process_id": 7372,
+  "indexed_entities": 101811,
+  "engine_benchmark": {
+    "collector_errors_logged": 0,
+    "ticks": 7500,
+    "comparison_to_baseline": false,
+    "milliseconds_per_update": 7.396
+  },
+  "client_payload": {
+    "full_bytes": 9912945,
+    "summary_bytes": 367826
+  },
+  "live_collector_version": "0.1.0",
+  "source_kind": "game",
+  "prepared_collector_version": "0.2.0",
+  "live_reload_required": true,
+  "machine_publication_age_seconds": 50.7577338
+}

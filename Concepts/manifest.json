@@ -1,0 +1,65 @@
+[
+  {
+    "file": "01-overview.png",
+    "title": "01 · Обзор",
+    "bytes": 2267506,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "file": "02-energy.png",
+    "title": "02 · Энергия",
+    "bytes": 2191465,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "file": "03-production.png",
+    "title": "03 · Производство",
+    "bytes": 2258034,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "file": "04-logistics.png",
+    "title": "04 · Логистика",
+    "bytes": 2282147,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "file": "05-research.png",
+    "title": "05 · Исследования",
+    "bytes": 2241850,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "file": "06-resources.png",
+    "title": "06 · Карта ресурсов",
+    "bytes": 2368814,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "file": "07-forecasts.png",
+    "title": "07 · Прогнозы и рекомендации",
+    "bytes": 2133494,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "file": "08-settings.png",
+    "title": "08 · Настройки",
+    "bytes": 2049759,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "file": "00-session-selection.png",
+    "title": "00 · Выбор игровой сессии",
+    "bytes": 1943093,
+    "width": 1448,
+    "height": 1086
+  }
+]

@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "before": {
+    "packets": 1,
+    "revision": 6284,
+    "session": "3006293857:2483554:1:0bc4de13b592430788b0e31d85ace5b2",
+    "historySamples": 300,
+    "productionHistorySamples": 300,
+    "stockHistorySamples": 1,
+    "models": {
+      "overview": 1,
+      "energy": 1,
+      "production": 1
+    },
+    "activeView": "energy",
+    "renders": {
+      "sessions": 2,
+      "overview": 1,
+      "energy": 1,
+      "production": 0
+    },
+    "visible": "energy",
+    "mutations": {
+      "sessions": 0,
+      "overview": 0,
+      "energy": 0
+    }
+  },
+  "after": {
+    "packets": 4,
+    "revision": 6304,
+    "session": "3006293857:2483554:1:0bc4de13b592430788b0e31d85ace5b2",
+    "historySamples": 303,
+    "productionHistorySamples": 303,
+    "stockHistorySamples": 3,
+    "models": {
+      "overview": 4,
+      "energy": 4,
+      "production": 4
+    },
+    "activeView": "energy",
+    "renders": {
+      "sessions": 2,
+      "overview": 1,
+      "energy": 4,
+      "production": 0
+    },
+    "visible": "energy",
+    "mutations": {
+      "sessions": 0,
+      "overview": 0,
+      "energy": 141
+    }
+  },
+  "passiveEnergy": {
+    "packets": 6,
+    "revision": 6317,
+    "session": "3006293857:2483554:1:0bc4de13b592430788b0e31d85ace5b2",
+    "historySamples": 305,
+    "productionHistorySamples": 304,
+    "stockHistorySamples": 4,
+    "models": {
+      "overview": 6,
+      "energy": 6,
+      "production": 5
+    },
+    "activeView": "overview",
+    "renders": {
+      "sessions": 2,
+      "overview": 4,
+      "energy": 4,
+      "production": 0
+    },
+    "visible": "overview",
+    "mutations": {
+      "sessions": 0,
+      "overview": 258,
+      "energy": 141
+    }
+  },
+  "checked": [
+    "live energy",
+    "worker history",
+    "no hidden DOM writes",
+    "cached tab switching",
+    "network filters",
+    "battery scope",
+    "stored energy and capacity from live telemetry",
+    "time windows",
+    "1152x864",
+    "1024x768"
+  ]
+}
