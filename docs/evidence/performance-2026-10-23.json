@@ -1,0 +1,1858 @@
+{
+  "date": "2026-10-23",
+  "gameProcessId": 17268,
+  "baselineSamples": [
+    {
+      "seconds": 0.1825271,
+      "cpu_seconds": 0,
+      "main_working_mb": 1514.95703125,
+      "family_working_mb": 2113.27734375,
+      "family_private_mb": 2765.74609375
+    },
+    {
+      "seconds": 3.3219057,
+      "cpu_seconds": 2.4375,
+      "main_working_mb": 1448.828125,
+      "family_working_mb": 2051.35546875,
+      "family_private_mb": 2572.63671875
+    },
+    {
+      "seconds": 6.4488301,
+      "cpu_seconds": 1.15625,
+      "main_working_mb": 1489.40234375,
+      "family_working_mb": 2093.8046875,
+      "family_private_mb": 2613.48046875
+    },
+    {
+      "seconds": 9.5661024,
+      "cpu_seconds": 2.3125,
+      "main_working_mb": 1601.25390625,
+      "family_working_mb": 2201.46484375,
+      "family_private_mb": 2853.765625
+    },
+    {
+      "seconds": 12.6990563,
+      "cpu_seconds": 1.796875,
+      "main_working_mb": 1700.4296875,
+      "family_working_mb": 2299.58984375,
+      "family_private_mb": 3025.6875
+    },
+    {
+      "seconds": 15.8148417,
+      "cpu_seconds": 2.078125,
+      "main_working_mb": 1678.703125,
+      "family_working_mb": 2279.921875,
+      "family_private_mb": 3000.1015625
+    },
+    {
+      "seconds": 18.9223864,
+      "cpu_seconds": 2.28125,
+      "main_working_mb": 1764.51953125,
+      "family_working_mb": 2368.859375,
+      "family_private_mb": 3106.015625
+    },
+    {
+      "seconds": 22.0300298,
+      "cpu_seconds": 1.609375,
+      "main_working_mb": 1542.9921875,
+      "family_working_mb": 2145.6328125,
+      "family_private_mb": 2816.48828125
+    },
+    {
+      "seconds": 25.1377391,
+      "cpu_seconds": 2.078125,
+      "main_working_mb": 1627.984375,
+      "family_working_mb": 2229.48828125,
+      "family_private_mb": 3046.671875
+    },
+    {
+      "seconds": 28.250938,
+      "cpu_seconds": 1.921875,
+      "main_working_mb": 1723.8671875,
+      "family_working_mb": 2326.296875,
+      "family_private_mb": 3149.65234375
+    },
+    {
+      "seconds": 31.3550061,
+      "cpu_seconds": 1.40625,
+      "main_working_mb": 1616.44921875,
+      "family_working_mb": 2220.42578125,
+      "family_private_mb": 3036.96875
+    }
+  ],
+  "stages": {
+    "compact": {
+      "process_id": 25876,
+      "logical_processors": 24,
+      "duration_seconds": 62.3148613,
+      "cpu_percent": 0.9057698130726112,
+      "main_working_avg_mb": 1755.8203125,
+      "family_working_avg_mb": 2242.326171875,
+      "family_private_avg_mb": 2928.557421875,
+      "samples": [
+        {
+          "seconds": 0.1625297,
+          "cpu_seconds": 0,
+          "main_working_mb": 1434.81640625,
+          "family_working_mb": 1918.34765625,
+          "family_private_mb": 2432.25390625
+        },
+        {
+          "seconds": 3.3042912,
+          "cpu_seconds": 1.03125,
+          "main_working_mb": 1332.5234375,
+          "family_working_mb": 1819.3046875,
+          "family_private_mb": 2330.00390625
+        },
+        {
+          "seconds": 6.4242482,
+          "cpu_seconds": 0.359375,
+          "main_working_mb": 1341.87890625,
+          "family_working_mb": 1828.8125,
+          "family_private_mb": 2339.55859375
+        },
+        {
+          "seconds": 9.5408762,
+          "cpu_seconds": 1.046875,
+          "main_working_mb": 1518.94140625,
+          "family_working_mb": 2003.1484375,
+          "family_private_mb": 2559.3671875
+        },
+        {
+          "seconds": 12.6531258,
+          "cpu_seconds": 0.796875,
+          "main_working_mb": 1603.078125,
+          "family_working_mb": 2093.6484375,
+          "family_private_mb": 2642.49609375
+        },
+        {
+          "seconds": 15.7500549,
+          "cpu_seconds": 0.640625,
+          "main_working_mb": 1654.90234375,
+          "family_working_mb": 2147.95703125,
+          "family_private_mb": 2696.21875
+        },
+        {
+          "seconds": 18.852828,
+          "cpu_seconds": 0.828125,
+          "main_working_mb": 1600.21875,
+          "family_working_mb": 2090.48046875,
+          "family_private_mb": 2784.828125
+        },
+        {
+          "seconds": 21.9728967,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 1598.66796875,
+          "family_working_mb": 2091.28125,
+          "family_private_mb": 2783.734375
+        },
+        {
+          "seconds": 25.0959131,
+          "cpu_seconds": 0.578125,
+          "main_working_mb": 1595.515625,
+          "family_working_mb": 2085.03125,
+          "family_private_mb": 2769.96484375
+        },
+        {
+          "seconds": 28.2080834,
+          "cpu_seconds": 0.671875,
+          "main_working_mb": 1763.19921875,
+          "family_working_mb": 2250.74609375,
+          "family_private_mb": 2935.0234375
+        },
+        {
+          "seconds": 31.3220431,
+          "cpu_seconds": 0.578125,
+          "main_working_mb": 1815.9453125,
+          "family_working_mb": 2305.39453125,
+          "family_private_mb": 2997.25390625
+        },
+        {
+          "seconds": 34.4261738,
+          "cpu_seconds": 0.875,
+          "main_working_mb": 1904.265625,
+          "family_working_mb": 2393.83984375,
+          "family_private_mb": 3085.6171875
+        },
+        {
+          "seconds": 37.5390927,
+          "cpu_seconds": 0.359375,
+          "main_working_mb": 1914.1484375,
+          "family_working_mb": 2403.53515625,
+          "family_private_mb": 3098.89453125
+        },
+        {
+          "seconds": 40.6425673,
+          "cpu_seconds": 1.03125,
+          "main_working_mb": 1809.30078125,
+          "family_working_mb": 2300.8984375,
+          "family_private_mb": 3085.9609375
+        },
+        {
+          "seconds": 43.7542698,
+          "cpu_seconds": 0.859375,
+          "main_working_mb": 1943.25,
+          "family_working_mb": 2424.82421875,
+          "family_private_mb": 3222.4609375
+        },
+        {
+          "seconds": 46.8604141,
+          "cpu_seconds": 0.46875,
+          "main_working_mb": 1977.85546875,
+          "family_working_mb": 2456.87109375,
+          "family_private_mb": 3254.328125
+        },
+        {
+          "seconds": 49.9685086,
+          "cpu_seconds": 0.890625,
+          "main_working_mb": 2122.796875,
+          "family_working_mb": 2606.39453125,
+          "family_private_mb": 3400.8203125
+        },
+        {
+          "seconds": 53.0859278,
+          "cpu_seconds": 0.75,
+          "main_working_mb": 2141.6484375,
+          "family_working_mb": 2622.9140625,
+          "family_private_mb": 3417.99609375
+        },
+        {
+          "seconds": 56.1909822,
+          "cpu_seconds": 0.671875,
+          "main_working_mb": 2177.9765625,
+          "family_working_mb": 2659.70703125,
+          "family_private_mb": 3455.578125
+        },
+        {
+          "seconds": 59.3018243,
+          "cpu_seconds": 0.734375,
+          "main_working_mb": 1865.4765625,
+          "family_working_mb": 2343.38671875,
+          "family_private_mb": 3278.7890625
+        }
+      ]
+    },
+    "optimized": {
+      "process_id": 23104,
+      "logical_processors": 24,
+      "duration_seconds": 62.2677243,
+      "cpu_percent": 0.589667477068979,
+      "main_working_avg_mb": 615.8693359375,
+      "family_working_avg_mb": 1099.696875,
+      "family_private_avg_mb": 1080.4671875,
+      "samples": [
+        {
+          "seconds": 0.1430647,
+          "cpu_seconds": 0,
+          "main_working_mb": 498.69140625,
+          "family_working_mb": 980.734375,
+          "family_private_mb": 958.7265625
+        },
+        {
+          "seconds": 3.2833245,
+          "cpu_seconds": 0.828125,
+          "main_working_mb": 524.640625,
+          "family_working_mb": 1007.94921875,
+          "family_private_mb": 994.73828125
+        },
+        {
+          "seconds": 6.4062783,
+          "cpu_seconds": 0.359375,
+          "main_working_mb": 551.05078125,
+          "family_working_mb": 1035.859375,
+          "family_private_mb": 1021.28515625
+        },
+        {
+          "seconds": 9.5154182,
+          "cpu_seconds": 0.59375,
+          "main_working_mb": 516.86328125,
+          "family_working_mb": 1003.13671875,
+          "family_private_mb": 994.53515625
+        },
+        {
+          "seconds": 12.6313716,
+          "cpu_seconds": 0.609375,
+          "main_working_mb": 526.2890625,
+          "family_working_mb": 1019.34375,
+          "family_private_mb": 995.61328125
+        },
+        {
+          "seconds": 15.7525409,
+          "cpu_seconds": 0.484375,
+          "main_working_mb": 574.40625,
+          "family_working_mb": 1062.7265625,
+          "family_private_mb": 1045.734375
+        },
+        {
+          "seconds": 18.860102,
+          "cpu_seconds": 0.5,
+          "main_working_mb": 569.3046875,
+          "family_working_mb": 1057.8046875,
+          "family_private_mb": 1034.11328125
+        },
+        {
+          "seconds": 21.9710998,
+          "cpu_seconds": 0.328125,
+          "main_working_mb": 628.97265625,
+          "family_working_mb": 1117.63671875,
+          "family_private_mb": 1099.8515625
+        },
+        {
+          "seconds": 25.0881507,
+          "cpu_seconds": 0.390625,
+          "main_working_mb": 632.51171875,
+          "family_working_mb": 1116.203125,
+          "family_private_mb": 1094.71484375
+        },
+        {
+          "seconds": 28.198569,
+          "cpu_seconds": 0.5625,
+          "main_working_mb": 630.23046875,
+          "family_working_mb": 1115.8203125,
+          "family_private_mb": 1097.1171875
+        },
+        {
+          "seconds": 31.3082793,
+          "cpu_seconds": 0.578125,
+          "main_working_mb": 639.35546875,
+          "family_working_mb": 1126.26171875,
+          "family_private_mb": 1106.859375
+        },
+        {
+          "seconds": 34.4123535,
+          "cpu_seconds": 0.46875,
+          "main_working_mb": 651.265625,
+          "family_working_mb": 1138.1015625,
+          "family_private_mb": 1118.49609375
+        },
+        {
+          "seconds": 37.5174757,
+          "cpu_seconds": 0.3125,
+          "main_working_mb": 674.171875,
+          "family_working_mb": 1164.5859375,
+          "family_private_mb": 1146.26953125
+        },
+        {
+          "seconds": 40.6270713,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 672.51953125,
+          "family_working_mb": 1161.0390625,
+          "family_private_mb": 1141.83984375
+        },
+        {
+          "seconds": 43.7299427,
+          "cpu_seconds": 0.5,
+          "main_working_mb": 663.640625,
+          "family_working_mb": 1142.26953125,
+          "family_private_mb": 1114.15625
+        },
+        {
+          "seconds": 46.838899,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 663.78515625,
+          "family_working_mb": 1137.24609375,
+          "family_private_mb": 1108.8125
+        },
+        {
+          "seconds": 49.9503961,
+          "cpu_seconds": 0.515625,
+          "main_working_mb": 659.265625,
+          "family_working_mb": 1136.48046875,
+          "family_private_mb": 1114.734375
+        },
+        {
+          "seconds": 53.0593645,
+          "cpu_seconds": 0.203125,
+          "main_working_mb": 686.0234375,
+          "family_working_mb": 1162.23046875,
+          "family_private_mb": 1144.74609375
+        },
+        {
+          "seconds": 56.1559497,
+          "cpu_seconds": 0.34375,
+          "main_working_mb": 690.5,
+          "family_working_mb": 1170.828125,
+          "family_private_mb": 1152.7265625
+        },
+        {
+          "seconds": 59.2682223,
+          "cpu_seconds": 0.4375,
+          "main_working_mb": 663.8984375,
+          "family_working_mb": 1137.6796875,
+          "family_private_mb": 1124.2734375
+        }
+      ]
+    },
+    "final": {
+      "process_id": 19880,
+      "logical_processors": 24,
+      "duration_seconds": 180.5326929,
+      "cpu_percent": 0.680848013850678,
+      "main_working_avg_mb": 330.4401266163793,
+      "family_working_avg_mb": 843.0171066810345,
+      "family_private_avg_mb": 761.0589978448276,
+      "samples": [
+        {
+          "seconds": 0.165151,
+          "cpu_seconds": 0,
+          "main_working_mb": 286.5859375,
+          "family_working_mb": 775.11328125,
+          "family_private_mb": 696.57421875
+        },
+        {
+          "seconds": 3.2958455,
+          "cpu_seconds": 0.65625,
+          "main_working_mb": 294.65625,
+          "family_working_mb": 784.6875,
+          "family_private_mb": 703.625
+        },
+        {
+          "seconds": 6.4128365,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 307.921875,
+          "family_working_mb": 805.109375,
+          "family_private_mb": 717.30078125
+        },
+        {
+          "seconds": 9.5339105,
+          "cpu_seconds": 0.578125,
+          "main_working_mb": 301.4140625,
+          "family_working_mb": 799.90625,
+          "family_private_mb": 715.9453125
+        },
+        {
+          "seconds": 12.6549145,
+          "cpu_seconds": 1.734375,
+          "main_working_mb": 316.99609375,
+          "family_working_mb": 818.55078125,
+          "family_private_mb": 757.0078125
+        },
+        {
+          "seconds": 15.7737991,
+          "cpu_seconds": 0.5,
+          "main_working_mb": 317.87890625,
+          "family_working_mb": 816.40625,
+          "family_private_mb": 752.7421875
+        },
+        {
+          "seconds": 18.8772888,
+          "cpu_seconds": 0.671875,
+          "main_working_mb": 308.65625,
+          "family_working_mb": 855.40234375,
+          "family_private_mb": 805.83203125
+        },
+        {
+          "seconds": 21.9858702,
+          "cpu_seconds": 0.828125,
+          "main_working_mb": 309.6328125,
+          "family_working_mb": 847.44921875,
+          "family_private_mb": 797.1953125
+        },
+        {
+          "seconds": 25.1066536,
+          "cpu_seconds": 0.6875,
+          "main_working_mb": 319.23046875,
+          "family_working_mb": 850.81640625,
+          "family_private_mb": 788.609375
+        },
+        {
+          "seconds": 28.2246553,
+          "cpu_seconds": 0.96875,
+          "main_working_mb": 320.01171875,
+          "family_working_mb": 832.5546875,
+          "family_private_mb": 768.84765625
+        },
+        {
+          "seconds": 31.344048,
+          "cpu_seconds": 0.53125,
+          "main_working_mb": 311.52734375,
+          "family_working_mb": 824.76953125,
+          "family_private_mb": 755.37890625
+        },
+        {
+          "seconds": 34.4583983,
+          "cpu_seconds": 0.515625,
+          "main_working_mb": 309.95703125,
+          "family_working_mb": 813.7734375,
+          "family_private_mb": 738.9140625
+        },
+        {
+          "seconds": 37.5654652,
+          "cpu_seconds": 0.78125,
+          "main_working_mb": 311.34765625,
+          "family_working_mb": 816.38671875,
+          "family_private_mb": 746.515625
+        },
+        {
+          "seconds": 40.681397,
+          "cpu_seconds": 0.640625,
+          "main_working_mb": 309.76953125,
+          "family_working_mb": 809.3671875,
+          "family_private_mb": 721.21484375
+        },
+        {
+          "seconds": 43.7928725,
+          "cpu_seconds": 0.625,
+          "main_working_mb": 319.40625,
+          "family_working_mb": 816.97265625,
+          "family_private_mb": 736.6015625
+        },
+        {
+          "seconds": 46.9005605,
+          "cpu_seconds": 0.4375,
+          "main_working_mb": 332.71484375,
+          "family_working_mb": 837.2265625,
+          "family_private_mb": 756.83203125
+        },
+        {
+          "seconds": 50.0218206,
+          "cpu_seconds": 0.390625,
+          "main_working_mb": 334.42578125,
+          "family_working_mb": 839.96875,
+          "family_private_mb": 759.3515625
+        },
+        {
+          "seconds": 53.1258895,
+          "cpu_seconds": 0.5625,
+          "main_working_mb": 334.49609375,
+          "family_working_mb": 838.59375,
+          "family_private_mb": 756.74609375
+        },
+        {
+          "seconds": 56.2355785,
+          "cpu_seconds": 0.28125,
+          "main_working_mb": 326.8671875,
+          "family_working_mb": 829.53125,
+          "family_private_mb": 753.8984375
+        },
+        {
+          "seconds": 59.355577,
+          "cpu_seconds": 0.546875,
+          "main_working_mb": 323.33203125,
+          "family_working_mb": 827.0546875,
+          "family_private_mb": 746.41796875
+        },
+        {
+          "seconds": 62.4739408,
+          "cpu_seconds": 0.484375,
+          "main_working_mb": 329.5703125,
+          "family_working_mb": 834.43359375,
+          "family_private_mb": 753.64453125
+        },
+        {
+          "seconds": 65.5754297,
+          "cpu_seconds": 0.546875,
+          "main_working_mb": 333.81640625,
+          "family_working_mb": 837.046875,
+          "family_private_mb": 759.4921875
+        },
+        {
+          "seconds": 68.6868827,
+          "cpu_seconds": 0.515625,
+          "main_working_mb": 334.7890625,
+          "family_working_mb": 842.296875,
+          "family_private_mb": 758.94140625
+        },
+        {
+          "seconds": 71.7953135,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 326.3359375,
+          "family_working_mb": 829.2578125,
+          "family_private_mb": 744.66796875
+        },
+        {
+          "seconds": 74.9038179,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 326.65234375,
+          "family_working_mb": 831.30078125,
+          "family_private_mb": 754.89453125
+        },
+        {
+          "seconds": 78.0091332,
+          "cpu_seconds": 0.75,
+          "main_working_mb": 325,
+          "family_working_mb": 839.9296875,
+          "family_private_mb": 762.19921875
+        },
+        {
+          "seconds": 81.1285557,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 326.26171875,
+          "family_working_mb": 841.79296875,
+          "family_private_mb": 763.04296875
+        },
+        {
+          "seconds": 84.2444495,
+          "cpu_seconds": 0.53125,
+          "main_working_mb": 329.6484375,
+          "family_working_mb": 842.4375,
+          "family_private_mb": 766.13671875
+        },
+        {
+          "seconds": 87.3666471,
+          "cpu_seconds": 0.4375,
+          "main_working_mb": 334.19921875,
+          "family_working_mb": 844.26953125,
+          "family_private_mb": 760.296875
+        },
+        {
+          "seconds": 90.4766062,
+          "cpu_seconds": 0.265625,
+          "main_working_mb": 336.48828125,
+          "family_working_mb": 848.11328125,
+          "family_private_mb": 763.41796875
+        },
+        {
+          "seconds": 93.5797815,
+          "cpu_seconds": 0.34375,
+          "main_working_mb": 337.3671875,
+          "family_working_mb": 850.4765625,
+          "family_private_mb": 767.0390625
+        },
+        {
+          "seconds": 96.7147853,
+          "cpu_seconds": 0.5625,
+          "main_working_mb": 353.41015625,
+          "family_working_mb": 865.828125,
+          "family_private_mb": 773.125
+        },
+        {
+          "seconds": 99.8238614,
+          "cpu_seconds": 0.265625,
+          "main_working_mb": 324.93359375,
+          "family_working_mb": 835.2421875,
+          "family_private_mb": 743.390625
+        },
+        {
+          "seconds": 102.9200354,
+          "cpu_seconds": 0.328125,
+          "main_working_mb": 325.921875,
+          "family_working_mb": 836.890625,
+          "family_private_mb": 745.328125
+        },
+        {
+          "seconds": 106.0315913,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 326.58984375,
+          "family_working_mb": 839.57421875,
+          "family_private_mb": 747.15625
+        },
+        {
+          "seconds": 109.1409766,
+          "cpu_seconds": 0.546875,
+          "main_working_mb": 324.80078125,
+          "family_working_mb": 836.6484375,
+          "family_private_mb": 750.2109375
+        },
+        {
+          "seconds": 112.2484961,
+          "cpu_seconds": 0.578125,
+          "main_working_mb": 326.50390625,
+          "family_working_mb": 839.28125,
+          "family_private_mb": 756.6015625
+        },
+        {
+          "seconds": 115.3609851,
+          "cpu_seconds": 0.515625,
+          "main_working_mb": 335.09375,
+          "family_working_mb": 845.6328125,
+          "family_private_mb": 756.75
+        },
+        {
+          "seconds": 118.4814404,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 332.22265625,
+          "family_working_mb": 841.98828125,
+          "family_private_mb": 752.2421875
+        },
+        {
+          "seconds": 121.5804908,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 334.80859375,
+          "family_working_mb": 845.59375,
+          "family_private_mb": 756.359375
+        },
+        {
+          "seconds": 124.6911582,
+          "cpu_seconds": 0.40625,
+          "main_working_mb": 334.88671875,
+          "family_working_mb": 847.95703125,
+          "family_private_mb": 759.25390625
+        },
+        {
+          "seconds": 127.7988372,
+          "cpu_seconds": 0.46875,
+          "main_working_mb": 323.3515625,
+          "family_working_mb": 841.80078125,
+          "family_private_mb": 753.26953125
+        },
+        {
+          "seconds": 130.8984479,
+          "cpu_seconds": 0.46875,
+          "main_working_mb": 323.50390625,
+          "family_working_mb": 832.43359375,
+          "family_private_mb": 740.9921875
+        },
+        {
+          "seconds": 134.0074092,
+          "cpu_seconds": 0.28125,
+          "main_working_mb": 323.734375,
+          "family_working_mb": 833.3203125,
+          "family_private_mb": 748.1328125
+        },
+        {
+          "seconds": 137.1049477,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 322.94140625,
+          "family_working_mb": 831.7734375,
+          "family_private_mb": 740.21484375
+        },
+        {
+          "seconds": 140.2029463,
+          "cpu_seconds": 0.546875,
+          "main_working_mb": 331.91796875,
+          "family_working_mb": 845.80859375,
+          "family_private_mb": 755.00390625
+        },
+        {
+          "seconds": 143.3171751,
+          "cpu_seconds": 0.59375,
+          "main_working_mb": 334.56640625,
+          "family_working_mb": 853.125,
+          "family_private_mb": 760.19921875
+        },
+        {
+          "seconds": 146.4254054,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 344.0078125,
+          "family_working_mb": 861.12109375,
+          "family_private_mb": 772.5
+        },
+        {
+          "seconds": 149.5345115,
+          "cpu_seconds": 0.515625,
+          "main_working_mb": 343.96484375,
+          "family_working_mb": 867.10546875,
+          "family_private_mb": 778.5234375
+        },
+        {
+          "seconds": 152.6398843,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 341.671875,
+          "family_working_mb": 873.9296875,
+          "family_private_mb": 781.62890625
+        },
+        {
+          "seconds": 155.7533102,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 343.359375,
+          "family_working_mb": 870.06640625,
+          "family_private_mb": 777.0234375
+        },
+        {
+          "seconds": 158.88401,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 345.421875,
+          "family_working_mb": 874.109375,
+          "family_private_mb": 780.51953125
+        },
+        {
+          "seconds": 162.0011105,
+          "cpu_seconds": 0.59375,
+          "main_working_mb": 347.015625,
+          "family_working_mb": 873.40625,
+          "family_private_mb": 785.09765625
+        },
+        {
+          "seconds": 165.0995664,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 343.921875,
+          "family_working_mb": 870.68359375,
+          "family_private_mb": 783.3984375
+        },
+        {
+          "seconds": 168.2004148,
+          "cpu_seconds": 0.3125,
+          "main_working_mb": 354.8515625,
+          "family_working_mb": 881.4375,
+          "family_private_mb": 793.515625
+        },
+        {
+          "seconds": 171.3009491,
+          "cpu_seconds": 0.34375,
+          "main_working_mb": 360.40234375,
+          "family_working_mb": 886.359375,
+          "family_private_mb": 795.9765625
+        },
+        {
+          "seconds": 174.4212305,
+          "cpu_seconds": 0.6875,
+          "main_working_mb": 407.171875,
+          "family_working_mb": 935.54296875,
+          "family_private_mb": 857.4296875
+        },
+        {
+          "seconds": 177.52939,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 417.59375,
+          "family_working_mb": 947.3359375,
+          "family_private_mb": 868.25390625
+        }
+      ]
+    },
+    "stream-gpu": {
+      "process_id": 3568,
+      "logical_processors": 24,
+      "duration_seconds": 121.3060048,
+      "cpu_percent": 0.5704943102574849,
+      "main_working_avg_mb": 312.3863075657895,
+      "family_working_avg_mb": 800.6368215460526,
+      "family_private_avg_mb": 598.3425164473684,
+      "main_private_working_avg_mb": 165.65296052631578,
+      "family_private_working_avg_mb": 366.38651315789474,
+      "samples": [
+        {
+          "seconds": 0.260844,
+          "cpu_seconds": 0,
+          "main_working_mb": 287.37109375,
+          "family_working_mb": 773.078125,
+          "family_private_mb": 571.9609375,
+          "main_private_working_mb": 143.265625,
+          "family_private_working_mb": 346.84765625
+        },
+        {
+          "seconds": 3.4691202,
+          "cpu_seconds": 0.296875,
+          "main_working_mb": 300.1796875,
+          "family_working_mb": 786.77734375,
+          "family_private_mb": 583.4921875,
+          "main_private_working_mb": 156.03125,
+          "family_private_working_mb": 360.41015625
+        },
+        {
+          "seconds": 6.6686855,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 298.72265625,
+          "family_working_mb": 787.28515625,
+          "family_private_mb": 591.48828125,
+          "main_private_working_mb": 154.44921875,
+          "family_private_working_mb": 360.80859375
+        },
+        {
+          "seconds": 9.867712,
+          "cpu_seconds": 0.28125,
+          "main_working_mb": 298.98046875,
+          "family_working_mb": 790.921875,
+          "family_private_mb": 591.48046875,
+          "main_private_working_mb": 154.78125,
+          "family_private_working_mb": 361.9296875
+        },
+        {
+          "seconds": 13.0563293,
+          "cpu_seconds": 0.625,
+          "main_working_mb": 320.70703125,
+          "family_working_mb": 802.4921875,
+          "family_private_mb": 603.90625,
+          "main_private_working_mb": 177.35546875,
+          "family_private_working_mb": 374.265625
+        },
+        {
+          "seconds": 16.2446206,
+          "cpu_seconds": 0.515625,
+          "main_working_mb": 328.37109375,
+          "family_working_mb": 804,
+          "family_private_mb": 608.4609375,
+          "main_private_working_mb": 182.5390625,
+          "family_private_working_mb": 372.16796875
+        },
+        {
+          "seconds": 19.4553587,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 329.09765625,
+          "family_working_mb": 804.109375,
+          "family_private_mb": 607.35546875,
+          "main_private_working_mb": 183.22265625,
+          "family_private_working_mb": 372.23046875
+        },
+        {
+          "seconds": 22.6473108,
+          "cpu_seconds": 0.53125,
+          "main_working_mb": 326.65234375,
+          "family_working_mb": 806.62109375,
+          "family_private_mb": 598.34375,
+          "main_private_working_mb": 180.76953125,
+          "family_private_working_mb": 375.7421875
+        },
+        {
+          "seconds": 25.8589152,
+          "cpu_seconds": 0.359375,
+          "main_working_mb": 326.69921875,
+          "family_working_mb": 808.609375,
+          "family_private_mb": 608.52734375,
+          "main_private_working_mb": 180.7734375,
+          "family_private_working_mb": 376.41796875
+        },
+        {
+          "seconds": 29.0633784,
+          "cpu_seconds": 0.328125,
+          "main_working_mb": 326.55859375,
+          "family_working_mb": 807.3515625,
+          "family_private_mb": 603.7421875,
+          "main_private_working_mb": 180.5390625,
+          "family_private_working_mb": 373.2890625
+        },
+        {
+          "seconds": 32.2544576,
+          "cpu_seconds": 0.53125,
+          "main_working_mb": 302.46484375,
+          "family_working_mb": 783.7265625,
+          "family_private_mb": 588.13671875,
+          "main_private_working_mb": 156.3984375,
+          "family_private_working_mb": 349.6015625
+        },
+        {
+          "seconds": 35.4460936,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 302.41015625,
+          "family_working_mb": 782.64453125,
+          "family_private_mb": 586.7109375,
+          "main_private_working_mb": 156.390625,
+          "family_private_working_mb": 348.53515625
+        },
+        {
+          "seconds": 38.6461711,
+          "cpu_seconds": 0.328125,
+          "main_working_mb": 302.61328125,
+          "family_working_mb": 781.7734375,
+          "family_private_mb": 579.85546875,
+          "main_private_working_mb": 156.55859375,
+          "family_private_working_mb": 347.609375
+        },
+        {
+          "seconds": 41.8247465,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 283.69140625,
+          "family_working_mb": 762.8828125,
+          "family_private_mb": 560.796875,
+          "main_private_working_mb": 137.56640625,
+          "family_private_working_mb": 328.62109375
+        },
+        {
+          "seconds": 45.0083743,
+          "cpu_seconds": 0.75,
+          "main_working_mb": 290.62890625,
+          "family_working_mb": 773.765625,
+          "family_private_mb": 569.2109375,
+          "main_private_working_mb": 144.0546875,
+          "family_private_working_mb": 339.06640625
+        },
+        {
+          "seconds": 48.1894484,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 306.109375,
+          "family_working_mb": 788.328125,
+          "family_private_mb": 581.9296875,
+          "main_private_working_mb": 159.47265625,
+          "family_private_working_mb": 353.515625
+        },
+        {
+          "seconds": 51.3745011,
+          "cpu_seconds": 0.46875,
+          "main_working_mb": 306.8046875,
+          "family_working_mb": 787.78125,
+          "family_private_mb": 576.30859375,
+          "main_private_working_mb": 160.1328125,
+          "family_private_working_mb": 352.91796875
+        },
+        {
+          "seconds": 54.5650407,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 307.5234375,
+          "family_working_mb": 802.296875,
+          "family_private_mb": 603.2578125,
+          "main_private_working_mb": 160.87109375,
+          "family_private_working_mb": 367.421875
+        },
+        {
+          "seconds": 57.7539416,
+          "cpu_seconds": 0.328125,
+          "main_working_mb": 301.42578125,
+          "family_working_mb": 789.29296875,
+          "family_private_mb": 578.89453125,
+          "main_private_working_mb": 154.8359375,
+          "family_private_working_mb": 354.45703125
+        },
+        {
+          "seconds": 60.9377237,
+          "cpu_seconds": 0.28125,
+          "main_working_mb": 304.0390625,
+          "family_working_mb": 790.0078125,
+          "family_private_mb": 577.97265625,
+          "main_private_working_mb": 157.4375,
+          "family_private_working_mb": 355.16015625
+        },
+        {
+          "seconds": 64.1270925,
+          "cpu_seconds": 0.390625,
+          "main_working_mb": 274.69921875,
+          "family_working_mb": 759.39453125,
+          "family_private_mb": 546.91015625,
+          "main_private_working_mb": 128.09375,
+          "family_private_working_mb": 324.50390625
+        },
+        {
+          "seconds": 67.3092712,
+          "cpu_seconds": 0.3125,
+          "main_working_mb": 283.59765625,
+          "family_working_mb": 768.69140625,
+          "family_private_mb": 547.86328125,
+          "main_private_working_mb": 136.9921875,
+          "family_private_working_mb": 333.79296875
+        },
+        {
+          "seconds": 70.4984355,
+          "cpu_seconds": 0.453125,
+          "main_working_mb": 284.1640625,
+          "family_working_mb": 771.2890625,
+          "family_private_mb": 562.8515625,
+          "main_private_working_mb": 137.59765625,
+          "family_private_working_mb": 336.421875
+        },
+        {
+          "seconds": 73.6712107,
+          "cpu_seconds": 0.40625,
+          "main_working_mb": 293.90234375,
+          "family_working_mb": 788.359375,
+          "family_private_mb": 568.18359375,
+          "main_private_working_mb": 147.19921875,
+          "family_private_working_mb": 352.92578125
+        },
+        {
+          "seconds": 76.8550405,
+          "cpu_seconds": 0.390625,
+          "main_working_mb": 286.02734375,
+          "family_working_mb": 778.875,
+          "family_private_mb": 566.19921875,
+          "main_private_working_mb": 122.50390625,
+          "family_private_working_mb": 326.5859375
+        },
+        {
+          "seconds": 80.0346225,
+          "cpu_seconds": 0.5625,
+          "main_working_mb": 296.6640625,
+          "family_working_mb": 789.5546875,
+          "family_private_mb": 584.05078125,
+          "main_private_working_mb": 149.94921875,
+          "family_private_working_mb": 354.07421875
+        },
+        {
+          "seconds": 83.2206456,
+          "cpu_seconds": 0.546875,
+          "main_working_mb": 307.4609375,
+          "family_working_mb": 801.046875,
+          "family_private_mb": 601.98828125,
+          "main_private_working_mb": 160.7421875,
+          "family_private_working_mb": 365.33203125
+        },
+        {
+          "seconds": 86.4058154,
+          "cpu_seconds": 0.453125,
+          "main_working_mb": 307.4453125,
+          "family_working_mb": 802.57421875,
+          "family_private_mb": 603.1875,
+          "main_private_working_mb": 160.7265625,
+          "family_private_working_mb": 367.046875
+        },
+        {
+          "seconds": 89.5859702,
+          "cpu_seconds": 0.625,
+          "main_working_mb": 305.328125,
+          "family_working_mb": 800.34375,
+          "family_private_mb": 594.5390625,
+          "main_private_working_mb": 158.609375,
+          "family_private_working_mb": 364.80859375
+        },
+        {
+          "seconds": 92.7837568,
+          "cpu_seconds": 0.5,
+          "main_working_mb": 315.99609375,
+          "family_working_mb": 812.1484375,
+          "family_private_mb": 605.77734375,
+          "main_private_working_mb": 169.27734375,
+          "family_private_working_mb": 376.5859375
+        },
+        {
+          "seconds": 95.9801502,
+          "cpu_seconds": 0.5625,
+          "main_working_mb": 316.93359375,
+          "family_working_mb": 810.88671875,
+          "family_private_mb": 607.94921875,
+          "main_private_working_mb": 170.07421875,
+          "family_private_working_mb": 375.96484375
+        },
+        {
+          "seconds": 99.1808501,
+          "cpu_seconds": 0.75,
+          "main_working_mb": 326.90234375,
+          "family_working_mb": 823.48828125,
+          "family_private_mb": 652.2578125,
+          "main_private_working_mb": 179.63671875,
+          "family_private_working_mb": 387.359375
+        },
+        {
+          "seconds": 102.365797,
+          "cpu_seconds": 0.765625,
+          "main_working_mb": 336.1328125,
+          "family_working_mb": 837.10546875,
+          "family_private_mb": 660.953125,
+          "main_private_working_mb": 188.72265625,
+          "family_private_working_mb": 400.82421875
+        },
+        {
+          "seconds": 105.5540744,
+          "cpu_seconds": 0.296875,
+          "main_working_mb": 336.203125,
+          "family_working_mb": 836.58203125,
+          "family_private_mb": 651.78125,
+          "main_private_working_mb": 188.78125,
+          "family_private_working_mb": 400.27734375
+        },
+        {
+          "seconds": 108.7382384,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 341.74609375,
+          "family_working_mb": 838.91796875,
+          "family_private_mb": 632.03125,
+          "main_private_working_mb": 194.32421875,
+          "family_private_working_mb": 402.58984375
+        },
+        {
+          "seconds": 111.9281856,
+          "cpu_seconds": 0.28125,
+          "main_working_mb": 342.27734375,
+          "family_working_mb": 837.69921875,
+          "family_private_mb": 630.3515625,
+          "main_private_working_mb": 194.84765625,
+          "family_private_working_mb": 401.36328125
+        },
+        {
+          "seconds": 115.1140505,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 353.81640625,
+          "family_working_mb": 848.140625,
+          "family_private_mb": 640.60546875,
+          "main_private_working_mb": 206.38671875,
+          "family_private_working_mb": 412.20703125
+        },
+        {
+          "seconds": 118.3044035,
+          "cpu_seconds": 0.546875,
+          "main_working_mb": 410.33203125,
+          "family_working_mb": 905.35546875,
+          "family_private_mb": 707.703125,
+          "main_private_working_mb": 262.90234375,
+          "family_private_working_mb": 469.0078125
+        }
+      ]
+    }
+  },
+  "pixelComparison": {
+    "filters": {
+      "width": 1443,
+      "height": 1083,
+      "changedChannels": 0,
+      "totalChannels": 6251076,
+      "averageDifference": 0,
+      "maxDifference": 0
+    },
+    "context": {
+      "changedChannels": 6,
+      "totalChannels": 6251076,
+      "averageDifference": 9.598347548486052e-7,
+      "maxDifference": 1,
+      "aa": false,
+      "preserve": false
+    }
+  },
+  "final": {
+    "process_id": 8876,
+    "logical_processors": 24,
+    "duration_seconds": 92.1464237,
+    "cpu_percent": 0.5779279162541583,
+    "main_working_avg_mb": 283.265625,
+    "family_working_avg_mb": 808.1976023706897,
+    "family_private_avg_mb": 607.7738415948276,
+    "main_private_working_avg_mb": 136.25633081896552,
+    "family_private_working_avg_mb": 368.5254579741379,
+    "samples": [
+      {
+        "seconds": 0.4368054,
+        "cpu_seconds": 0,
+        "main_working_mb": 283.4375,
+        "family_working_mb": 780.82421875,
+        "family_private_mb": 573.37890625,
+        "main_private_working_mb": 136.7890625,
+        "family_private_working_mb": 350.4921875
+      },
+      {
+        "seconds": 3.6175784,
+        "cpu_seconds": 0.40625,
+        "main_working_mb": 280.46875,
+        "family_working_mb": 781.11328125,
+        "family_private_mb": 573.29296875,
+        "main_private_working_mb": 133.796875,
+        "family_private_working_mb": 346.23828125
+      },
+      {
+        "seconds": 6.7872814,
+        "cpu_seconds": 0.21875,
+        "main_working_mb": 281.0078125,
+        "family_working_mb": 780.40625,
+        "family_private_mb": 570.6328125,
+        "main_private_working_mb": 134.3359375,
+        "family_private_working_mb": 345.51953125
+      },
+      {
+        "seconds": 9.9641957,
+        "cpu_seconds": 0.328125,
+        "main_working_mb": 280.703125,
+        "family_working_mb": 777.81640625,
+        "family_private_mb": 568.0859375,
+        "main_private_working_mb": 134.03125,
+        "family_private_working_mb": 342.890625
+      },
+      {
+        "seconds": 13.1303854,
+        "cpu_seconds": 0.453125,
+        "main_working_mb": 283.80859375,
+        "family_working_mb": 787.859375,
+        "family_private_mb": 580.28125,
+        "main_private_working_mb": 137.01171875,
+        "family_private_working_mb": 352.8046875
+      },
+      {
+        "seconds": 16.3026925,
+        "cpu_seconds": 0.703125,
+        "main_working_mb": 288.2109375,
+        "family_working_mb": 792.17578125,
+        "family_private_mb": 585.64453125,
+        "main_private_working_mb": 141.65234375,
+        "family_private_working_mb": 357.3515625
+      },
+      {
+        "seconds": 19.4654984,
+        "cpu_seconds": 0.4375,
+        "main_working_mb": 286.41015625,
+        "family_working_mb": 790.08984375,
+        "family_private_mb": 580.984375,
+        "main_private_working_mb": 139.62109375,
+        "family_private_working_mb": 355.53125
+      },
+      {
+        "seconds": 22.6272387,
+        "cpu_seconds": 0.40625,
+        "main_working_mb": 291.375,
+        "family_working_mb": 792.77734375,
+        "family_private_mb": 583.484375,
+        "main_private_working_mb": 144.5703125,
+        "family_private_working_mb": 357.6875
+      },
+      {
+        "seconds": 25.8044377,
+        "cpu_seconds": 0.359375,
+        "main_working_mb": 287.3828125,
+        "family_working_mb": 788.05078125,
+        "family_private_mb": 579.27734375,
+        "main_private_working_mb": 140.5703125,
+        "family_private_working_mb": 352.953125
+      },
+      {
+        "seconds": 28.9716965,
+        "cpu_seconds": 0.453125,
+        "main_working_mb": 287.6015625,
+        "family_working_mb": 791.5234375,
+        "family_private_mb": 583.125,
+        "main_private_working_mb": 140.7890625,
+        "family_private_working_mb": 356.41796875
+      },
+      {
+        "seconds": 32.1323803,
+        "cpu_seconds": 0.421875,
+        "main_working_mb": 284.8984375,
+        "family_working_mb": 786.23828125,
+        "family_private_mb": 575.3984375,
+        "main_private_working_mb": 138.078125,
+        "family_private_working_mb": 350.8125
+      },
+      {
+        "seconds": 35.2968294,
+        "cpu_seconds": 0.375,
+        "main_working_mb": 287.28515625,
+        "family_working_mb": 788.53515625,
+        "family_private_mb": 578.7578125,
+        "main_private_working_mb": 140.46484375,
+        "family_private_working_mb": 353.06640625
+      },
+      {
+        "seconds": 38.4744589,
+        "cpu_seconds": 0.484375,
+        "main_working_mb": 287.24609375,
+        "family_working_mb": 790.31640625,
+        "family_private_mb": 581.28515625,
+        "main_private_working_mb": 140.42578125,
+        "family_private_working_mb": 354.83203125
+      },
+      {
+        "seconds": 41.6371397,
+        "cpu_seconds": 0.359375,
+        "main_working_mb": 287.3125,
+        "family_working_mb": 787.94921875,
+        "family_private_mb": 577.7578125,
+        "main_private_working_mb": 140.4921875,
+        "family_private_working_mb": 352.453125
+      },
+      {
+        "seconds": 44.809879,
+        "cpu_seconds": 0.53125,
+        "main_working_mb": 283.58984375,
+        "family_working_mb": 788.1796875,
+        "family_private_mb": 578.13671875,
+        "main_private_working_mb": 136.76171875,
+        "family_private_working_mb": 352.65234375
+      },
+      {
+        "seconds": 47.9859671,
+        "cpu_seconds": 0.828125,
+        "main_working_mb": 288.359375,
+        "family_working_mb": 881.44921875,
+        "family_private_mb": 811.5703125,
+        "main_private_working_mb": 141.140625,
+        "family_private_working_mb": 437.421875
+      },
+      {
+        "seconds": 51.1567646,
+        "cpu_seconds": 0.703125,
+        "main_working_mb": 278.63671875,
+        "family_working_mb": 873.22265625,
+        "family_private_mb": 767.171875,
+        "main_private_working_mb": 131.33203125,
+        "family_private_working_mb": 428.79296875
+      },
+      {
+        "seconds": 54.3232398,
+        "cpu_seconds": 0.71875,
+        "main_working_mb": 279.40625,
+        "family_working_mb": 845.25390625,
+        "family_private_mb": 644.9921875,
+        "main_private_working_mb": 132.12109375,
+        "family_private_working_mb": 400.83203125
+      },
+      {
+        "seconds": 57.4866401,
+        "cpu_seconds": 0.609375,
+        "main_working_mb": 279.1796875,
+        "family_working_mb": 844.78515625,
+        "family_private_mb": 644.61328125,
+        "main_private_working_mb": 131.89453125,
+        "family_private_working_mb": 399.7421875
+      },
+      {
+        "seconds": 60.6496207,
+        "cpu_seconds": 0.484375,
+        "main_working_mb": 276.4375,
+        "family_working_mb": 817.2109375,
+        "family_private_mb": 609.78125,
+        "main_private_working_mb": 129.15234375,
+        "family_private_working_mb": 372.83984375
+      },
+      {
+        "seconds": 63.8237679,
+        "cpu_seconds": 0.28125,
+        "main_working_mb": 276.7109375,
+        "family_working_mb": 810.49609375,
+        "family_private_mb": 601.65625,
+        "main_private_working_mb": 129.42578125,
+        "family_private_working_mb": 365.6015625
+      },
+      {
+        "seconds": 66.9922797,
+        "cpu_seconds": 0.390625,
+        "main_working_mb": 276.26171875,
+        "family_working_mb": 807.50390625,
+        "family_private_mb": 596.5625,
+        "main_private_working_mb": 128.9765625,
+        "family_private_working_mb": 362.60546875
+      },
+      {
+        "seconds": 70.1516096,
+        "cpu_seconds": 0.3125,
+        "main_working_mb": 276.1640625,
+        "family_working_mb": 807.41015625,
+        "family_private_mb": 596.29296875,
+        "main_private_working_mb": 128.8046875,
+        "family_private_working_mb": 362.2421875
+      },
+      {
+        "seconds": 73.3148729,
+        "cpu_seconds": 0.40625,
+        "main_working_mb": 276.93359375,
+        "family_working_mb": 818.75390625,
+        "family_private_mb": 608.0390625,
+        "main_private_working_mb": 129.5703125,
+        "family_private_working_mb": 373.5546875
+      },
+      {
+        "seconds": 76.4753423,
+        "cpu_seconds": 0.5625,
+        "main_working_mb": 276.93359375,
+        "family_working_mb": 817.60546875,
+        "family_private_mb": 606.8515625,
+        "main_private_working_mb": 130.23046875,
+        "family_private_working_mb": 372.99609375
+      },
+      {
+        "seconds": 79.6501668,
+        "cpu_seconds": 0.59375,
+        "main_working_mb": 289.49609375,
+        "family_working_mb": 830.4921875,
+        "family_private_mb": 619.921875,
+        "main_private_working_mb": 142.11328125,
+        "family_private_working_mb": 385.171875
+      },
+      {
+        "seconds": 82.8067413,
+        "cpu_seconds": 0.359375,
+        "main_working_mb": 286.94921875,
+        "family_working_mb": 828.01171875,
+        "family_private_mb": 617.6328125,
+        "main_private_working_mb": 139.5625,
+        "family_private_working_mb": 382.6484375
+      },
+      {
+        "seconds": 85.9704049,
+        "cpu_seconds": 0.203125,
+        "main_working_mb": 286.0703125,
+        "family_working_mb": 824.7265625,
+        "family_private_mb": 613.94140625,
+        "main_private_working_mb": 138.68359375,
+        "family_private_working_mb": 379.4375
+      },
+      {
+        "seconds": 89.134256,
+        "cpu_seconds": 0.390625,
+        "main_working_mb": 286.42578125,
+        "family_working_mb": 826.953125,
+        "family_private_mb": 616.890625,
+        "main_private_working_mb": 139.03515625,
+        "family_private_working_mb": 381.6484375
+      }
+    ]
+  },
+  "finalContext": {
+    "view": {
+      "packets": 86,
+      "revision": 636,
+      "session": "3807324555:31832443:1:84ff3668dbf747e8ba11bab665ce0a33",
+      "historySamples": 78,
+      "productionHistorySamples": 58,
+      "stockHistorySamples": 45,
+      "logisticsHistorySamples": 42,
+      "researchHistorySamples": 41,
+      "resourceCells": 1281,
+      "resourceHistorySamples": 172,
+      "models": {
+        "overview": 84,
+        "energy": 83,
+        "production": 83,
+        "logistics": 48,
+        "research": 74,
+        "resources": 33,
+        "forecasts": 74,
+        "damage": 86
+      },
+      "activeView": "forecasts",
+      "renders": {
+        "sessions": 1,
+        "overview": 18,
+        "energy": 0,
+        "production": 0,
+        "logistics": 0,
+        "research": 0,
+        "resources": 0,
+        "forecasts": 54,
+        "damage": 6
+      },
+      "visible": "forecasts"
+    },
+    "vfx": {
+      "renderer": "pixi",
+      "glyphs": {
+        "active": false,
+        "characters": 0,
+        "pulses": 25,
+        "painted": 785,
+        "amount": 0.01,
+        "minInterval": 6500,
+        "maxInterval": 13000,
+        "next": 267975.8365349129
+      },
+      "experimental": true,
+      "enabled": true,
+      "frames": 7750,
+      "uploads": 662,
+      "elapsedMs": 258453.8999999985,
+      "p50Ms": 0.29999999701976776,
+      "p95Ms": 0.8999999985098839,
+      "htmlInCanvas": true,
+      "sourceResolution": 1,
+      "filterResolution": 1,
+      "sampling": "linear",
+      "sharpen": 0.16,
+      "webgl": true
+    },
+    "width": 1154,
+    "height": 866,
+    "dpr": 1.25,
+    "crt": true,
+    "canvases": [
+      {
+        "cls": "tab-boot-ascii",
+        "w": 1,
+        "h": 1
+      },
+      {
+        "cls": "pixi-dom-source",
+        "w": 1154,
+        "h": 866
+      },
+      {
+        "cls": "tab-boot-ascii",
+        "w": 1,
+        "h": 1
+      },
+      {
+        "cls": "pixi-crt-output",
+        "w": 1443,
+        "h": 1083
+      }
+    ]
+  },
+  "liveValidation": {
+    "passed": true,
+    "session": "3807324555:31832443:1:84ff3668dbf747e8ba11bab665ce0a33",
+    "gameProcessId": 17268,
+    "requesters": 18212,
+    "groups": 92,
+    "comparedGroups": 92,
+    "fullApiRetainsDetails": true,
+    "aggregatesMatch": true,
+    "transport": "in_process"
+  },
+  "invalidatedEarlierSample": {
+    "reason": "World reloaded and requester indexing was incomplete; not used as final full-load measurement.",
+    "sample": {
+      "process_id": 8876,
+      "logical_processors": 24,
+      "duration_seconds": 92.4844144,
+      "cpu_percent": 0.5920063422895657,
+      "main_working_avg_mb": 267.57004310344826,
+      "family_working_avg_mb": 754.4419450431035,
+      "family_private_avg_mb": 576.0383890086207,
+      "main_private_working_avg_mb": 123.19867995689656,
+      "family_private_working_avg_mb": 328.1452047413793,
+      "samples": [
+        {
+          "seconds": 0.4692692,
+          "cpu_seconds": 0,
+          "main_working_mb": 248.85546875,
+          "family_working_mb": 736.0234375,
+          "family_private_mb": 565.34375,
+          "main_private_working_mb": 108.4140625,
+          "family_private_working_mb": 327.8046875
+        },
+        {
+          "seconds": 3.6807718,
+          "cpu_seconds": 0.5,
+          "main_working_mb": 251.13671875,
+          "family_working_mb": 739.78515625,
+          "family_private_mb": 568.12109375,
+          "main_private_working_mb": 110.453125,
+          "family_private_working_mb": 330.82421875
+        },
+        {
+          "seconds": 6.8525075,
+          "cpu_seconds": 0.46875,
+          "main_working_mb": 256.8359375,
+          "family_working_mb": 742.2578125,
+          "family_private_mb": 570.46875,
+          "main_private_working_mb": 116.01953125,
+          "family_private_working_mb": 332.88671875
+        },
+        {
+          "seconds": 10.0397054,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 254.81640625,
+          "family_working_mb": 737.02734375,
+          "family_private_mb": 552.484375,
+          "main_private_working_mb": 113.95703125,
+          "family_private_working_mb": 327.6484375
+        },
+        {
+          "seconds": 13.2095573,
+          "cpu_seconds": 0.625,
+          "main_working_mb": 263.0234375,
+          "family_working_mb": 746.69921875,
+          "family_private_mb": 575.39453125,
+          "main_private_working_mb": 120.734375,
+          "family_private_working_mb": 335.07421875
+        },
+        {
+          "seconds": 16.3843845,
+          "cpu_seconds": 0.546875,
+          "main_working_mb": 264.43359375,
+          "family_working_mb": 755.78515625,
+          "family_private_mb": 577.16015625,
+          "main_private_working_mb": 121.66015625,
+          "family_private_working_mb": 333.4375
+        },
+        {
+          "seconds": 19.5551341,
+          "cpu_seconds": 0.40625,
+          "main_working_mb": 258.015625,
+          "family_working_mb": 750.85546875,
+          "family_private_mb": 574.390625,
+          "main_private_working_mb": 115.0546875,
+          "family_private_working_mb": 328.2734375
+        },
+        {
+          "seconds": 22.7325863,
+          "cpu_seconds": 0.484375,
+          "main_working_mb": 258.76953125,
+          "family_working_mb": 750.94140625,
+          "family_private_mb": 573.51953125,
+          "main_private_working_mb": 115.69921875,
+          "family_private_working_mb": 327.8671875
+        },
+        {
+          "seconds": 25.9118177,
+          "cpu_seconds": 0.765625,
+          "main_working_mb": 263.515625,
+          "family_working_mb": 752.41015625,
+          "family_private_mb": 570.99609375,
+          "main_private_working_mb": 119.44921875,
+          "family_private_working_mb": 327.1484375
+        },
+        {
+          "seconds": 29.086529,
+          "cpu_seconds": 0.59375,
+          "main_working_mb": 265.21875,
+          "family_working_mb": 759.24609375,
+          "family_private_mb": 601.76953125,
+          "main_private_working_mb": 120.390625,
+          "family_private_working_mb": 331.95703125
+        },
+        {
+          "seconds": 32.2552454,
+          "cpu_seconds": 0.546875,
+          "main_working_mb": 262.12109375,
+          "family_working_mb": 756.4609375,
+          "family_private_mb": 591.6328125,
+          "main_private_working_mb": 117.25,
+          "family_private_working_mb": 329.19140625
+        },
+        {
+          "seconds": 35.4631257,
+          "cpu_seconds": 0.46875,
+          "main_working_mb": 266.69921875,
+          "family_working_mb": 749.296875,
+          "family_private_mb": 575.48046875,
+          "main_private_working_mb": 121.71484375,
+          "family_private_working_mb": 321.82421875
+        },
+        {
+          "seconds": 38.6389731,
+          "cpu_seconds": 0.4375,
+          "main_working_mb": 268.59375,
+          "family_working_mb": 754.39453125,
+          "family_private_mb": 563.734375,
+          "main_private_working_mb": 123.59765625,
+          "family_private_working_mb": 324.5390625
+        },
+        {
+          "seconds": 41.81189,
+          "cpu_seconds": 0.34375,
+          "main_working_mb": 266.125,
+          "family_working_mb": 753.734375,
+          "family_private_mb": 561.44921875,
+          "main_private_working_mb": 121.046875,
+          "family_private_working_mb": 323.40234375
+        },
+        {
+          "seconds": 44.9921642,
+          "cpu_seconds": 0.65625,
+          "main_working_mb": 271.8671875,
+          "family_working_mb": 753.921875,
+          "family_private_mb": 606.67578125,
+          "main_private_working_mb": 126.546875,
+          "family_private_working_mb": 322.75
+        },
+        {
+          "seconds": 48.1802465,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 269.21875,
+          "family_working_mb": 745.7578125,
+          "family_private_mb": 584.0859375,
+          "main_private_working_mb": 123.89453125,
+          "family_private_working_mb": 314.48046875
+        },
+        {
+          "seconds": 51.3521946,
+          "cpu_seconds": 0.46875,
+          "main_working_mb": 270.01171875,
+          "family_working_mb": 750.97265625,
+          "family_private_mb": 569.45703125,
+          "main_private_working_mb": 124.66015625,
+          "family_private_working_mb": 319.890625
+        },
+        {
+          "seconds": 54.518127,
+          "cpu_seconds": 0.390625,
+          "main_working_mb": 270.34765625,
+          "family_working_mb": 753.96875,
+          "family_private_mb": 572.640625,
+          "main_private_working_mb": 124.96484375,
+          "family_private_working_mb": 321.59765625
+        },
+        {
+          "seconds": 57.6945465,
+          "cpu_seconds": 0.625,
+          "main_working_mb": 271.375,
+          "family_working_mb": 758.88671875,
+          "family_private_mb": 611.87890625,
+          "main_private_working_mb": 126.04296875,
+          "family_private_working_mb": 327.125
+        },
+        {
+          "seconds": 60.8678682,
+          "cpu_seconds": 0.3125,
+          "main_working_mb": 269.64453125,
+          "family_working_mb": 755.2890625,
+          "family_private_mb": 599.1640625,
+          "main_private_working_mb": 124.3125,
+          "family_private_working_mb": 323.55078125
+        },
+        {
+          "seconds": 64.0561233,
+          "cpu_seconds": 0.3125,
+          "main_working_mb": 274.28515625,
+          "family_working_mb": 761.40625,
+          "family_private_mb": 583.9765625,
+          "main_private_working_mb": 128.87109375,
+          "family_private_working_mb": 329.8046875
+        },
+        {
+          "seconds": 67.2307773,
+          "cpu_seconds": 0.34375,
+          "main_working_mb": 276.95703125,
+          "family_working_mb": 765.921875,
+          "family_private_mb": 574.72265625,
+          "main_private_working_mb": 131.46875,
+          "family_private_working_mb": 333.9453125
+        },
+        {
+          "seconds": 70.4088552,
+          "cpu_seconds": 0.375,
+          "main_working_mb": 277.62109375,
+          "family_working_mb": 764.671875,
+          "family_private_mb": 569.3125,
+          "main_private_working_mb": 132.0859375,
+          "family_private_working_mb": 332.6015625
+        },
+        {
+          "seconds": 73.5892885,
+          "cpu_seconds": 0.390625,
+          "main_working_mb": 276.30859375,
+          "family_working_mb": 763.828125,
+          "family_private_mb": 568.359375,
+          "main_private_working_mb": 130.578125,
+          "family_private_working_mb": 331.5390625
+        },
+        {
+          "seconds": 76.7627419,
+          "cpu_seconds": 0.515625,
+          "main_working_mb": 278.203125,
+          "family_working_mb": 767.5703125,
+          "family_private_mb": 572.953125,
+          "main_private_working_mb": 132.25390625,
+          "family_private_working_mb": 335.4140625
+        },
+        {
+          "seconds": 79.9442124,
+          "cpu_seconds": 0.515625,
+          "main_working_mb": 275.36328125,
+          "family_working_mb": 760.06640625,
+          "family_private_mb": 564.5390625,
+          "main_private_working_mb": 129.39453125,
+          "family_private_working_mb": 327.828125
+        },
+        {
+          "seconds": 83.119162,
+          "cpu_seconds": 0.515625,
+          "main_working_mb": 275.5078125,
+          "family_working_mb": 762.453125,
+          "family_private_mb": 567.44140625,
+          "main_private_working_mb": 129.5390625,
+          "family_private_working_mb": 329.859375
+        },
+        {
+          "seconds": 86.294633,
+          "cpu_seconds": 0.3125,
+          "main_working_mb": 276.25,
+          "family_working_mb": 762.70703125,
+          "family_private_mb": 567.9140625,
+          "main_private_working_mb": 130.27734375,
+          "family_private_working_mb": 330.1015625
+        },
+        {
+          "seconds": 89.4714274,
+          "cpu_seconds": 0.421875,
+          "main_working_mb": 278.41015625,
+          "family_working_mb": 766.4765625,
+          "family_private_mb": 570.046875,
+          "main_private_working_mb": 132.4296875,
+          "family_private_working_mb": 333.84375
+        }
+      ]
+    }
+  },
+  "runtime": {
+    "before": {
+      "dotnet.gc.last_collection.memory.committed_size (By)": {
+        "average": 1873515929.6,
+        "max": 2021064704
+      },
+      "dotnet.gc.heap.total_allocated (By / 1 sec)": {
+        "average": 182362419.78947368,
+        "max": 665898168
+      },
+      "dotnet.gc.pause.time (s / 1 sec)": {
+        "average": 0.23306957894736888,
+        "max": 0.48471899999999835
+      }
+    },
+    "after": {
+      "dotnet.gc.last_collection.memory.committed_size (By)": {
+        "average": 101021491.2,
+        "max": 111026176
+      },
+      "dotnet.gc.heap.total_allocated (By / 1 sec)": {
+        "average": 2280422.1016949154,
+        "max": 6037880
+      },
+      "dotnet.gc.pause.time (s / 1 sec)": {
+        "average": 0.0005818813559322034,
+        "max": 0.01109199999999999
+      }
+    }
+  }
+}

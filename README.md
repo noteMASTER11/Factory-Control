@@ -1,8 +1,8 @@
-# Factory Control
+# Factory Control 0.2.0
 
 Настольная диспетчерская для **Factorio 2.0 на Windows x64**: производство, энергия, логистика, исследования, ресурсы и нападения на одном экране. Интерфейс рассчитан на второй монитор, включая 1024×768 и 1152×864. ИИ и облачные сервисы для работы не нужны.
 
-**[Скачать релиз](https://github.com/noteMASTER11/Factory-Control/releases/latest)** · [Покрытие телеметрии](docs/telemetry-coverage.md) · [Архитектура](docs/embedded-runtime.md)
+**[Скачать релиз](https://github.com/noteMASTER11/Factory-Control/releases/latest)** · [Покрытие телеметрии](docs/telemetry-coverage.md) · [Архитектура](docs/embedded-runtime.md) · [Оптимизация и замеры](docs/performance-2026-10-23.md)
 
 ![Factory Control — прогнозы и узкие места](docs/evidence/catalog-release-window.png)
 
@@ -75,7 +75,7 @@
 
 ## API и ограничения
 
-Bridge и Gateway встроены в основной процесс. Файлы читаются раз в 250 мс; фиксированные MCP-запросы выполняются последовательно с интервалами 1–15 секунд. HTTP-клиенты читают кеш, не запускают обход игры. История SQLite хранится по сессиям, по умолчанию 60 минут.
+Bridge и Gateway встроены в основной процесс и используют общие готовые снимки без внутренней JSON-пересылки. Проверка файлов идёт раз в 250 мс, чтение — не чаще интервала соответствующего канала, 1–15 секунд. MCP доступен для внешних клиентов и раздельного запуска компонентов. HTTP-клиенты читают кеш, не запускают обход игры. История SQLite хранится по сессиям, по умолчанию 60 минут; новые снимки сжимаются без потери данных.
 
 - MCP: `http://127.0.0.1:18740/mcp`, инструменты `telemetry_snapshot` и `telemetry_capabilities`.
 - HTTP: `http://127.0.0.1:18741/api/v1/` — `status`, `sessions`, `overview`, восемь каналов через `telemetry/{topic}`, `forecasts`, `history`, `client/updates`, SSE `events`.

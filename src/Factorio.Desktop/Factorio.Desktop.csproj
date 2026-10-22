@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType><TargetFramework>net10.0-windows</TargetFramework>
     <UseWPF>true</UseWPF><PlatformTarget>x64</PlatformTarget><ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>0.1.0</Version><Product>Factory Control</Product><Description>Factorio telemetry terminal for Windows</Description>
+    <Version>0.2.0</Version><Product>Factory Control</Product><Description>Factorio telemetry terminal for Windows</Description>
   </PropertyGroup>
   <ItemGroup><ProjectReference Include="../Factorio.Bridge/Factorio.Bridge.csproj" /><ProjectReference Include="../Factorio.Gateway/Factorio.Gateway.csproj" /></ItemGroup>
   <ItemGroup><PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4258.31" /><PackageReference Include="System.Management" Version="10.0.0" /></ItemGroup>

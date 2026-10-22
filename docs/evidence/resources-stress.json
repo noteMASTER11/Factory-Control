@@ -2,10 +2,10 @@
   "passed": true,
   "liveRows": 1692,
   "livePatches": 225,
-  "liveIngestMs": 5.436900000000001,
-  "liveModelMs": 0.9634,
-  "activeFrameBytes": 117949,
+  "liveIngestMs": 5.1066,
+  "liveModelMs": 0.8975000000000009,
+  "activeFrameBytes": 117981,
   "stressCells": 50000,
-  "largeIngestMs": 95.604,
-  "largeModelMs": 6.573600000000013
+  "largeIngestMs": 86.9024,
+  "largeModelMs": 4.551199999999994
 }

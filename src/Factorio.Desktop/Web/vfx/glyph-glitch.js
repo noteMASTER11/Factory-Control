@@ -14,6 +14,7 @@ export class GlyphGlitch {
  apply(values){const signature=values.glyphFrequency+':'+values.glyphAmount;if(signature===this.signature)return;this.signature=signature;this.settings=glyphParameters(values);this.cancel();this.schedule(performance.now());}
  capture(source){if(this.clean.width!==source.width||this.clean.height!==source.height){this.clean.width=source.width;this.clean.height=source.height;this.cancel();}this.cleanContext.clearRect(0,0,this.clean.width,this.clean.height);this.cleanContext.drawImage(source,0,0);}
  cancel(){if(this.active)this.restoreNeeded=true;this.active=false;this.entries=[];}
+ release(){this.cancel();this.restoreNeeded=false;this.clean.width=this.clean.height=1;}
  pulse(now=performance.now()){
   this.schedule(now);if(!this.settings.amount||!Number.isFinite(this.settings.minInterval)||!this.clean.width)return false;
   const walker=document.createTreeWalker(this.surface,NodeFilter.SHOW_TEXT),candidates=[];let node,visited=0,inspected=0;

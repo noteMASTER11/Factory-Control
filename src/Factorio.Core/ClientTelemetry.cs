@@ -5,7 +5,7 @@ namespace Factorio.Core;
 public static class ClientTelemetry
 {
     // Aggregated once on ingestion, outside the game. Detailed routes retain the original snapshot.
-    public static JsonObject Project(string topic, JsonObject payload)
+    public static JsonObject Project(string topic, JsonObject payload,JsonObject? requesterSummary=null)
     {
         if(topic!="logistics")return payload;
         var result=new JsonObject();
@@ -13,7 +13,7 @@ public static class ClientTelemetry
         var source=payload["data"];
         var data=new JsonObject
         {
-            ["requester_count"]=source?["requester_count"]?.DeepClone()??JsonValue.Create((source?["requesters"] as JsonArray)?.Count??0),
+            ["requester_count"]=source?["requester_count"]?.DeepClone()??source?["requesters_ref"]?["row_count"]?.DeepClone()??JsonValue.Create((source?["requesters"] as JsonArray)?.Count??0),
             ["requesters_available"]=source?["requesters_available"]?.DeepClone(),
             ["request_age_available"]=source?["request_age_available"]?.DeepClone(),
             ["train_eta_available"]=source?["train_eta_available"]?.DeepClone()
@@ -33,7 +33,7 @@ public static class ClientTelemetry
             }
             data[field]=rows;
         }
-        LogisticsProjection.Requests(data,source);
+        LogisticsProjection.Requests(data,source,requesterSummary);
         result["data"]=data;return result;
     }
 

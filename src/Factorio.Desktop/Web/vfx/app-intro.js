@@ -33,6 +33,6 @@ export class AppIntro {
  fail(){this.failed=true;this.phase='failed';this.clock.cancel(this.id);if(!this.root)return;this.root.dataset.stage='failed';this.shell.style.clipPath='none';this.shell.style.opacity='1';this.reveal.canvas.hidden=true;this.retry.hidden=false;if(this.i18n){this.title.textContent=this.name;this.root.querySelector('.intro-subtitle').textContent=this.i18n.text('intro.failed');this.retry.focus();}this.sound?.finishStartup();}
  finish(){if(!this.active)return;this.active=false;this.phase='done';this.finishedAt=performance.now()-this.started;this.clock.cancel(this.id);this.root.hidden=true;this.cleanup();this.sound?.finishStartup();for(const callback of this.callbacks)callback();this.callbacks=[];this.resolveDone();}
  skip(){this.finish();}
- cleanup(){window.removeEventListener('resize',this.resize);document.removeEventListener('keydown',this.keyboard,true);window.removeEventListener('error',this.error);window.removeEventListener('unhandledrejection',this.error);}
+ cleanup(){window.removeEventListener('resize',this.resize);document.removeEventListener('keydown',this.keyboard,true);window.removeEventListener('error',this.error);window.removeEventListener('unhandledrejection',this.error);this.reveal.release();}
  describe(){return {active:this.active,stage:this.phase,frames:this.frames,elapsed:performance.now()-this.started,readyAt:this.readyAt,finishedAt:this.finishedAt,tasks:structuredClone(this.tasks),gearRows:this.gearLines.length,asciiCaptures:this.reveal?.captures||0};}
 }

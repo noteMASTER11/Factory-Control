@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "counts": [
+    2,
+    2,
+    2,
+    2
+  ],
+  "disabled": {
+    "pooled": 0,
+    "output": 1,
+    "source": 1
+  },
+  "restored": true,
+  "allocated": 4230,
+  "released": 1,
+  "antialias": false,
+  "preserve": false
+}

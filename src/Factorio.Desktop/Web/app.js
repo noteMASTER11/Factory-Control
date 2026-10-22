@@ -174,7 +174,7 @@ function renderTopics() {
   const coverage = show ? topics.status?.payload.coverage : null;
   write('entity-count', number(coverage?.indexed_entities));
   write('chunk-count', number(coverage?.charted_chunks_scanned));
-  write('call-count', show ? number(snapshot.status.mcp_calls) : empty());
+  write('call-count', show ? number(snapshot.status.telemetry_reads??snapshot.status.mcp_calls) : empty());
   const machineData=show?topics.machines?.payload.data:null;
   $('inventory-window').hidden=!machineData;
   if(machineData)write('inventory-window',machineData.collection_mode==='rolling'?

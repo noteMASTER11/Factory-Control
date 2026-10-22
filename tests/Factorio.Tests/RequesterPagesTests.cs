@@ -13,7 +13,7 @@ public sealed class RequesterPagesTests
         {
             var path=await Fixture(root);
             var snapshot=await new SnapshotFiles().ReadAsync(path,"logistics");
-            var rows=Assert.IsType<JsonArray>(snapshot!.Payload["data"]!["requesters"]);
+            var rows=Assert.IsType<JsonArray>(JsonNode.Parse(snapshot!.Payload.ToJsonString())!["data"]!["requesters"]);
             Assert.Equal(3,rows.Count);
             Assert.Equal(11,rows[0]!["unit_number"]!.GetValue<int>());
             Assert.Equal(12,rows[1]!["unit_number"]!.GetValue<int>());

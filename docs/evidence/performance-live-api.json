@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "session": "3807324555:31832443:1:84ff3668dbf747e8ba11bab665ce0a33",
+  "gameProcessId": 17268,
+  "requesters": 18212,
+  "groups": 92,
+  "comparedGroups": 92,
+  "fullApiRetainsDetails": true,
+  "aggregatesMatch": true,
+  "transport": "in_process"
+}

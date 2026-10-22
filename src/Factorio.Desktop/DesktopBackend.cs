@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using Factorio.Bridge;
 using Factorio.Gateway;
 using Microsoft.AspNetCore.Builder;
+using Factorio.Core;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Factorio.Desktop;
 
@@ -60,7 +62,7 @@ public sealed class DesktopBackend(BackendOptions options) : IAsyncDisposable
             await bridge.StartAsync(cancellationToken);
             BridgeAddress = bridge.Urls.Single();
             settings["Bridge:Endpoint"] = BridgeAddress + "/mcp";
-            gateway = GatewayHost.Build(settings, options.GatewayUrl);
+            gateway = GatewayHost.Build(settings, options.GatewayUrl,bridge.Services.GetRequiredService<ITelemetrySource>());
             await gateway.StartAsync(cancellationToken);
             GatewayAddress = gateway.Urls.Single();
         }

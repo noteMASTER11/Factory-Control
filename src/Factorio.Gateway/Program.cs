@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO.Compression;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Factorio.Core;
@@ -10,7 +11,7 @@ namespace Factorio.Gateway;
 
 public static class GatewayHost
 {
-    public static WebApplication Build(IReadOnlyDictionary<string,string?> settings, string url="http://127.0.0.1:18741")
+    public static WebApplication Build(IReadOnlyDictionary<string,string?> settings, string url="http://127.0.0.1:18741",ITelemetrySource? directSource=null)
     {
 var builder=WebApplication.CreateBuilder(new WebApplicationOptions { Args=[], ApplicationName=typeof(GatewayHost).Assembly.FullName, ContentRootPath=AppContext.BaseDirectory });
 builder.Configuration.AddInMemoryCollection(settings);
@@ -20,15 +21,16 @@ builder.WebHost.UseUrls(url);
 builder.Services.AddSingleton<SnapshotCache>();
 builder.Services.AddSingleton<GatewayState>();
 builder.Services.AddSingleton<HistoryStore>();
+if(directSource is not null)builder.Services.AddSingleton(directSource);
 builder.Services.AddHostedService<McpCollector>();
 var app=builder.Build();
-app.MapGet("/health",()=>new {service="gateway",process_id=Environment.ProcessId,hosting="desktop",version="0.1.0"});
+app.MapGet("/health",()=>new {service="gateway",process_id=Environment.ProcessId,hosting="desktop",version="0.2.0"});
 app.MapGet("/api/v1/status",(GatewayState state,SnapshotCache cache)=>state.Describe(cache));
 app.MapGet("/api/v1/client/status",(GatewayState state,SnapshotCache cache)=>state.Describe(cache,true));
 app.MapGet("/api/v1/client/updates",(long? since,string? session,GatewayState state,SnapshotCache cache)=>
 {
     var delta=cache.Changes(since,session);
-    return new{connected=state.Connected,telemetry_ready=cache.Get("status") is not null,session_id=delta.SessionId,source_kind=state.SourceKind,source_process_id=state.SourceProcessId,last_error=state.LastError,mcp_calls=Interlocked.Read(ref state.Calls),revision=delta.Revision,reset=delta.Reset,topics=delta.Topics.ToDictionary(p=>p.Key,p=>state.Wrap(p.Value,true))};
+    return new{connected=state.Connected,telemetry_ready=cache.Get("status") is not null,session_id=delta.SessionId,source_kind=state.SourceKind,source_process_id=state.SourceProcessId,last_error=state.LastError,mcp_calls=Interlocked.Read(ref state.Calls),telemetry_reads=Interlocked.Read(ref state.Reads),transport=state.Transport,revision=delta.Revision,reset=delta.Reset,topics=delta.Topics.ToDictionary(p=>p.Key,p=>state.Wrap(p.Value,true))};
 });
 app.MapGet("/api/v1/collector/status",(GatewayState state,SnapshotCache cache)=>state.Describe(cache));
 app.MapGet("/api/v1/telemetry/{topic}",(string topic,SnapshotCache cache,GatewayState state)=>
@@ -70,15 +72,16 @@ return app;
 
 public sealed class GatewayState
 {
-    public static readonly Dictionary<string,double> Intervals=new(){["status"]=2,["power"]=1,["production"]=2,["machines"]=5,["logistics"]=5,["research"]=5,["resources"]=15,["combat"]=1};
+    public static readonly IReadOnlyDictionary<string,double> Intervals=TelemetryCadence.Seconds;
     public volatile bool Connected;
     public string SourceKind="unknown";
     public int? SourceProcessId;
     public string? LastError;
-    public long Calls,Revision;
+    public long Calls,Reads,Revision;
+    public string Transport="mcp";
     public JsonObject Forecasts=new(){["rows"]=new JsonArray(),["scope"]="waiting_for_telemetry"};
     public object Wrap(Snapshot s,bool summary=false)=>new{topic=s.Topic,session_id=s.SessionId,tick=s.Tick,written_at=s.WrittenAt,age_seconds=Math.Max(0,(DateTimeOffset.UtcNow-s.WrittenAt).TotalSeconds),stale=(DateTimeOffset.UtcNow-s.WrittenAt).TotalSeconds>Math.Max(15,Intervals[s.Topic]*3),source_kind=SourceKind,payload=summary?(s.ClientPayload??s.Payload):s.Payload};
-    public object Describe(SnapshotCache cache,bool summary=false)=>new{connected=Connected,telemetry_ready=cache.Get("status") is not null,discovery_complete=cache.Get("status")?.Payload["coverage"]?["discovery_complete"]?.GetValue<bool>()??false,session_id=cache.SessionId,source_kind=SourceKind,source_process_id=SourceProcessId,last_error=LastError,mcp_calls=Interlocked.Read(ref Calls),revision=Interlocked.Read(ref Revision),topics=Intervals.Keys.ToDictionary(t=>t,t=>cache.Get(t) is {} s?Wrap(s,summary):null)};
+    public object Describe(SnapshotCache cache,bool summary=false)=>new{connected=Connected,telemetry_ready=cache.Get("status") is not null,discovery_complete=cache.Get("status")?.Payload["coverage"]?["discovery_complete"]?.GetValue<bool>()??false,session_id=cache.SessionId,source_kind=SourceKind,source_process_id=SourceProcessId,last_error=LastError,mcp_calls=Interlocked.Read(ref Calls),telemetry_reads=Interlocked.Read(ref Reads),transport=Transport,revision=Interlocked.Read(ref Revision),topics=Intervals.Keys.ToDictionary(t=>t,t=>cache.Get(t) is {} s?Wrap(s,summary):null)};
     public void UpdateForecasts(SnapshotCache cache)
     {
         var p=cache.Get("production");var m=cache.Get("machines");
@@ -111,13 +114,16 @@ public sealed class HistoryStore
         var path=Path.GetFullPath(config["History:Path"]??@"D:\ChatGPT\Projects\FactorioMonitor\Data\history.db");
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);connectionString=new SqliteConnectionStringBuilder{DataSource=path}.ToString();
         retentionMinutes=Math.Clamp(config.GetValue("History:RetentionMinutes",60),15,1440);
-        using var c=Open();using var cmd=c.CreateCommand();cmd.CommandText="PRAGMA journal_mode=WAL; CREATE TABLE IF NOT EXISTS snapshots(session TEXT,topic TEXT,tick INTEGER,written TEXT,json TEXT,PRIMARY KEY(session,topic,tick)); CREATE INDEX IF NOT EXISTS snapshots_topic ON snapshots(topic,written);";cmd.ExecuteNonQuery();
+        using var c=Open();using var cmd=c.CreateCommand();cmd.CommandText="PRAGMA journal_mode=WAL; CREATE TABLE IF NOT EXISTS snapshots(session TEXT,topic TEXT,tick INTEGER,written TEXT,json TEXT,PRIMARY KEY(session,topic,tick)); CREATE INDEX IF NOT EXISTS snapshots_topic ON snapshots(topic,written); CREATE INDEX IF NOT EXISTS snapshots_written ON snapshots(written); CREATE INDEX IF NOT EXISTS snapshots_session_topic ON snapshots(session,topic,written DESC);";cmd.ExecuteNonQuery();
     }
     private SqliteConnection Open(){var c=new SqliteConnection(connectionString);c.Open();return c;}
     public void Save(Snapshot s)
     {
         using var c=Open();using var cmd=c.CreateCommand();cmd.CommandText="INSERT OR IGNORE INTO snapshots VALUES($session,$topic,$tick,$written,$json)";
-        cmd.Parameters.AddWithValue("$session",s.SessionId);cmd.Parameters.AddWithValue("$topic",s.Topic);cmd.Parameters.AddWithValue("$tick",s.Tick);cmd.Parameters.AddWithValue("$written",s.WrittenAt.ToString("O"));cmd.Parameters.AddWithValue("$json",s.Payload.ToJsonString());cmd.ExecuteNonQuery();
+        using var buffer=new MemoryStream();
+        using(var compressed=new BrotliStream(buffer,CompressionLevel.Fastest,true))
+        using(var writer=new Utf8JsonWriter(compressed))JsonSerializer.Serialize(writer,s.Payload);
+        cmd.Parameters.AddWithValue("$session",s.SessionId);cmd.Parameters.AddWithValue("$topic",s.Topic);cmd.Parameters.AddWithValue("$tick",s.Tick);cmd.Parameters.AddWithValue("$written",s.WrittenAt.ToString("O"));cmd.Parameters.AddWithValue("$json",buffer.ToArray());cmd.ExecuteNonQuery();
         if(DateTimeOffset.UtcNow-lastPrune>TimeSpan.FromMinutes(1))
         {
             using var prune=c.CreateCommand();prune.CommandText="DELETE FROM snapshots WHERE written < $cutoff";prune.Parameters.AddWithValue("$cutoff",DateTimeOffset.UtcNow.AddMinutes(-retentionMinutes).ToString("O"));prune.ExecuteNonQuery();lastPrune=DateTimeOffset.UtcNow;
@@ -128,10 +134,17 @@ public sealed class HistoryStore
         if(session is null)return [];
         using var c=Open();using var cmd=c.CreateCommand();cmd.CommandText="SELECT session,tick,written,json FROM snapshots WHERE topic=$topic AND session=$session ORDER BY written DESC LIMIT $limit";
         cmd.Parameters.AddWithValue("$session",session);cmd.Parameters.AddWithValue("$topic",topic);cmd.Parameters.AddWithValue("$limit",limit);using var r=cmd.ExecuteReader();var result=new List<object>();
-        while(r.Read())result.Add(new{session_id=r.GetString(0),tick=r.GetInt64(1),written_at=r.GetString(2),payload=JsonNode.Parse(r.GetString(3))});return result.ToArray();
+        while(r.Read())
+        {
+            JsonNode? payload;
+            if(r.GetValue(3) is byte[] bytes){using var input=new MemoryStream(bytes,false);using var decoded=new BrotliStream(input,CompressionMode.Decompress);payload=JsonNode.Parse(decoded);}
+            else payload=JsonNode.Parse(r.GetString(3));
+            result.Add(new{session_id=r.GetString(0),tick=r.GetInt64(1),written_at=r.GetString(2),payload});
+        }
+        return result.ToArray();
     }
 }
-public sealed class McpCollector(IConfiguration config,SnapshotCache cache,GatewayState state,HistoryStore history,ILogger<McpCollector> log):BackgroundService
+public sealed class McpCollector(IConfiguration config,SnapshotCache cache,GatewayState state,HistoryStore history,ILogger<McpCollector> log,IServiceProvider services):BackgroundService
 {
     private readonly SerializedPoller serial=new();
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -141,10 +154,15 @@ public sealed class McpCollector(IConfiguration config,SnapshotCache cache,Gatew
         {
             try
             {
-                var transport=new HttpClientTransport(new HttpClientTransportOptions{Endpoint=new Uri(url),TransportMode=HttpTransportMode.StreamableHttp,ConnectionTimeout=TimeSpan.FromSeconds(5)});
-                await using var client=await McpClient.CreateAsync(transport,cancellationToken:stoppingToken);
-                var tools=await client.ListToolsAsync(cancellationToken:stoppingToken);
-                if(!tools.Any(t=>t.Name=="telemetry_snapshot"))throw new InvalidOperationException("Required telemetry_snapshot MCP tool not found.");
+                var direct=services.GetService<ITelemetrySource>();
+                var transport=direct is null?new HttpClientTransport(new HttpClientTransportOptions{Endpoint=new Uri(url),TransportMode=HttpTransportMode.StreamableHttp,ConnectionTimeout=TimeSpan.FromSeconds(5)}):null;
+                await using var client=transport is null?null:await McpClient.CreateAsync(transport,cancellationToken:stoppingToken);
+                if(client is not null)
+                {
+                    var tools=await client.ListToolsAsync(cancellationToken:stoppingToken);
+                    if(!tools.Any(t=>t.Name=="telemetry_snapshot"))throw new InvalidOperationException("Required telemetry_snapshot MCP tool not found.");
+                }
+                state.Transport=direct is null?"mcp":"in_process";
                 state.Connected=true;state.LastError=null;
                 var due=GatewayState.Intervals.Keys.ToDictionary(k=>k,_=>DateTimeOffset.MinValue);
                 while(!stoppingToken.IsCancellationRequested)
@@ -152,23 +170,35 @@ public sealed class McpCollector(IConfiguration config,SnapshotCache cache,Gatew
                     var topic=due.MinBy(x=>x.Value).Key;
                     if(due[topic]>DateTimeOffset.UtcNow){await Task.Delay(100,stoppingToken);continue;}
                     due[topic]=DateTimeOffset.UtcNow.AddSeconds(GatewayState.Intervals[topic]);
-                    Interlocked.Increment(ref state.Calls);
-                    var response=await serial.RunAsync(ct=>client.CallToolAsync("telemetry_snapshot",new Dictionary<string,object?>{{"topic",topic}},cancellationToken:ct).AsTask(),TimeSpan.FromSeconds(3),stoppingToken);
-                    if(response.IsError==true){state.LastError="topic_not_ready:"+topic;continue;}
-                    var text=response.Content.OfType<TextContentBlock>().FirstOrDefault()?.Text;
-                    var value=text is null?null:JsonNode.Parse(text) as JsonObject;
-                    if(value is null)throw new InvalidDataException("Malformed bridge response.");
-                    var sourcePid=value["source_process_id"]?.GetValue<int>();
+                    TelemetryRead read;
+                    Interlocked.Increment(ref state.Reads);
+                    if(direct is not null)read=direct.Read(topic);
+                    else
+                    {
+                        Interlocked.Increment(ref state.Calls);
+                        var response=await serial.RunAsync(ct=>client!.CallToolAsync("telemetry_snapshot",new Dictionary<string,object?>{{"topic",topic}},cancellationToken:ct).AsTask(),TimeSpan.FromSeconds(3),stoppingToken);
+                        if(response.IsError==true){state.LastError="topic_not_ready:"+topic;continue;}
+                        var text=response.Content.OfType<TextContentBlock>().FirstOrDefault()?.Text;
+                        var value=text is null?null:JsonNode.Parse(text) as JsonObject;
+                        if(value is null)throw new InvalidDataException("Malformed bridge response.");
+                        Snapshot? received=null;
+                        if(value["ready"]?.GetValue<bool>()!=false)
+                        {
+                            if(value["payload"] is not JsonObject payload)throw new InvalidDataException("Malformed bridge response.");
+                            received=new Snapshot(topic,value["session_id"]!.GetValue<string>(),value["tick"]!.GetValue<long>(),DateTimeOffset.Parse(value["written_at"]!.GetValue<string>()),payload)
+                                {ClientPayload=value["client_payload"] as JsonObject??ClientTelemetry.Project(topic,payload)};
+                        }
+                        read=new(received,value["source_kind"]?.GetValue<string>()??"unknown",value["source_process_id"]?.GetValue<int>());
+                    }
+                    var sourcePid=read.SourceProcessId;
                     if(state.SourceProcessId!=sourcePid){cache.Reset();state.UpdateForecasts(cache);Interlocked.Increment(ref state.Revision);}
-                    state.SourceKind=value["source_kind"]?.GetValue<string>()??"unknown";
+                    state.SourceKind=read.SourceKind;
                     state.SourceProcessId=sourcePid;
-                    if(value["ready"]?.GetValue<bool>()==false){if(topic!="combat")state.LastError="topic_not_ready:"+topic;continue;}
-                    if(value?["payload"] is not JsonObject payload)throw new InvalidDataException("Malformed bridge response.");
-                    var snapshot=new Snapshot(topic,value["session_id"]!.GetValue<string>(),value["tick"]!.GetValue<long>(),DateTimeOffset.Parse(value["written_at"]!.GetValue<string>()),payload);
+                    if(read.Snapshot is not {} snapshot){if(topic!="combat")state.LastError="topic_not_ready:"+topic;continue;}
                     var previous=cache.Get(topic);
                     if(previous?.SessionId==snapshot.SessionId&&previous.Tick>=snapshot.Tick)continue;
-                    snapshot=snapshot with {ClientPayload=ClientTelemetry.Project(topic,payload)};
-                    if(cache.Put(snapshot)){history.Save(snapshot);state.UpdateForecasts(cache);Interlocked.Increment(ref state.Revision);}
+                    var changedSession=cache.SessionId!=snapshot.SessionId;
+                    if(cache.Put(snapshot)){history.Save(snapshot);if(changedSession||topic is "production" or "machines")state.UpdateForecasts(cache);Interlocked.Increment(ref state.Revision);}
                     state.LastError=null;
                 }
             }

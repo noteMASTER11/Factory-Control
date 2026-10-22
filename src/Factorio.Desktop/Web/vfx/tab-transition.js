@@ -19,6 +19,6 @@ export class TabTransition {
   else{this.log.style.visibility='hidden';this.flash.style.opacity='0';this.active.style.removeProperty('clip-path');this.ascii.draw(state.progress);}
   this.clock.request(this.id,()=>this.tick());
  }
- cancel(){this.clock.cancel(this.id);if(this.active)this.active.style.removeProperty('clip-path');this.active=null;this.root.hidden=true;this.log.style.visibility='';}
+ cancel(){this.clock.cancel(this.id);if(this.active)this.active.style.removeProperty('clip-path');this.active=null;this.root.hidden=true;this.log.style.visibility='';this.ascii?.release();}
  describe(){return {active:!!this.active,stage:this.root.dataset.stage,count:this.count,elapsed:performance.now()-(this.started||performance.now()),asciiSource:this.ascii.sourceMode,asciiCaptures:this.ascii.captures,sweep:this.ascii.sweep};}
 }

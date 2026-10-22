@@ -1,4 +1,4 @@
-import {Application,Sprite,Texture,CanvasSource,DisplacementFilter,Rectangle,CRTFilter,RGBSplitFilter,GlitchFilter,ConvolutionFilter,ColorMatrixFilter} from './vendor/pixi-vendor.js';
+import {Application,Sprite,Texture,CanvasSource,DisplacementFilter,Rectangle,CRTFilter,RGBSplitFilter,GlitchFilter,ConvolutionFilter,ColorMatrixFilter,TexturePool} from './vendor/pixi-vendor.js';
 import {effectProfile,colorMatrix} from '../settings-model.js';
 import {projectCrtPoint} from './crt-overlay.js';
 import {makeGlitchBlocks,insideQuad} from './glitch-geometry.js';
@@ -30,7 +30,7 @@ export class PixiCrtOverlay {
  applyEffects(values){this.glyphs.apply(values);this.baseProfile??=structuredClone(this.profile);const p=effectProfile(this.baseProfile,values);Object.assign(this.profile,p);this.settings=this.profile.pixi;this.rgb.red={x:-this.settings.rgbSplitPixels,y:0};this.rgb.blue={x:this.settings.rgbSplitPixels,y:0};this.crt.noise=this.settings.noise;this.crt.vignettingAlpha=Math.min(1,this.settings.vignetteAlpha);const sharp=this.settings.sharpen;this.sharpen.matrix=[0,-sharp,0,-sharp,1+4*sharp,-sharp,0,-sharp,0];this.color.matrix=colorMatrix(values);this.colorConfigured=[values.redBalance,values.greenBalance,values.blueBalance].some(v=>v!==100);this.color.enabled=this.colorConfigured&&!this.surface.classList.contains('threat-active');this.geometryDirty=true;this.mapDirection=null;this.glitchUntil=0;this.nextGlitch=performance.now()+p.glitchMinIntervalMs;this.queue();}
  async initialize(){
   this.settings=this.profile.pixi;
-  this.app=new Application();await this.app.init({width:innerWidth,height:innerHeight,preference:'webgl',autoStart:false,sharedTicker:false,resolution:Math.min(2,devicePixelRatio),autoDensity:true,antialias:true,background:'#02080d',preserveDrawingBuffer:true});
+  this.app=new Application();await this.app.init({width:1,height:1,preference:'webgl',autoStart:false,sharedTicker:false,resolution:1,autoDensity:true,antialias:false,background:'#02080d',preserveDrawingBuffer:false});
   this.app.stop();this.app.canvas.className='pixi-crt-output';this.app.canvas.hidden=true;this.app.canvas.setAttribute('aria-hidden','true');document.body.append(this.app.canvas);
   this.sourceTexture=new Texture({dynamic:true,source:new CanvasSource({resource:this.source,width:innerWidth,height:innerHeight,resolution:1,scaleMode:'linear',autoDensity:false})});
   this.screen=new Sprite(this.sourceTexture);this.app.stage.addChild(this.screen);
@@ -42,7 +42,8 @@ export class PixiCrtOverlay {
   this.sharpen=new ConvolutionFilter({matrix:[0,-sharp,0,-sharp,1+4*sharp,-sharp,0,-sharp,0],width:innerWidth,height:innerHeight});
   this.bandGlitch=new GlitchFilter({slices:32,minSize:1,sampleSize:1024,offset:2,fillMode:3});this.bandGlitch.enabled=false;
   this.color=new ColorMatrixFilter();this.color.enabled=false;this.screen.filters=[this.rgb,this.warp,this.bandGlitch,this.sharpen,this.crt,this.color];
-  for(const filter of this.screen.filters){filter.resolution=1;filter.antialias='on';filter.padding=0;}
+  // Fullscreen texture passes have no polygon edges to multisample; linear image sampling stays intact.
+  for(const filter of this.screen.filters){filter.resolution=1;filter.antialias='off';filter.padding=0;}
   this.geometryDirty=true;this.nextGlitch=performance.now()+8000;window.pixiProbe=this;
  }
  queue(){if(!this.enabled||this.destroyed||document.hidden)return;this.clock.request(this.id,()=>this.draw());}
@@ -70,7 +71,7 @@ export class PixiCrtOverlay {
  pulse(){this.blocks=makeGlitchBlocks();this.bandGlitch.seed=Math.random();this.bandGlitch.shuffle();this.glitchUntil=performance.now()+this.profile.glitchDurationMs;this.nextGlitch=performance.now()+this.profile.glitchMinIntervalMs+Math.random()*(this.profile.glitchMaxIntervalMs-this.profile.glitchMinIntervalMs);this.mapDirection=null;}
  setEnabled(value){if(this.destroyed)return;this.enabled=!!value;if(this.app?.renderer)this.app.canvas.hidden=!this.enabled;
   if(this.enabled){this.originalParent.insertBefore(this.source,this.surface);this.source.append(this.surface);this.geometryDirty=true;this.dirty=true;this.source.requestPaint?.();this.queue();}
-  else{this.glyphs.cancel();this.clock.cancel(this.id);if(this.surface.parentNode===this.source)this.originalParent.insertBefore(this.surface,this.source);this.source.remove();}
+  else{this.glyphs.release();this.clock.cancel(this.id);if(this.surface.parentNode===this.source)this.originalParent.insertBefore(this.surface,this.source);this.source.remove();if(this.app?.renderer){TexturePool.clear(true);this.source.width=this.source.height=1;this.sourceTexture.source.resize(1,1,1);this.sourceTexture.source.unload();this.app.renderer.resize(1,1,1);}}
  }
  describe(){const sorted=[...this.paintMs].sort((a,b)=>a-b);return {renderer:'pixi',glyphs:this.glyphs.describe(),experimental:true,enabled:this.enabled,frames:this.frames,uploads:this.uploads,elapsedMs:performance.now()-this.started,p50Ms:sorted[Math.floor(sorted.length*.5)]||0,p95Ms:sorted[Math.floor(sorted.length*.95)]||0,htmlInCanvas:typeof this.ctx.drawElementImage==='function',sourceResolution:1,filterResolution:1,sampling:'linear',sharpen:.16,webgl:!!this.app.renderer.gl};}
  destroy(){if(this.destroyed)return;this.setEnabled(false);this.destroyed=true;window.removeEventListener('resize',this.resize);document.removeEventListener('scroll',this.cancelGlyphs,true);document.removeEventListener('pointerdown',this.cancelGlyphs,true);document.removeEventListener('visibilitychange',this.activity);document.removeEventListener('click',this.retarget,true);this.source.removeEventListener('paint',this.paint);this.surface.removeAttribute('drawable');this.app?.destroy(true,{children:true,texture:true,textureSource:true});this.mapTexture?.destroy(true);}

@@ -34,7 +34,7 @@ public sealed class DesktopBackendTests
     }
 
     [Fact]
-    public async Task BothHostsSharePidCollectViaMcpAndReleaseTheirPorts()
+    public async Task BothHostsSharePidAndSnapshotsAndReleaseTheirPorts()
     {
         var root = Path.Combine(@"D:\ChatGPT\Temp\FactorioMonitor", "embedded-" + Guid.NewGuid().ToString("N"));
         var export = Path.Combine(root, "script-output", "factory-telemetry");
@@ -67,7 +67,9 @@ public sealed class DesktopBackendTests
             } while (true);
             Assert.True(status!["connected"]!.GetValue<bool>());
             Assert.StartsWith("embedded-test:", status["session_id"]!.GetValue<string>());
-            Assert.True(status["mcp_calls"]!.GetValue<long>() > 0);
+            Assert.Equal("in_process",status["transport"]!.GetValue<string>());
+            Assert.Equal(0,status["mcp_calls"]!.GetValue<long>());
+            Assert.True(status["telemetry_reads"]!.GetValue<long>() > 0);
             var history = JsonNode.Parse(await client.GetStringAsync(gatewayUrl + "/api/v1/history?topic=status"))!.AsArray();
             Assert.Single(history);
         }

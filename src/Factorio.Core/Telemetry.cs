@@ -70,7 +70,7 @@ public sealed class SnapshotFiles
 {
     private readonly RequesterPages requesterPages=new();
     private static readonly HashSet<string> ArrayFields=["rows","groups","stocks","networks","accumulators","nameplate_generators","consumers","producers","trains","requesters","forces","queue","ingredients","products","examples","chunks","items","filters","sections","delivering","episodes","losses","placement"];
-    private static void NormalizeArrays(JsonNode? node)
+    internal static void NormalizeArrays(JsonNode? node)
     {
         if(node is JsonObject obj)foreach(var pair in obj.ToArray())
         {
@@ -78,6 +78,24 @@ public sealed class SnapshotFiles
             NormalizeArrays(obj[pair.Key]);
         }
         else if(node is JsonArray array)foreach(var item in array)NormalizeArrays(item);
+    }
+    internal static void WriteNormalized(Utf8JsonWriter writer,JsonElement value)
+    {
+        if(value.ValueKind==JsonValueKind.Object)
+        {
+            writer.WriteStartObject();
+            foreach(var field in value.EnumerateObject())
+            {
+                writer.WritePropertyName(field.Name);
+                if(ArrayFields.Contains(field.Name)&&field.Value.ValueKind==JsonValueKind.Object&&!field.Value.EnumerateObject().MoveNext())
+                {writer.WriteStartArray();writer.WriteEndArray();}
+                else WriteNormalized(writer,field.Value);
+            }
+            writer.WriteEndObject();
+        }
+        else if(value.ValueKind==JsonValueKind.Array)
+        {writer.WriteStartArray();foreach(var item in value.EnumerateArray())WriteNormalized(writer,item);writer.WriteEndArray();}
+        else value.WriteTo(writer);
     }
     public async Task<Snapshot?> ReadAsync(string path, string topic, CancellationToken ct = default)
     {
@@ -91,14 +109,17 @@ public sealed class SnapshotFiles
             var session=value["session_id"]?.GetValue<string>();
             var tick=value["tick"]?.GetValue<long>();
             if(string.IsNullOrWhiteSpace(session)||tick is null||tick<0||value["data"] is null)return null;
+            NormalizeArrays(value["data"]);
+            JsonObject? requesterSummary=null;
             if(topic=="logistics"&&value["data"] is JsonObject data&&data["requesters_ref"] is JsonObject reference)
             {
-                var rows=await requesterPages.ReadAsync(Path.GetDirectoryName(Path.GetFullPath(path))!,session,reference,ct);
-                data["requesters"]=rows??new JsonArray();
-                data["requesters_available"]=rows is not null;
+                var pages=await requesterPages.ReadAsync(Path.GetDirectoryName(Path.GetFullPath(path))!,session,reference,ct);
+                data["requesters"]=pages?.Rows??new JsonArray();
+                data["requesters_available"]=pages is not null;
+                requesterSummary=pages?.Summary;
             }
-            NormalizeArrays(value["data"]);
-            return new(topic,session,tick.Value,new DateTimeOffset(before,TimeSpan.Zero),value);
+            return new Snapshot(topic,session,tick.Value,new DateTimeOffset(before,TimeSpan.Zero),value)
+                {ClientPayload=ClientTelemetry.Project(topic,value,requesterSummary)};
         }
         catch(Exception ex) when(ex is IOException or JsonException or InvalidOperationException or FormatException) {return null;}
     }

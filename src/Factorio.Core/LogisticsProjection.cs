@@ -1,10 +1,15 @@
 using System.Text.Json.Nodes;
+using System.Text.Json;
 
 namespace Factorio.Core;
 
 internal static class LogisticsProjection
 {
-    private static IEnumerable<JsonNode> Rows(JsonNode? value)=>value is JsonArray a?a.OfType<JsonObject>():[];
+    private static IEnumerable<JsonNode> Rows(JsonNode? value)
+    {
+        if(value is JsonValue encoded&&encoded.TryGetValue<EncodedJsonArray>(out var details))value=JsonNode.Parse(details.Json.Span);
+        return value is JsonArray array?array.OfType<JsonObject>():[];
+    }
     private static string Text(JsonNode? n,string fallback="")=>n is JsonValue v&&v.TryGetValue<string>(out var s)?s:fallback;
     private static double Number(JsonNode? n,double fallback=0)
     {
@@ -34,39 +39,71 @@ internal static class LogisticsProjection
         target["destination"]=current>=0&&current<records.Length?Text(records[current]["station"]):null;
         target["route"]=new JsonArray(records.Where(r=>r["station"] is not null).Take(12).Select(r=>(JsonNode?)JsonValue.Create(Text(r["station"]))).ToArray());
     }
-    public static void Requests(JsonObject target,JsonNode? source)
+    public static void Requests(JsonObject target,JsonNode? source,JsonObject? summary=null)
     {
-        var groups=new Dictionary<(string Surface,string Force,string Name,string Quality),Request>();var unsupported=0;
-        foreach(var chest in Rows(source?["requesters"]))
+        if(summary is null)
         {
-            var requests=new Dictionary<(string Name,string Quality),double>();
-            foreach(var section in Rows(chest["sections"]))
+            var accumulator=new RequestAccumulator();
+            foreach(var chest in Rows(source?["requesters"]))accumulator.Add(chest);
+            accumulator.Write(target);
+        }
+        else foreach(var field in summary)target[field.Key]=field.Value?.DeepClone();
+        if(source?["requesters_ref"] is {} reference){target["requests_tick"]=reference["revision"]?.DeepClone();target["sample_start_tick"]=reference["sample_start_tick"]?.DeepClone();target["sample_end_tick"]=reference["sample_end_tick"]?.DeepClone();}
+    }
+    internal sealed class RequestAccumulator
+    {
+        private readonly Dictionary<(string Surface,string Force,string Name,string Quality),Request> groups=[];
+        private int unsupported;
+        private readonly Dictionary<(string Name,string Quality),double> requests=[];
+        private readonly Dictionary<(string Name,string Quality),double> contents=[];
+        private readonly Dictionary<(string Name,string Quality),double> incoming=[];
+        private static JsonElement Field(JsonElement row,string key)=>row.ValueKind==JsonValueKind.Object&&row.TryGetProperty(key,out var value)?value:default;
+        private static string Text(JsonElement value,string fallback="")=>value.ValueKind==JsonValueKind.String?value.GetString()!:fallback;
+        private static double Number(JsonElement value,double fallback=0)=>value.ValueKind==JsonValueKind.Number&&value.TryGetDouble(out var number)&&double.IsFinite(number)?number:fallback;
+        private static IEnumerable<JsonElement> Rows(JsonElement value)=>value.ValueKind==JsonValueKind.Array?value.EnumerateArray():[];
+        private static (string Name,string Quality) Key(JsonElement row)=>(Text(Field(row,"name")),Text(Field(row,"quality"),"normal"));
+        private static void Contents(JsonElement value,Dictionary<(string,string),double> target)
+        {
+            target.Clear();
+            foreach(var row in Rows(value)){var key=Key(row);target[key]=target.GetValueOrDefault(key)+Math.Max(0,Number(Field(row,"count")));}
+        }
+        public void Add(JsonNode chest)
+        {
+            using var document=JsonDocument.Parse(chest.ToJsonString());
+            Add(document.RootElement);
+        }
+        public void Add(JsonElement chest)
+        {
+            requests.Clear();
+            foreach(var section in Rows(Field(chest,"sections")))
             {
-                if(section["active"]?.GetValue<bool>()==false)continue;
-                var multiplier=Number(section["multiplier"],1);
-                foreach(var filter in Rows(section["filters"]))
+                if(Field(section,"active").ValueKind==JsonValueKind.False)continue;
+                var multiplier=Number(Field(section,"multiplier"),1);
+                foreach(var filter in Rows(Field(section,"filters")))
                 {
-                    var item=filter["value"];
-                    if(item is not JsonObject||string.IsNullOrEmpty(Text(item["name"]))||Text(item["type"],"item")!="item")continue;
-                    if(Text(item["comparator"],"=")!="="){unsupported++;continue;}
-                    var k=Key(item);requests[k]=requests.GetValueOrDefault(k)+Math.Floor(Number(filter["min"])*multiplier);
+                    var item=Field(filter,"value");
+                    if(item.ValueKind!=JsonValueKind.Object||string.IsNullOrEmpty(Text(Field(item,"name")))||Text(Field(item,"type"),"item")!="item")continue;
+                    if(Text(Field(item,"comparator"),"=")!="="){unsupported++;continue;}
+                    var key=Key(item);requests[key]=requests.GetValueOrDefault(key)+Math.Floor(Number(Field(filter,"min"))*multiplier);
                 }
             }
-            var contents=Contents(chest["items"]);var incoming=Contents(chest["delivering"]);
+            Contents(Field(chest,"items"),contents);Contents(Field(chest,"delivering"),incoming);
             foreach(var (key,requested) in requests)
             {
                 if(requested<=0)continue;
-                var k=(Text(chest["surface"]),Text(chest["force"]),key.Name,key.Quality);
-                if(!groups.TryGetValue(k,out var r))groups[k]=r=new Request();
+                var group=(Text(Field(chest,"surface")),Text(Field(chest,"force")),key.Name,key.Quality);
+                if(!groups.TryGetValue(group,out var request))groups[group]=request=new Request();
                 var held=contents.GetValueOrDefault(key);var delivery=incoming.GetValueOrDefault(key);
-                r.Requested+=requested;r.Present+=held;r.Incoming+=delivery;r.Missing+=Math.Max(0,requested-held-delivery);r.Containers++;
+                request.Requested+=requested;request.Present+=held;request.Incoming+=delivery;request.Missing+=Math.Max(0,requested-held-delivery);request.Containers++;
             }
         }
-        var rows=new JsonArray();
-        foreach(var (k,r) in groups.OrderByDescending(p=>p.Value.Missing).ThenBy(p=>p.Key.Name,StringComparer.Ordinal).Take(512))
-            rows.Add(new JsonObject{["surface"]=k.Surface,["force"]=k.Force,["name"]=k.Name,["quality"]=k.Quality,["requested"]=r.Requested,["present"]=r.Present,["incoming"]=r.Incoming,["missing"]=r.Missing,["containers"]=r.Containers});
-        target["requests"]=rows;target["request_groups_total"]=groups.Count;target["unsupported_filters"]=unsupported;
-        if(source?["requesters_ref"] is {} reference){target["requests_tick"]=reference["revision"]?.DeepClone();target["sample_start_tick"]=reference["sample_start_tick"]?.DeepClone();target["sample_end_tick"]=reference["sample_end_tick"]?.DeepClone();}
+        public void Write(JsonObject target)
+        {
+            var rows=new JsonArray();
+            foreach(var (k,r) in groups.OrderByDescending(p=>p.Value.Missing).ThenBy(p=>p.Key.Name,StringComparer.Ordinal).Take(512))
+                rows.Add(new JsonObject{["surface"]=k.Surface,["force"]=k.Force,["name"]=k.Name,["quality"]=k.Quality,["requested"]=r.Requested,["present"]=r.Present,["incoming"]=r.Incoming,["missing"]=r.Missing,["containers"]=r.Containers});
+            target["requests"]=rows;target["request_groups_total"]=groups.Count;target["unsupported_filters"]=unsupported;
+        }
     }
     private sealed class Request {public double Requested,Present,Incoming,Missing;public int Containers;}
 }

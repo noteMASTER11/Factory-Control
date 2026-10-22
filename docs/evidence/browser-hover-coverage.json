@@ -1,18 +1,18 @@
 {
   "passed": true,
   "sequence": [
-    "hover1",
-    "hover3",
-    "hover5",
     "hover4",
-    "hover2",
-    "hover5",
-    "hover4",
-    "hover3",
     "hover1",
+    "hover5",
+    "hover3",
     "hover2",
     "hover4",
-    "hover3"
+    "hover2",
+    "hover1",
+    "hover5",
+    "hover3",
+    "hover1",
+    "hover2"
   ],
   "projection": {
     "hover": "TR",
