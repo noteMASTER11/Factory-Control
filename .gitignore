@@ -8,4 +8,5 @@ Validation/
 *.log
 scripts/env.local.ps1
 /AGENTS.md
+/Concepts/
 docs/superpowers/

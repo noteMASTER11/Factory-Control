@@ -84,7 +84,7 @@ The embedded Bridge/Gateway shares prepared snapshots with the desktop. SQLite h
 - `src/`: .NET 10, WPF/WebView2 desktop, Bridge/Gateway, telemetry models and SQLite history.
 - `mod/factory-telemetry/`: Lua collector.
 - `tests/`: .NET, collector/model and browser checks.
-- `Concepts/`: visual concepts; `docs/evidence/`: captures and validation evidence.
+- `docs/evidence/`: application captures and validation evidence.
 
 Use the SDK version in `global.json` and PowerShell 7. The repository build scripts use the development environment configured in `scripts/env.ps1`.
 
