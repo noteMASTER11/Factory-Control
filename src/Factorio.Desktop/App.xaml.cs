@@ -6,16 +6,15 @@ namespace Factorio.Desktop;
 
 public partial class App : Application
 {
-    private Mutex? instance;
-    private bool ownsInstance;
+    private DesktopInstance? instance;
     private DesktopBackend? backend;
     private Task? backendReady;
     private RuntimeLogs? runtimeLogs;
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-        instance = new Mutex(true, @"Local\FactoryControl.Desktop", out ownsInstance);
-        if (!ownsInstance) { Shutdown(); return; }
+        instance = new DesktopInstance(@"Local\FactoryControl.Desktop");
+        if (!instance.TryAcquire()) { instance.RequestActivation(); Shutdown(); return; }
         var options = BackendOptions.Load(e.Args);
         runtimeLogs=new RuntimeLogs(options.DataRoot);
         runtimeLogs.Write(LogLevel.Information,"desktop","Application starting");
@@ -36,20 +35,33 @@ public partial class App : Application
         });
         MainWindow = new MonitorWindow(e.Args, backendReady,runtimeLogs,backend);
         MainWindow.Show();
+        instance.Listen(()=>
+        {
+            if(Dispatcher.HasShutdownStarted)return;
+            Dispatcher.BeginInvoke(()=>
+            {
+                if(MainWindow is not {} window||!window.IsLoaded)return;
+                if(window.WindowState==WindowState.Minimized)window.WindowState=WindowState.Normal;
+                window.Show();window.Activate();
+            });
+        });
     }
 
     protected override void OnExit(ExitEventArgs e)
     {
         runtimeLogs?.Write(LogLevel.Information,"desktop","Application stopping");
-        if (backend is not null)
+        try
+        {
             Task.Run(async () =>
             {
-                try { if (backendReady is not null) await backendReady; } catch { /* Logged at startup. */ }
-                await backend.DisposeAsync();
+                if(backend is not null)
+                {
+                    try { if (backendReady is not null) await backendReady; } catch { /* Logged at startup. */ }
+                    await backend.DisposeAsync();
+                }
+                if(runtimeLogs is not null)await runtimeLogs.DisposeAsync();
             }).GetAwaiter().GetResult();
-        if (ownsInstance) instance?.ReleaseMutex();
-        if(runtimeLogs is not null)runtimeLogs.DisposeAsync().AsTask().GetAwaiter().GetResult();
-        instance?.Dispose();
-        base.OnExit(e);
+        }
+        finally{instance?.Dispose();base.OnExit(e);}
     }
 }

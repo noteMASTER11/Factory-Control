@@ -107,5 +107,5 @@ public sealed class RuntimeLogs : IAsyncDisposable
         finally{if(writer is not null)try{await writer.DisposeAsync();}catch(IOException){}}
     }
 
-    public async ValueTask DisposeAsync(){enabled=false;queue.Writer.TryComplete();await writerTask;}
+    public async ValueTask DisposeAsync(){enabled=false;queue.Writer.TryComplete();await writerTask.ConfigureAwait(false);}
 }

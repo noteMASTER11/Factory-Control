@@ -4,6 +4,22 @@ using Xunit;
 
 public sealed class RuntimeLogsTests
 {
+    private sealed class HoldingContext:SynchronizationContext
+    {
+        private readonly System.Collections.Concurrent.ConcurrentQueue<(SendOrPostCallback Callback,object? State)> callbacks=new();
+        public override void Post(SendOrPostCallback callback,object? state)=>callbacks.Enqueue((callback,state));
+        public void Drain(){while(callbacks.TryDequeue(out var work))work.Callback(work.State);}
+    }
+    [Fact] public async Task ShutdownDoesNotWaitForTheBlockedWindowThread()
+    {
+        var logs=new RuntimeLogs(Path.Combine(Path.GetTempPath(),"logs-window-exit-"+Guid.NewGuid().ToString("N")));logs.SetEnabled(true);
+        for(var i=0;i<64;i++)logs.Write(LogLevel.Debug,"shutdown",new string('x',4096));
+        var context=new HoldingContext();var previous=SynchronizationContext.Current;Task shutdown;
+        try{SynchronizationContext.SetSynchronizationContext(context);shutdown=logs.DisposeAsync().AsTask();}
+        finally{SynchronizationContext.SetSynchronizationContext(previous);}
+        try{Assert.Same(shutdown,await Task.WhenAny(shutdown,Task.Delay(1500)));}
+        finally{context.Drain();await shutdown.WaitAsync(TimeSpan.FromSeconds(3));}
+    }
     [Fact]
     public async Task DefaultOffThenAllLevelsFromDebugAreWrittenAndDisableStopsNewEntries()
     {
