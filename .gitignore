@@ -6,3 +6,6 @@ dist/
 Validation/
 *.user
 *.log
+scripts/env.local.ps1
+/AGENTS.md
+docs/superpowers/

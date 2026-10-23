@@ -1,95 +1,101 @@
-# Factory Control 0.2.0
+# Factory Control
 
-Настольная диспетчерская для **Factorio 2.0 на Windows x64**: производство, энергия, логистика, исследования, ресурсы и нападения на одном экране. Интерфейс рассчитан на второй монитор, включая 1024×768 и 1152×864. ИИ и облачные сервисы для работы не нужны.
+A desktop control room for **Factorio on Windows x64**. Monitor production, power, logistics, research, resources and attacks on a second screen. Runs locally without an AI model or cloud service.
 
-**[Скачать релиз](https://github.com/noteMASTER11/Factory-Control/releases/latest)** · [Покрытие телеметрии](docs/telemetry-coverage.md) · [Архитектура](docs/embedded-runtime.md) · [Оптимизация и замеры](docs/performance-2026-10-23.md)
+[Download published releases](https://github.com/noteMASTER11/Factory-Control/releases) · [Telemetry mod](mod/factory-telemetry/README.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)
 
-![Factory Control — прогнозы и узкие места](docs/evidence/catalog-release-window.png)
+![Factory Control dashboard](docs/evidence/catalog-release-window.png)
 
-## Установка
+## Release status
 
-Требуются Factorio **2.0.77+**, Windows x64, диск **D:** и установленный **Microsoft Edge WebView2 Runtime**. .NET включён в EXE. Для установщика нужен PowerShell 7. Проверено с Factorio 2.0.77 и Space Age; Quality и Space Age поддерживаются как необязательные зависимости мода.
+The published **0.2.0** release includes Factory Telemetry **0.4.0** for Factorio **2.0.77+** and a Russian interface. The features and installation defaults described below refer to the **current development sources**; they are not all included in that release.
 
-1. Скачайте из релиза **FactoryControl.exe**, **factory-telemetry_0.4.0.zip** и **Install-FactoryControl.ps1** в одну папку на D:.
-2. Запустите установщик, указав путь к игре:
+Development adds 11 interface languages, spatial diagnostics and native map views, Space Age transport monitoring, and separate telemetry packages for Factorio 2.0 and 2.1 experimental. The current collector source version is **0.6.2**. No newer desktop release is implied by this README.
+
+## Requirements and installation
+
+- Windows x64 and Microsoft Edge WebView2 Runtime. The desktop executable bundles .NET.
+- Factorio purchased separately. Development collector packages target **2.0.77+** or **2.1.23+ experimental**; use the archive matching the game's branch. Quality and Space Age are optional dependencies.
+- PowerShell 7 to run the installer.
+
+For a matching application/collector build:
+
+1. Put `FactoryControl.exe`, the matching `factory-telemetry_<version>.zip` and `Install-FactoryControl.ps1` in one folder. The two game branches use the same ZIP filename, so keep their packages separate.
+2. Close Factorio completely and run the installer, replacing `<Factorio>` with your game installation folder:
 
    ```powershell
-   pwsh -File .\Install-FactoryControl.ps1 -GameExecutable 'D:\SteamLibrary\steamapps\common\Factorio\bin\x64\Factorio.exe'
+   pwsh -File ./Install-FactoryControl.ps1 -GameExecutable '<Factorio>/bin/x64/factorio.exe'
    ```
 
-3. Перезапустите Factorio, загрузите карту и откройте `D:\ChatGPT\Projects\FactoryControl\Factory Control.cmd`. Выберите обнаруженную игровую сессию.
+   The default installation folder is `%LOCALAPPDATA%\FactoryControl`. Use `-InstallDirectory '<destination>'` to choose another folder and `-GameProfile '<profile>'` for a nonstandard Factorio profile.
 
-Установщик использует стандартный профиль `%APPDATA%\Factorio`, включает мод и направляет `script-output` через junction на D:. Если каталог уже непустой или связан с другим экспортом, он останавливается, не заменяя его. Для существующей установки коллектора достаточно обновить EXE. Сохранения не копируются и не подменяются. **Текущая сборка хранит данные и кеши под D:\ChatGPT; наличие диска D: обязательно.**
+3. Start Factorio, load a save with **Factory Telemetry Bridge** enabled, then open `Factory Control.cmd` from the installation folder and select the detected session.
 
-## Возможности терминала
+The installer enables the mod in the selected profile and connects its `script-output` to the application's data folder. It stops if an existing nonempty output folder or conflicting link needs attention. Existing saves are not copied or replaced. Updating Lua code requires reloading the map; mod activation requires a game restart.
 
-| Экран | Возможности |
+If installed files are present but the mod is disabled, enable it through Factorio's **Mods** menu and keep it enabled when synchronizing a save's mod set. Editing `mod-list.json` while Factorio is running does not activate a mod: the game can overwrite those edits on exit. Connection diagnostics distinguish a disabled mod, a pending restart, an unloaded map and an export that has not arrived yet.
+
+Application data, history, logs and profiles are kept in the configured data root. The installer creates a `Data` folder in the chosen installation; direct launches accept `--data-root=<folder>`.
+
+## Development features
+
+| View | What it shows |
 |---|---|
-| **ОБЗ** | Сводка фабрики, потоки материалов, энергия и заряд АКБ, состояния машин, ключевые цепочки и дефициты. |
-| **ЭНРГ** | Сети, выработка/потребление, источники и потребители, пиковые значения, заряд и ёмкость АКБ, история и наблюдаемый тренд. |
-| **ПРЗВ** | Выпуск/расход предметов и жидкостей, баланс, запасы, покрытие спроса, условное истощение, рецепты, простои, поиск и наблюдаемый UPS. |
-| **ЛОГ** | Логистические сети, свободные/всего роботы, запросы сундуков, назначенные доставки, дефициты, поезда, грузы, позиции и проблемы движения. |
-| **НАУК** | Текущая технология и уровень, прогресс/ETA, очередь, выпуск/расход научных пакетов и состояния лабораторий. |
-| **РЕС** | Карта разведанных ресурсных чанков, участки месторождений, остаток, наблюдаемая убыль и условный срок истощения. |
-| **ПРГ** | Устойчивость дефицитов, время до резерва/нуля, связи рецептов, рекомендации по наблюдениям и сценарии изменения выпуска/спроса. |
-| **ПОДКЛ** | Обнаружение Factorio, привязка к PID, состояние восьми каналов, возраст данных и охват сбора. |
-| **УЩЕРБ** | Экран из индикатора/уведомления: разрушенное, повторно построенное, оставшиеся затраты и сравнение с учтёнными запасами. |
+| Overview | Persistent spatial machine issues, grouped nearby machines, measured locations, native map navigation, production history and conditional advice. Global deficits have no invented coordinates. |
+| Power | Networks, generation and demand, sources and consumers, theoretical capacity, accumulator charge and history. |
+| Production | Item/fluid flows, balance, monitored stock, recipes, idle states, demand coverage, conditional depletion, search and observed UPS. Table and native map views; Space Age imports/exports in material details. |
+| Logistics | Robot networks, requests, deliveries, shortages, trains and cargo. Space Age tables and an interactive transport map with platforms, cargo pods, loading, cargo/quality filters and observed leg ETA. |
+| Research | Current technology and level, progress, queue, science-pack flows, laboratory states and conditional ETA. |
+| Resources | Surveyed resource chunks, deposit groups, remaining amounts, observed depletion and conditional exhaustion estimates. |
+| Forecasts | Persistent deficits, reserve/zero-stock horizons, recipe relationships and production/demand scenarios. |
+| Connection | Detected Factorio processes, session selection, channel state, data age and collection coverage. |
+| Damage | Attacks, destroyed/rebuilt structures, outstanding rebuilding costs and comparison with monitored stock. |
 
-- Полный экран на текущем мониторе, адаптация при ресайзе и разном DPI; масштаб **70–175%**, шаг 1%.
-- Русский интерфейс, поиск по русским названиям, оригинальные игровые значки; строки вынесены в JSON, предусмотрен каталог языков.
-- Отдельный CRT-слой PixiJS: кривизна, аберрация, шум, RGB-баланс, резкость, смещения фрагментов и краткие ASCII-подмены символов. Шесть групп настроек; эффекты отключаются.
-- Загрузка приложения с ASCII-шестерёнкой, реальные этапы инициализации и переходы BIOS/люминофор/ASCII при открытии разделов.
-- Фоновый шум, клики, пять случайных звуков наведения без повторов подряд, сигналы загрузки и тревога; отдельные каналы, общий mute и громкость.
-- При нападении — красная палитра и лампочка, окно на **10 секунд**, минимум **15 секунд между открытиями**. Звук прекращается с атакой; тревожный режим можно отключить до перезапуска, сохранив индикацию действующей атаки.
-- История обрабатывается Worker-ом; изменяет DOM только открытый экран. Общий лимит интерфейса/VFX — **30 FPS**.
+- **11 languages:** English, German, Spanish, French, Czech, Hungarian, Estonian, Finnish, Portuguese, Russian and Ukrainian. First launch suggests the Windows interface language with English fallback; the choice remains available in settings. UI strings use JSON locale files.
+- Resizable layout including 1024×768 and 1152×864, mixed-DPI support, fullscreen on the current monitor and 70–175% UI scale.
+- Optional CRT effects, adjustable audio, ASCII startup and screen transitions. Attack alerts include a temporary red theme and an alarm that ends with the attack.
+- UI and effects share a **30 FPS** cap. Background workers maintain history/models; hidden views stop rendering and native map requests.
+- Native map imagery fills progressively and retains loaded imagery while panning or refreshing. Unknown or uncollected areas remain empty.
+- Optional diagnostic logs, disabled by default, with a settings shortcut to their folder.
 
-**Клавиши:** F1 обзор · F2 энергия · F3 производство · F4 логистика · F5 обновить · F6 исследования · F7 ресурсы · F8 прогнозы · F9 подключение · F10 настройки · F11 полный экран · Esc выход из полного экрана/настроек.
+**Shortcuts:** F1 overview · F2 power · F3 production · F4 logistics · F5 refresh · F6 research · F7 resources · F8 forecasts · F9 connection · F10 settings · F11 fullscreen · Esc leave fullscreen/settings.
 
-## Что делает мод Factory Telemetry 0.4.0
+## Telemetry and limits
 
-Мод читает состояние мира и пишет завершённые JSON-снимки в `script-output/factory-telemetry/`. Не добавляет игровые прототипы и не меняет производство, ресурсы, команды игрока или правила игры. Техническое состояние хранит в собственном `storage.factory_telemetry`.
+[Factory Telemetry Bridge](mod/factory-telemetry/README.md) adds no prototypes or gameplay changes. It exports completed snapshots to `script-output/factory-telemetry/` across eight channels: `status`, `production`, `machines`, `power`, `logistics`, `research`, `resources` and `combat`. Space transport observations are included in logistics; native map pixels are exported separately.
 
-| Канал | Экспортируемые данные |
+Collection is incremental: up to 16 indexed entities per tick, paged requester data, bounded transport observation and one native chart read per six ticks. Snapshots report session, tick, coverage and collection errors. Large worlds need time for initial discovery; rolling samples are not simultaneous measurements of the entire factory. Opening a view or calling an API reads prepared data and never triggers a new game scan.
+
+- Monitored stock excludes belts, inserter hands, pipes, players and fuel inventories. Stock in a container does not imply that every consumer can reach it.
+- Production-flow item totals currently use normal quality. Inventory and transport observations retain quality where available.
+- Generator ratings are theoretical capacity; accumulator charge is not assigned to individual networks.
+- Forecasts are conditional on observed history and coverage. They do not promise exact machine counts or train arrival times. Infinite resource patches have no finite exhaustion estimate.
+- Map coverage follows factories, players and observed/charted areas under collection limits; it is not an unrestricted world scan or a complete rail/sprite renderer.
+- In multiplayer, exports are written by the server. The desktop application needs access to those files.
+
+The embedded Bridge/Gateway shares prepared snapshots with the desktop. SQLite history is separated by session, retains 60 minutes by default and compresses new snapshots without loss. The local interfaces are:
+
+| Interface | Address / operations |
 |---|---|
-| `status` | Версии игры/мода, игроки, сессия, тик/скорость игры, охват индексации, бюджеты и ошибки коллектора. |
-| `production` | Производство и потребление предметов/жидкостей по поверхности и фракции, окна 5 секунд / 1 минута / 10 минут. |
-| `machines` | Группы машин по типу/рецепту/статусу, причины простоя, crafting speed, ингредиенты/продукты и примеры координат; инвентари с качеством, жидкости, полнота и возраст замеров. |
-| `power` | Электросети, выработка/потребление по прототипам, паспортная мощность генераторов, число/заряд/ёмкость аккумуляторов по поверхности и фракции. |
-| `logistics` | Сети и их содержимое, свободные/всего логистические и строительные роботы; фильтры запросов, наличие и назначенные доставки; состояния, скорость, координаты, станции, расписания и грузы поездов. |
-| `research` | Текущая технология, уровень, прогресс, очередь, стоимость и состав научных пакетов по фракциям. |
-| `resources` | Разведанные ресурсные чанки: поверхность, координаты, тип, количество, тайлы, бесконечность и тик измерения. |
-| `combat` | Вражеский урон зданиям, эпизоды атак, разрушения по прототипу/качеству, координаты, предметы восстановления, повторные постройки на тех же местах и полнота учёта. |
+| MCP | `http://127.0.0.1:18740/mcp` — `telemetry_snapshot`, `telemetry_capabilities` |
+| HTTP | `http://127.0.0.1:18741/api/v1/` — status, sessions, overview, `telemetry/{topic}`, forecasts, history, client updates and SSE events |
+| Native map | HTTP map manifest, tiles and composed pages from completed exports of the current session |
 
-**Все дополнительные функции коллектора:**
+## Source and build
 
-- Постепенная индексация разведанных чанков, с приоритетом области вокруг игроков; обработка новых поверхностей, разведки, построек и восстановлений.
-- Порционный обход **до 16 объектов за тик**, до четырёх строк потоков за шаг; обновлённый объект заменяет прежний вклад, пустые/удалённые объекты вычитаются.
-- Машины/запасы, status и combat публикуются каждые 120 игровых тиков; энергия начинает цикл после 60, логистика/исследования — 300, ресурсы — 600. Порционные задачи могут завершаться позже планового интервала.
-- Большие requester-данные выгружаются страницами **по 16 записей за тик** в два чередующихся каталога; ссылка публикуется только на законченный набор.
-- Новая генерация при загрузке/смене мира; охват и тики замеров позволяют отличать неполные и старые данные.
-- Нападение завершается после **900 игровых тиков без вражеского урона**. Сохраняется до восьми эпизодов; ограниченные наборы групп/позиций помечают неполный учёт явно.
-- Обработка ошибок вызовов и `profile.txt` со средним временем работы коллектора за 300 тиков.
-- Консольная команда **`/factory-telemetry-status`** выводит охват сбора.
-- Remote-интерфейс **`remote.call("factory_telemetry", "snapshot", "power")`** возвращает последний готовый JSON указанного канала либо `nil`, без нового обхода мира.
-- В multiplayer файлы пишет сервер; терминалу необходим доступ к его экспорту. Это не сервис удалённого управления игрой.
+- `src/`: .NET 10, WPF/WebView2 desktop, Bridge/Gateway, telemetry models and SQLite history.
+- `mod/factory-telemetry/`: Lua collector.
+- `tests/`: .NET, collector/model and browser checks.
+- `Concepts/`: visual concepts; `docs/evidence/`: captures and validation evidence.
 
-## API и ограничения
-
-Bridge и Gateway встроены в основной процесс и используют общие готовые снимки без внутренней JSON-пересылки. Проверка файлов идёт раз в 250 мс, чтение — не чаще интервала соответствующего канала, 1–15 секунд. MCP доступен для внешних клиентов и раздельного запуска компонентов. HTTP-клиенты читают кеш, не запускают обход игры. История SQLite хранится по сессиям, по умолчанию 60 минут; новые снимки сжимаются без потери данных.
-
-- MCP: `http://127.0.0.1:18740/mcp`, инструменты `telemetry_snapshot` и `telemetry_capabilities`.
-- HTTP: `http://127.0.0.1:18741/api/v1/` — `status`, `sessions`, `overview`, восемь каналов через `telemetry/{topic}`, `forecasts`, `history`, `client/updates`, SSE `events`.
-
-Запасы не включают конвейеры, руки манипуляторов, трубы, игроков и топливные инвентари; учтённый запас не означает доступность конкретному потребителю. Потоки предметов сейчас относятся к normal quality. Паспортная мощность — теоретический потолок. Заряд АКБ ещё не привязан к отдельным сетям. Прогнозы условны: не учитывают все причины голодания и не обещают точное число новых машин; точного ETA поездов и полного слоя рельсов нет. Для бесконечных ресурсов конечный срок истощения не выдаётся. Начальная индексация большой карты требует времени.
-
-## Исходники и сборка
-
-`src/` — .NET 10, WPF/WebView2, MCP и SQLite; `mod/factory-telemetry/` — Lua; `tests/` — .NET, модели, коллектор и проверки Chromium; `Concepts/` — исходные макеты; `docs/` — расчёты, ограничения и замеры.
+Use the SDK version in `global.json` and PowerShell 7. The repository build scripts use the development environment configured in `scripts/env.ps1`.
 
 ```powershell
-.\scripts\build.ps1 -Publish   # dist/FactoryControl.exe
+pwsh -File ./scripts/build.ps1 -Publish
+pwsh -File ./scripts/package-telemetry.ps1 -GameBranch 2.0
+pwsh -File ./scripts/package-telemetry.ps1 -GameBranch 2.1
 ```
 
-Скрипты разработки используют локальные инструменты под `D:\ChatGPT\Tools` и кеши на D:, см. `scripts/env.ps1` и `global.json`. Каталог игровых имён/иконок обновляется `scripts/import-game-localization.ps1`; при обычном запуске импорт не выполняется. Распаковка EXE, WebView2-профиль и данные остаются на D:.
+The application is written to `dist/FactoryControl.exe`; collector archives go to `dist/mods/2.0/` and `dist/mods/2.1/`. Game names/icons are prepared during development, not imported on normal startup.
 
-Игровая графика и переводы принадлежат Wube Software; Factorio приобретается отдельно. Лицензии Iosevka, PixiJS и Pixi Filters включены рядом с ресурсами. [Сторонние материалы](THIRD_PARTY_NOTICES.md).
+Factorio artwork and translations belong to Wube Software. This project is not officially affiliated with Wube Software. Included font/library licenses and other attributions are listed in [third-party notices](THIRD_PARTY_NOTICES.md).
