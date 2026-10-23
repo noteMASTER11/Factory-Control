@@ -2814,5 +2814,16 @@
   "space.network.stage.launching": "Indítás",
   "space.network.stage.transit": "Kapszula úton",
   "space.network.stage.unloading": "Rakomány fogadása",
-  "space.network.stage.unknown": "Helyzet ismeretlen"
+  "space.network.stage.unknown": "Helyzet ismeretlen",
+  "collector.button": "MOD",
+  "collector.buttonTitle": "Telemetria-mod telepítése vagy frissítése",
+  "collector.chooseGame": "Factorio kiválasztása",
+  "collector.exeFilter": "Factorio (factorio.exe)|factorio.exe",
+  "collector.waitingForExit": "Zárd be a Factoriót. Az alkalmazás automatikusan telepíti és engedélyezi a modot; utána indítsd el a játékot és töltsd be a mentést.",
+  "collector.ready": "A(z) {version} gyűjtő készen áll a Factorio {branch} verzióhoz. Indítsd el a játékot és tölts be egy pályát.",
+  "collector.error.unsupported_version": "Támogatott ágak: Factorio 2.0 (2.0.77+) és 2.1 (2.1.23+).",
+  "collector.error.access_denied": "A játék profilja nem írható. Ellenőrizd a mappa jogosultságait.",
+  "collector.error.invalid_game": "Válaszd ki a factorio.exe fájlt egy érvényes Factorio-telepítésből.",
+  "collector.error.invalid_mod_list": "A mods/mod-list.json nem olvasható. Állíts vissza egy érvényes fájlt, majd próbáld újra.",
+  "collector.error.io": "A mod telepítése sikertelen. Ellenőrizd a játék profilját, majd próbáld újra."
 }

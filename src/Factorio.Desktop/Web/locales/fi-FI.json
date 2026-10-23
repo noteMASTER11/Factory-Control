@@ -2814,5 +2814,16 @@
   "space.network.stage.launching": "Laukaisu",
   "space.network.stage.transit": "Kapseli matkalla",
   "space.network.stage.unloading": "Lastin vastaanotto",
-  "space.network.stage.unknown": "Sijaintia ei määritetty"
+  "space.network.stage.unknown": "Sijaintia ei määritetty",
+  "collector.button": "MOD",
+  "collector.buttonTitle": "Asenna tai päivitä telemetriamodi",
+  "collector.chooseGame": "Valitse Factorio",
+  "collector.exeFilter": "Factorio (factorio.exe)|factorio.exe",
+  "collector.waitingForExit": "Sulje Factorio. Sovellus asentaa ja ottaa modin käyttöön automaattisesti; käynnistä sitten peli ja lataa tallennus.",
+  "collector.ready": "Kerääjä {version} Factorio-versiolle {branch} on valmis. Käynnistä peli ja lataa kartta.",
+  "collector.error.unsupported_version": "Tuetut haarat: Factorio 2.0 (2.0.77+) ja 2.1 (2.1.23+).",
+  "collector.error.access_denied": "Peliprofiiliin ei voi kirjoittaa. Tarkista kansion käyttöoikeudet.",
+  "collector.error.invalid_game": "Valitse factorio.exe kelvollisesta Factorio-asennuksesta.",
+  "collector.error.invalid_mod_list": "Tiedostoa mods/mod-list.json ei voi lukea. Palauta kelvollinen tiedosto ja yritä uudelleen.",
+  "collector.error.io": "Modin asennus epäonnistui. Tarkista peliprofiili ja yritä uudelleen."
 }

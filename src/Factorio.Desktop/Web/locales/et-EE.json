@@ -2814,5 +2814,16 @@
   "space.network.stage.launching": "Start",
   "space.network.stage.transit": "Kapsel teel",
   "space.network.stage.unloading": "Lasti vastuvõtt",
-  "space.network.stage.unknown": "Asukoht määramata"
+  "space.network.stage.unknown": "Asukoht määramata",
+  "collector.button": "MOD",
+  "collector.buttonTitle": "Paigalda või uuenda telemeetria modi",
+  "collector.chooseGame": "Vali Factorio",
+  "collector.exeFilter": "Factorio (factorio.exe)|factorio.exe",
+  "collector.waitingForExit": "Sulge Factorio. Rakendus paigaldab ja lubab modi automaatselt; seejärel käivita mäng ja laadi salvestus.",
+  "collector.ready": "Koguja {version} Factorio {branch} jaoks on valmis. Käivita mäng ja laadi kaart.",
+  "collector.error.unsupported_version": "Toetatud harud: Factorio 2.0 (2.0.77+) ja 2.1 (2.1.23+).",
+  "collector.error.access_denied": "Mänguprofiili ei saa kirjutada. Kontrolli kausta õigusi.",
+  "collector.error.invalid_game": "Vali factorio.exe kehtivast Factorio paigaldusest.",
+  "collector.error.invalid_mod_list": "Faili mods/mod-list.json ei saa lugeda. Taasta kehtiv fail ja proovi uuesti.",
+  "collector.error.io": "Modi paigaldamine ebaõnnestus. Kontrolli mänguprofiili ja proovi uuesti."
 }

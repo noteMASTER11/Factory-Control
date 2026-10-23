@@ -31,11 +31,13 @@ public sealed class MonitorWindow : Window
     private string? telemetrySession;
     private string? historySession;
     private readonly RuntimeLogs? logs;
+    private readonly DesktopBackend? backend;
 
-    public MonitorWindow(string[] arguments, Task? backendReady = null,RuntimeLogs? logs=null)
+    public MonitorWindow(string[] arguments, Task? backendReady = null,RuntimeLogs? logs=null,DesktopBackend? backend=null)
     {
         this.arguments = arguments;
         this.logs=logs;
+        this.backend=backend;
         this.backendReady = backendReady ?? Task.CompletedTask;
         Title = Localization.Text("app.title");
         Icon = BitmapFrame.Create(new Uri("pack://application:,,,/Assets/factory-control.ico"));
@@ -144,6 +146,33 @@ public sealed class MonitorWindow : Window
             var message = document.RootElement;
             var command = message.GetProperty("type").GetString();
             if(command!="debug.log"&&logs?.Enabled==true)logs.Write(LogLevel.Debug,"webview.message",command??"unknown");
+            if(command=="collector.setup")
+            {
+                if(backend is null)return;
+                await backendReady.WaitAsync(lifetime.Token);
+                try
+                {
+                    string? executable=null;
+                    if(message.TryGetProperty("pid",out var pid)&&pid.ValueKind==JsonValueKind.Number&&pid.TryGetInt32(out var processId)&&processId>0)
+                    {
+                        using var process=System.Diagnostics.Process.GetProcessById(processId);
+                        if(!process.ProcessName.Equals("factorio",StringComparison.OrdinalIgnoreCase))throw new ArgumentException("invalid_game");
+                        executable=process.MainModule?.FileName;
+                    }
+                    if(string.IsNullOrWhiteSpace(executable))
+                    {
+                        var dialog=new Microsoft.Win32.OpenFileDialog{Title=Localization.Text("collector.chooseGame"),Filter=Localization.Text("collector.exeFilter"),CheckFileExists=true,Multiselect=false};
+                        if(dialog.ShowDialog(this)!=true){Send(new{type="collector.result",data=backend.Collector});return;}
+                        executable=dialog.FileName;
+                    }
+                    var result=await backend.SetupCollectorAsync(executable,lifetime.Token);
+                    telemetryRevision=null;telemetrySession=null;historySession=null;
+                    Send(new{type="collector.result",data=result});
+                }
+                catch(Exception ex)when(ex is IOException or UnauthorizedAccessException or ArgumentException or InvalidOperationException or System.ComponentModel.Win32Exception)
+                {logs?.Write(LogLevel.Error,"collector.setup","Could not prepare collector",ex);Send(new{type="collector.result",data=new CollectorSetup("error",Error:"io")});}
+                return;
+            }
             if(command=="settings.debugLogs"){logs?.SetEnabled(message.TryGetProperty("enabled",out var debug)&&debug.ValueKind==JsonValueKind.True);return;}
             if(command=="settings.logs.open"){
                 if(logs is not null){Directory.CreateDirectory(logs.DirectoryPath);System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(logs.DirectoryPath){UseShellExecute=true});}
@@ -192,10 +221,11 @@ public sealed class MonitorWindow : Window
                     historySession=nextSession;
                 }
                 telemetryRevision=status?["revision"]?.GetValue<long>();telemetrySession=nextSession;
-                Send(new { type = "api.reply", id, data = new { status, sessions, history, productionHistory, researchHistory } });
+                Send(new { type = "api.reply", id, data = new { status, sessions, history, productionHistory, researchHistory,collector=backend?.Collector } });
             }
             finally { reading = false; }
         }
+        catch(OperationCanceledException)when(lifetime.IsCancellationRequested){}
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException or InvalidOperationException or KeyNotFoundException or IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception)
         {logs?.Write(LogLevel.Error,"webview.message","Native request failed",ex);if (!lifetime.IsCancellationRequested) Send(new { type = "api.reply", id, error = "gateway_unavailable" }); }
     }

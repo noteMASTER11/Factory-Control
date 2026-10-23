@@ -34,7 +34,7 @@ public partial class App : Application
                 throw new InvalidOperationException("Embedded backend could not start.", ex);
             }
         });
-        MainWindow = new MonitorWindow(e.Args, backendReady,runtimeLogs);
+        MainWindow = new MonitorWindow(e.Args, backendReady,runtimeLogs,backend);
         MainWindow.Show();
     }
 

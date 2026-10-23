@@ -8,7 +8,7 @@ Current version: **0.10.7**, released together with Factory Control **0.10.7**.
 
 The shared sources are packaged separately for **Factorio 2.0.77+** and **2.1.23+ experimental**. Source `info.json` targets 2.0; `scripts/package-telemetry.ps1 -GameBranch 2.1` supplies the 2.1 metadata. Each archive supports one Factorio branch. Space Age and Quality are optional dependencies.
 
-Place the matching ZIP in the game's `mods` folder, enable **Factory Telemetry Bridge**, restart Factorio and load a map. Keep the mod enabled when synchronizing a save's mod set. Updating an already loaded collector requires reloading the map. For desktop integration, use the matching `Install-FactoryControl.ps1` with an explicit `-GameExecutable` path.
+Place the matching ZIP in the game's `mods` folder, enable **Factory Telemetry Bridge**, restart Factorio and load a map. Keep the mod enabled when synchronizing a save's mod set. Updating an already loaded collector requires reloading the map. Factory Control embeds this collector and automatically prepares the right metadata for the detected game branch. No external installation script is needed. The optional `FactoryTelemetry-0.10.7.zip` release download contains both branch-specific mod ZIPs in separate folders for manual installation.
 
 ## Exported data
 

@@ -84,4 +84,19 @@ public sealed class DesktopBackendTests
         var listener = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Loopback, new Uri(url).Port);
         try { listener.Start(); } finally { listener.Stop(); }
     }
+
+    [Fact] public async Task SelectingPortableGameRebindsTelemetryAndPersistsTheChosenProfile()
+    {
+        var root=Path.Combine(Path.GetTempPath(),"collector-backend-"+Guid.NewGuid().ToString("N"));
+        var game=Path.Combine(root,"game");Directory.CreateDirectory(Path.Combine(game,"bin","x64"));Directory.CreateDirectory(Path.Combine(game,"data","base"));
+        var executable=Path.Combine(game,"bin","x64","factorio.exe");File.WriteAllText(executable,"");
+        File.WriteAllText(Path.Combine(game,"data","base","info.json"),"{\"name\":\"base\",\"version\":\"2.1.23\"}");
+        File.WriteAllText(Path.Combine(game,"config-path.cfg"),"config-path=__PATH__executable__/../../config\nuse-system-read-write-data-directories=false\n");
+        var data=Path.Combine(root,"data");var oldProfile=Path.Combine(root,"old-profile");
+        await using var backend=new DesktopBackend(new(data,Path.Combine(oldProfile,"script-output","factory-telemetry"),WatchGame:false,BridgeUrl:"http://127.0.0.1:0",GatewayUrl:"http://127.0.0.1:0",GameProfile:oldProfile));
+        await backend.StartAsync();await backend.SetupCollectorAsync(executable).WaitAsync(TimeSpan.FromSeconds(15));
+        using var client=new HttpClient();var health=JsonNode.Parse(await client.GetStringAsync(backend.BridgeAddress+"/health"))!;
+        Assert.Equal(Path.Combine(game,"script-output","factory-telemetry"),health["directory"]!.GetValue<string>());
+        var saved=BackendOptions.Load(["--data-root="+data]);Assert.Equal(game,saved.GameProfile);Assert.False(saved.GameProfileExplicit);Assert.Equal(executable,saved.GameExecutable);
+    }
 }

@@ -15,6 +15,11 @@
   </PropertyGroup>
   <ItemGroup><Content Include="Web/**"><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory><CopyToPublishDirectory Condition="'$(PortableBundle)' != 'true'">PreserveNewest</CopyToPublishDirectory><CopyToPublishDirectory Condition="'$(PortableBundle)' == 'true'">Never</CopyToPublishDirectory><ExcludeFromSingleFile>true</ExcludeFromSingleFile></Content></ItemGroup>
   <ItemGroup><EmbeddedResource Include="Web/locales/*.json"><LogicalName>Factorio.Desktop.Locales.%(Filename)%(Extension)</LogicalName></EmbeddedResource></ItemGroup>
+  <Target Name="BundleCollector" BeforeTargets="AssignTargetPaths">
+    <MakeDir Directories="$(IntermediateOutputPath)" />
+    <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)/../../mod/factory-telemetry" DestinationFile="$(IntermediateOutputPath)factory-collector.zip" Overwrite="true" />
+    <ItemGroup><EmbeddedResource Include="$(IntermediateOutputPath)factory-collector.zip"><LogicalName>Factorio.Desktop.Collector.zip</LogicalName></EmbeddedResource></ItemGroup>
+  </Target>
   <Target Name="BundleWebAssets" BeforeTargets="AssignTargetPaths" Condition="'$(PortableBundle)' == 'true'">
     <MakeDir Directories="$(IntermediateOutputPath)" />
     <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)/Web" DestinationFile="$(IntermediateOutputPath)factory-web.zip" Overwrite="true" />

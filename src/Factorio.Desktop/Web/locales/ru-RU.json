@@ -2814,5 +2814,16 @@
   "space.network.stage.launching": "Запуск",
   "space.network.stage.transit": "Капсула в пути",
   "space.network.stage.unloading": "Приём груза",
-  "space.network.stage.unknown": "Положение не определено"
+  "space.network.stage.unknown": "Положение не определено",
+  "collector.button": "МОД",
+  "collector.buttonTitle": "Установить или обновить мод телеметрии",
+  "collector.chooseGame": "Выберите Factorio",
+  "collector.exeFilter": "Factorio (factorio.exe)|factorio.exe",
+  "collector.waitingForExit": "Закройте Factorio. Приложение само установит и включит мод; затем запустите игру и загрузите сохранение.",
+  "collector.ready": "Коллектор {version} для Factorio {branch} готов. Запустите игру и загрузите карту.",
+  "collector.error.unsupported_version": "Поддерживаются ветки Factorio 2.0 (2.0.77+) и 2.1 (2.1.23+).",
+  "collector.error.access_denied": "Нет доступа для записи в профиль игры. Проверьте права на папку.",
+  "collector.error.invalid_game": "Выберите factorio.exe из установленной игры Factorio.",
+  "collector.error.invalid_mod_list": "Не удалось прочитать mods/mod-list.json. Восстановите корректный файл и повторите.",
+  "collector.error.io": "Не удалось установить мод. Проверьте профиль игры и повторите."
 }

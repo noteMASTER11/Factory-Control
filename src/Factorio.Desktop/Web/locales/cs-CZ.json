@@ -2814,5 +2814,16 @@
   "space.network.stage.launching": "Start",
   "space.network.stage.transit": "Kapsle na cestě",
   "space.network.stage.unloading": "Příjem nákladu",
-  "space.network.stage.unknown": "Poloha neurčena"
+  "space.network.stage.unknown": "Poloha neurčena",
+  "collector.button": "MOD",
+  "collector.buttonTitle": "Nainstalovat nebo aktualizovat telemetrický mod",
+  "collector.chooseGame": "Vyberte Factorio",
+  "collector.exeFilter": "Factorio (factorio.exe)|factorio.exe",
+  "collector.waitingForExit": "Zavřete Factorio. Aplikace mod automaticky nainstaluje a zapne. Poté spusťte hru a načtěte uloženou pozici.",
+  "collector.ready": "Kolektor {version} pro Factorio {branch} je připraven. Spusťte hru a načtěte mapu.",
+  "collector.error.unsupported_version": "Podporované větve: Factorio 2.0 (2.0.77+) a 2.1 (2.1.23+).",
+  "collector.error.access_denied": "Do herního profilu nelze zapisovat. Zkontrolujte oprávnění složky.",
+  "collector.error.invalid_game": "Vyberte factorio.exe z platné instalace hry Factorio.",
+  "collector.error.invalid_mod_list": "Nelze přečíst mods/mod-list.json. Obnovte platný soubor a zkuste to znovu.",
+  "collector.error.io": "Mod se nepodařilo nainstalovat. Zkontrolujte herní profil a zkuste to znovu."
 }

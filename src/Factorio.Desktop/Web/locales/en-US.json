@@ -2814,5 +2814,16 @@
   "space.network.stage.launching": "Launching",
   "space.network.stage.transit": "Pod in transit",
   "space.network.stage.unloading": "Receiving cargo",
-  "space.network.stage.unknown": "Position undetermined"
+  "space.network.stage.unknown": "Position undetermined",
+  "collector.button": "MOD",
+  "collector.buttonTitle": "Install or update the telemetry mod",
+  "collector.chooseGame": "Select Factorio",
+  "collector.exeFilter": "Factorio (factorio.exe)|factorio.exe",
+  "collector.waitingForExit": "Close Factorio. The app will install and enable the mod automatically; then start the game and load your save.",
+  "collector.ready": "Collector {version} for Factorio {branch} is ready. Start the game and load a map.",
+  "collector.error.unsupported_version": "Supported branches: Factorio 2.0 (2.0.77+) and 2.1 (2.1.23+).",
+  "collector.error.access_denied": "Cannot write to the game profile. Check folder permissions.",
+  "collector.error.invalid_game": "Select factorio.exe from a valid Factorio installation.",
+  "collector.error.invalid_mod_list": "Cannot read mods/mod-list.json. Restore a valid file and retry.",
+  "collector.error.io": "Could not install the mod. Check the game profile and retry."
 }

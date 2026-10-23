@@ -39,7 +39,7 @@ if(new URLSearchParams(location.search).get('renderer')!=='svg'){
 }else overlay=new CrtOverlay(document.querySelector('.console'),crtProfile,visualClock);
 startup.mark('renderer',window.pixiProbe||overlay instanceof CrtOverlay?'ready':'degraded');
 let snapshot = null, selectedPid = null, attachedPid = null, busy = false, failed = false, processingFailed = false, timer;
-let windowState = { fullscreen:false };
+let windowState = { fullscreen:false },collectorSetup=null,collectorSetupBusy=false;
 let lastReceived = 0;
 let screen='sessions';
 let restored=false;
@@ -96,6 +96,7 @@ function requestSnapshot() {
   });
 }
 window.chrome?.webview?.addEventListener('message', ({data}) => {
+  if(data.type==='collector.result'){collectorSetup=data.data;collectorSetupBusy=false;render();refresh();}
   if (data.type === 'api.reply') {
     const request = pending.get(data.id);
     if (!request) return;
@@ -207,7 +208,10 @@ function renderConnection() {
   write('detail-coverage', show && coverage ? coverage.discovery_complete ? t('details.discoveryComplete') : t('details.discoveryInProgress',{chunks:number(coverage.charted_chunks_scanned)}) : empty());
   const activation=collectorState(p);
   const note = t(!p ? 'details.selectProcess' : !show ? 'details.noCollector' : failed ? 'details.gatewayUnavailable' : !topic ? activation?'details.collector.'+activation:'details.loadCollector' : !available(p) ? 'details.noFreshData' : status.source_kind === 'validation_copy' ? 'details.copyNotice' : 'details.gameNotice');
-  write('selection-note', note); $('selection-note').dataset.kind = available(p) && status.source_kind !== 'validation_copy' ? 'good' : 'notice';
+  const setupApplies=!p||!collectorSetup?.executable||p.executable?.toLowerCase()===collectorSetup.executable.toLowerCase();
+  const setupNote=setupApplies&&collectorSetup?.state==='waiting_for_exit'?t('collector.waitingForExit'):setupApplies&&collectorSetup?.state==='error'?t('collector.error.'+collectorSetup.error):setupApplies&&!p&&collectorSetup?.state==='ready'?t('collector.ready',{version:collectorSetup.version,branch:collectorSetup.branch}):null;
+  write('selection-note', setupNote??note); $('selection-note').dataset.kind = !setupNote&&available(p) && status.source_kind !== 'validation_copy' ? 'good' : 'notice';
+  $('collector-setup').disabled=collectorSetupBusy;
   $('connect').disabled = !available(p);
   write('connect-label', t(attachedPid === selectedPid && attachedPid !== null ? 'connection.disconnect' : 'connection.connect'));
   write('diagnostic-message', t(failed ? 'diagnostics.offline' : !show ? 'diagnostics.selectProcess' : !topic?'diagnostics.noTelemetry':stale(topic) ? 'diagnostics.stale' : 'diagnostics.cache'));
@@ -263,7 +267,7 @@ async function refresh() {
   if (busy) return;
   busy = true;
   try {
-    const packet=await requestSnapshot();startup.mark('gateway');lastReceived=Date.now();failed=false;initialRequest=false;
+    const packet=await requestSnapshot();collectorSetup=packet.collector??collectorSetup;startup.mark('gateway');lastReceived=Date.now();failed=false;initialRequest=false;
     worker.postMessage({type:'ingest',packet});
   } catch { startup.mark('gateway','degraded');failed = true;worker.postMessage({type:'clock'}); }
   finally { busy=false;render();timer=setTimeout(refresh,document.hidden?10000:3000); }
@@ -277,6 +281,7 @@ function connect(){
 for(const key of ['overview','energy','production','logistics','research','resources','forecasts','sessions'])$('nav-'+key).addEventListener('click',()=>showScreen(key));
 $('fullscreen').addEventListener('click', () => post({type:'window.toggleFullscreen'}));
 $('refresh').addEventListener('click', refresh);
+$('collector-setup').addEventListener('click',()=>{collectorSetupBusy=true;post({type:'collector.setup',pid:selectedPid});render();});
 $('connect').addEventListener('click', connect);
 function setCrtEnabled(enabled) {
   if(overlay.enabled!==!!enabled)overlay.setEnabled(enabled);enabled=overlay.enabled; $('vfx-toggle').setAttribute('aria-pressed', String(enabled));

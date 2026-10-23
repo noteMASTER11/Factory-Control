@@ -8,32 +8,25 @@ A desktop control room for **Factorio on Windows x64**. Monitor production, powe
 
 ## Current release
 
-**[Factory Control 0.10.7](https://github.com/noteMASTER11/Factory-Control/releases/tag/v0.10.7)** includes Factory Telemetry **0.10.7**. Choose the complete download for **Factorio 2.0** or **Factorio 2.1 experimental**. Both include the desktop EXE, matching mod and installer.
+**[Factory Control 0.10.7](https://github.com/noteMASTER11/Factory-Control/releases/tag/v0.10.7)** is one Windows EXE with Factory Telemetry **0.10.7** built in. It detects Factorio 2.0 or 2.1 experimental and prepares the compatible collector automatically.
 
 ## Requirements and installation
 
-- Windows x64 and Microsoft Edge WebView2 Runtime. The desktop executable bundles .NET.
-- Factorio purchased separately. Collector packages target **2.0.77+** or **2.1.23+ experimental**; use the archive matching the game's branch. Quality and Space Age are optional dependencies.
-- PowerShell 7 to run the installer.
+- Windows x64 and Microsoft Edge WebView2 Runtime. The EXE bundles .NET and the telemetry collector.
+- Factorio purchased separately: **2.0.77+** on the 2.0 branch, or **2.1.23+ experimental** on the 2.1 branch. Quality and Space Age are optional.
 
-To install:
+1. Download `FactoryControl.exe`, place it in a folder of your choice and launch it.
+2. If Factorio is running, the application detects it. Otherwise, use **MOD** on the Connection screen and select the game's `factorio.exe`.
+3. If collector installation or an update is needed, close Factorio and leave Factory Control open. It installs and enables the matching mod after the game exits. Then start Factorio and load your save with **Factory Telemetry Bridge** enabled.
+4. Select the detected session and connect the dashboard.
 
-1. Download and extract `FactoryControl-0.10.7-Factorio-2.0.zip` or `FactoryControl-0.10.7-Factorio-2.1.zip` from the release. Keep `FactoryControl.exe`, the included mod ZIP and `Install-FactoryControl.ps1` together. Do not extract the mod ZIP.
-2. Close Factorio completely and run the installer, replacing `<Factorio>` with your game installation folder:
+No external installer, PowerShell or separate mod download is required for the desktop application. The collector is installed in the game's profile, while telemetry is read directly from its existing `script-output/factory-telemetry` folder. Other mods and existing exports are preserved; replaced collectors and mod-list backups are kept under the game profile's `FactoryControl/collector-backups` folder. A newer compatible collector is retained.
 
-   ```powershell
-   pwsh -File ./Install-FactoryControl.ps1 -GameExecutable '<Factorio>/bin/x64/factorio.exe'
-   ```
+Keep the mod enabled when synchronizing a save's mod set. Installation is deferred while Factorio is running because the game can overwrite edits to `mod-list.json` on exit. The application does not close the game or replace your saves. If you close Factory Control before the game exits, reopen it to complete the pending setup.
 
-   The default installation folder is `%LOCALAPPDATA%\FactoryControl`. Use `-InstallDirectory '<destination>'` to choose another folder and `-GameProfile '<profile>'` for a nonstandard Factorio profile.
+**Manual mod installation:** the optional `FactoryTelemetry-0.10.7.zip` download contains `2.0` and `2.1` folders. Copy the inner `factory-telemetry_0.10.7.zip` from the matching folder into the game's `mods` directory without extracting it. Enable the mod in Factorio and restart the game. This archive is also useful for servers; it contains no desktop installer.
 
-3. Start Factorio, load a save with **Factory Telemetry Bridge** enabled, then open `Factory Control.cmd` from the installation folder and select the detected session.
-
-The installer enables the mod in the selected profile and connects its `script-output` to the application's data folder. It stops if an existing nonempty output folder or conflicting link needs attention. Existing saves are not copied or replaced. Updating Lua code requires reloading the map; mod activation requires a game restart.
-
-If installed files are present but the mod is disabled, enable it through Factorio's **Mods** menu and keep it enabled when synchronizing a save's mod set. Editing `mod-list.json` while Factorio is running does not activate a mod: the game can overwrite those edits on exit. Connection diagnostics distinguish a disabled mod, a pending restart, an unloaded map and an export that has not arrived yet.
-
-Application data, history, logs and profiles are kept in the configured data root. The installer creates a `Data` folder in the chosen installation; direct launches accept `--data-root=<folder>`.
+Application data, history, logs and cache default to `%LOCALAPPDATA%\FactoryControl`. Advanced launches accept `--data-root=<folder>`, `--game-executable=<path>` and `--game-profile=<folder>`; the last option overrides automatic game-profile detection. Existing configured data directories continue to work.
 
 ## Features
 
@@ -90,10 +83,9 @@ Use the SDK version in `global.json` and PowerShell 7. The repository build scri
 
 ```powershell
 pwsh -File ./scripts/build.ps1 -Publish
-pwsh -File ./scripts/package-telemetry.ps1 -GameBranch 2.0
-pwsh -File ./scripts/package-telemetry.ps1 -GameBranch 2.1
+pwsh -File ./scripts/package-release.ps1
 ```
 
-The application is written to `dist/FactoryControl.exe`; collector archives go to `dist/mods/2.0/` and `dist/mods/2.1/`. Game names/icons are prepared during development, not imported on normal startup.
+The application is written to `dist/FactoryControl.exe`. Release packaging produces the universal EXE, optional manual-collector archive and checksums under `dist/release/`. Game names/icons are prepared during development, not imported on normal startup.
 
 Factorio artwork and translations belong to Wube Software. This project is not officially affiliated with Wube Software. Included font/library licenses and other attributions are listed in [third-party notices](THIRD_PARTY_NOTICES.md).

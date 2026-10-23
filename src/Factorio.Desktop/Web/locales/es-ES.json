@@ -2814,5 +2814,16 @@
   "space.network.stage.launching": "Lanzamiento",
   "space.network.stage.transit": "Cápsula en camino",
   "space.network.stage.unloading": "Recibiendo carga",
-  "space.network.stage.unknown": "Posición sin determinar"
+  "space.network.stage.unknown": "Posición sin determinar",
+  "collector.button": "MOD",
+  "collector.buttonTitle": "Instalar o actualizar el mod de telemetría",
+  "collector.chooseGame": "Selecciona Factorio",
+  "collector.exeFilter": "Factorio (factorio.exe)|factorio.exe",
+  "collector.waitingForExit": "Cierra Factorio. La aplicación instalará y activará el mod automáticamente; después inicia el juego y carga tu partida.",
+  "collector.ready": "El colector {version} para Factorio {branch} está listo. Inicia el juego y carga un mapa.",
+  "collector.error.unsupported_version": "Ramas compatibles: Factorio 2.0 (2.0.77+) y 2.1 (2.1.23+).",
+  "collector.error.access_denied": "No se puede escribir en el perfil del juego. Comprueba los permisos de la carpeta.",
+  "collector.error.invalid_game": "Selecciona factorio.exe de una instalación válida de Factorio.",
+  "collector.error.invalid_mod_list": "No se puede leer mods/mod-list.json. Restaura un archivo válido y vuelve a intentarlo.",
+  "collector.error.io": "No se pudo instalar el mod. Comprueba el perfil del juego y vuelve a intentarlo."
 }

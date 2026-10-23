@@ -8,12 +8,11 @@ const root=fs.mkdtempSync('D:/ChatGPT/Temp/FactorioMonitor/installer-guard-'),pr
 fs.mkdirSync(path.join(profile,'mods'),{recursive:true});
 const list=path.join(profile,'mods/mod-list.json'),original='{"mods":[]}';fs.writeFileSync(list,original);
 for(const [script,extra]of [
- ['install-live-collector.ps1',['-SkipDesktopStart']],
- ['install-release.ps1',['-PackageDirectory',root,'-InstallDirectory',path.join(root,'install')]]
+ ['install-live-collector.ps1',['-SkipDesktopStart']]
 ]){
  const result=spawnSync(pwsh,['-NoProfile','-File',path.resolve('scripts',script),'-GameExecutable',game,'-GameProfile',profile,...extra],{encoding:'utf8',env:{...process.env,TEMP:'D:/ChatGPT/Temp/FactorioMonitor',TMP:'D:/ChatGPT/Temp/FactorioMonitor'}});
  assert.notEqual(result.status,0,script+' must reject a running game');
  assert.match(result.stdout+result.stderr,/Close Factorio before installing/i,script+' should explain the required action');
  assert.equal(fs.readFileSync(list,'utf8'),original,'must not rewrite the running game configuration');
 }
-console.log('Both installers reject an active client before modifying its profile.');
+console.log('Development installer rejects an active client before modifying its profile.');
