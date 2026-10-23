@@ -1,0 +1,56 @@
+{
+  "exe": "D:\\ChatGPT\\Projects\\FactorioMonitor\\dist\\FactoryControl.exe",
+  "frames": [
+    {
+      "size": 16,
+      "bits": 32,
+      "bytes": 969
+    },
+    {
+      "size": 20,
+      "bits": 32,
+      "bytes": 1372
+    },
+    {
+      "size": 24,
+      "bits": 32,
+      "bytes": 1784
+    },
+    {
+      "size": 32,
+      "bits": 32,
+      "bytes": 2779
+    },
+    {
+      "size": 40,
+      "bits": 32,
+      "bytes": 3885
+    },
+    {
+      "size": 48,
+      "bits": 32,
+      "bytes": 5203
+    },
+    {
+      "size": 64,
+      "bits": 32,
+      "bytes": 8076
+    },
+    {
+      "size": 96,
+      "bits": 32,
+      "bytes": 15488
+    },
+    {
+      "size": 128,
+      "bits": 32,
+      "bytes": 24877
+    },
+    {
+      "size": 256,
+      "bits": 32,
+      "bytes": 83132
+    }
+  ],
+  "transparent_master": true
+}

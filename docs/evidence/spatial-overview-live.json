@@ -1,0 +1,259 @@
+{
+  "passed": true,
+  "source": "current player process; no validation copy",
+  "checkedAt": "2026-10-23T09:11:42.706Z",
+  "pid": 22880,
+  "game": "2.1.23",
+  "collector": "0.5.1",
+  "topics": {
+    "status": {
+      "tick": 1335291240,
+      "ageSeconds": 5.2201653
+    },
+    "power": {
+      "tick": 1335291373,
+      "ageSeconds": 3.1155547
+    },
+    "production": {
+      "tick": 1335290775,
+      "ageSeconds": 12.374914
+    },
+    "machines": {
+      "tick": 1335291085,
+      "ageSeconds": 7.7775241
+    },
+    "logistics": {
+      "tick": 1335290913,
+      "ageSeconds": 10.3170452
+    },
+    "research": {
+      "tick": 1335290905,
+      "ageSeconds": 10.4300527
+    },
+    "resources": {
+      "tick": 1335289405,
+      "ageSeconds": 32.9976978
+    },
+    "combat": {
+      "tick": 1335291480,
+      "ageSeconds": 1.5155268
+    }
+  },
+  "manifestStatus": 200,
+  "binaryStatus": 200,
+  "binaryBytes": 2048,
+  "pageStatus": 200,
+  "pageBytes": 262144,
+  "rawSession": "2580672862:1335208405:1",
+  "scopes": [
+    {
+      "surface": "nauvis",
+      "force": "Newbies",
+      "tiles": 2277
+    },
+    {
+      "surface": "vulcanus",
+      "force": "Newbies",
+      "tiles": 306
+    },
+    {
+      "surface": "fulgora",
+      "force": "Newbies",
+      "tiles": 306
+    },
+    {
+      "surface": "gleba",
+      "force": "Newbies",
+      "tiles": 270
+    },
+    {
+      "surface": "aquilo",
+      "force": "Newbies",
+      "tiles": 241
+    },
+    {
+      "surface": "nauvis",
+      "force": "player",
+      "tiles": 55
+    },
+    {
+      "surface": "platform-9",
+      "force": "Newbies",
+      "tiles": 62
+    },
+    {
+      "surface": "platform-18",
+      "force": "Newbies",
+      "tiles": 79
+    },
+    {
+      "surface": "platform-2",
+      "force": "Newbies",
+      "tiles": 56
+    },
+    {
+      "surface": "platform-5",
+      "force": "Newbies",
+      "tiles": 61
+    },
+    {
+      "surface": "platform-3",
+      "force": "Newbies",
+      "tiles": 170
+    },
+    {
+      "surface": "platform-6",
+      "force": "Newbies",
+      "tiles": 193
+    },
+    {
+      "surface": "platform-7",
+      "force": "Newbies",
+      "tiles": 71
+    },
+    {
+      "surface": "platform-8",
+      "force": "Newbies",
+      "tiles": 62
+    },
+    {
+      "surface": "platform-1",
+      "force": "Newbies",
+      "tiles": 84
+    },
+    {
+      "surface": "platform-15",
+      "force": "Newbies",
+      "tiles": 205
+    },
+    {
+      "surface": "platform-4",
+      "force": "Newbies",
+      "tiles": 70
+    },
+    {
+      "surface": "platform-12",
+      "force": "Newbies",
+      "tiles": 71
+    },
+    {
+      "surface": "platform-16",
+      "force": "Newbies",
+      "tiles": 104
+    },
+    {
+      "surface": "platform-19",
+      "force": "Newbies",
+      "tiles": 170
+    },
+    {
+      "surface": "platform-21",
+      "force": "Newbies",
+      "tiles": 66
+    },
+    {
+      "surface": "platform-22",
+      "force": "Newbies",
+      "tiles": 156
+    },
+    {
+      "surface": "platform-23",
+      "force": "Newbies",
+      "tiles": 81
+    },
+    {
+      "surface": "platform-10",
+      "force": "Newbies",
+      "tiles": 255
+    },
+    {
+      "surface": "platform-11",
+      "force": "Newbies",
+      "tiles": 640
+    },
+    {
+      "surface": "platform-13",
+      "force": "Newbies",
+      "tiles": 61
+    },
+    {
+      "surface": "platform-14",
+      "force": "Newbies",
+      "tiles": 57
+    },
+    {
+      "surface": "platform-17",
+      "force": "Newbies",
+      "tiles": 62
+    },
+    {
+      "surface": "platform-20",
+      "force": "Newbies",
+      "tiles": 96
+    },
+    {
+      "surface": "platform-29",
+      "force": "Newbies",
+      "tiles": 63
+    },
+    {
+      "surface": "platform-32",
+      "force": "Newbies",
+      "tiles": 55
+    }
+  ],
+  "state": {
+    "packets": 9,
+    "revision": 51,
+    "session": "2580672862:1335208405:1:83daacfc9dbe44fe9fc67c06a3ae783d",
+    "historySamples": 7,
+    "productionHistorySamples": 3,
+    "stockHistorySamples": 5,
+    "logisticsHistorySamples": 5,
+    "researchHistorySamples": 5,
+    "resourceCells": 555,
+    "resourceHistorySamples": 177,
+    "models": {
+      "overview": 9,
+      "energy": 7,
+      "production": 8,
+      "logistics": 6,
+      "research": 7,
+      "resources": 5,
+      "forecasts": 6,
+      "damage": 9
+    },
+    "activeView": "overview",
+    "renders": {
+      "sessions": 2,
+      "overview": 9,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "research": 0,
+      "resources": 0,
+      "forecasts": 0,
+      "damage": 0
+    },
+    "visible": "overview",
+    "map": {
+      "draws": 46,
+      "fetches": 19,
+      "cached": 17,
+      "encodedBytes": 148860,
+      "pending": 0,
+      "active": true,
+      "scope": "18-5",
+      "visiblePages": 4,
+      "targetPages": 4
+    }
+  },
+  "selected": "machine:platform-19|Newbies|assembling-machine-3|item_ingredient_shortage|space-science-pack|-4|-1",
+  "selectedScope": {
+    "surface": "platform-19",
+    "force": "Newbies"
+  },
+  "tileImages": 4,
+  "mapTitle": "platform-19 / Newbies",
+  "header": "ОНЛАЙН / ИГРА"
+}

@@ -11,20 +11,38 @@ namespace Factorio.Gateway;
 
 public static class GatewayHost
 {
-    public static WebApplication Build(IReadOnlyDictionary<string,string?> settings, string url="http://127.0.0.1:18741",ITelemetrySource? directSource=null)
+    public static WebApplication Build(IReadOnlyDictionary<string,string?> settings, string url="http://127.0.0.1:18741",ITelemetrySource? directSource=null,ILoggerProvider? loggerProvider=null)
     {
 var builder=WebApplication.CreateBuilder(new WebApplicationOptions { Args=[], ApplicationName=typeof(GatewayHost).Assembly.FullName, ContentRootPath=AppContext.BaseDirectory });
 builder.Configuration.AddInMemoryCollection(settings);
 builder.Logging.ClearProviders();
+if(loggerProvider is not null)builder.Logging.AddProvider(loggerProvider).SetMinimumLevel(LogLevel.Debug);
 builder.Services.Configure<HostOptions>(options=>options.ShutdownTimeout=TimeSpan.FromSeconds(5));
 builder.WebHost.UseUrls(url);
 builder.Services.AddSingleton<SnapshotCache>();
 builder.Services.AddSingleton<GatewayState>();
+builder.Services.AddSingleton(new CollectorStartupProbe(builder.Configuration["Telemetry:GameProfile"]));
 builder.Services.AddSingleton<HistoryStore>();
+builder.Services.AddSingleton(new NativeChartStore(builder.Configuration["Telemetry:Directory"]??@"D:\ChatGPT\Projects\FactorioMonitor\Data\Factorio\script-output\factory-telemetry"));
 if(directSource is not null)builder.Services.AddSingleton(directSource);
 builder.Services.AddHostedService<McpCollector>();
 var app=builder.Build();
-app.MapGet("/health",()=>new {service="gateway",process_id=Environment.ProcessId,hosting="desktop",version="0.2.0"});
+static string? RawSession(SnapshotCache cache)=>cache.Get("status")?.Payload["session_id"]?.GetValue<string>();
+app.MapGet("/api/v1/map/manifest",(SnapshotCache cache,NativeChartStore charts)=>
+    charts.ReadManifest(RawSession(cache)) is {} manifest?Results.Json(manifest):Results.Json(new{error="map_not_ready"},statusCode:503));
+app.MapGet("/api/v1/map/pages/{generation}/{scope}/{level:int}/{x:int}/{y:int}",(string generation,string scope,int level,int x,int y,SnapshotCache cache,NativeChartStore charts,HttpContext context)=>
+{
+    if(charts.ReadPage(RawSession(cache),generation,scope,level,x,y) is not {} bytes)return Results.NotFound();
+    context.Response.Headers.CacheControl="private, max-age=30";
+    return Results.Bytes(bytes,"application/octet-stream");
+});
+app.MapGet("/api/v1/map/tiles/{generation}/{scope}/{x:int}/{y:int}",(string generation,string scope,int x,int y,SnapshotCache cache,NativeChartStore charts,HttpContext context)=>
+{
+    if(charts.ReadTile(RawSession(cache),generation,scope,x,y) is not {} bytes)return Results.NotFound();
+    context.Response.Headers.CacheControl="private, max-age=30";
+    return Results.Bytes(bytes,"application/octet-stream");
+});
+app.MapGet("/health",()=>new {service="gateway",process_id=Environment.ProcessId,hosting="desktop",version="0.10.7"});
 app.MapGet("/api/v1/status",(GatewayState state,SnapshotCache cache)=>state.Describe(cache));
 app.MapGet("/api/v1/client/status",(GatewayState state,SnapshotCache cache)=>state.Describe(cache,true));
 app.MapGet("/api/v1/client/updates",(long? since,string? session,GatewayState state,SnapshotCache cache)=>
@@ -45,12 +63,13 @@ foreach(var topic in new[]{"power","production","machines","logistics","research
 app.MapGet("/api/v1/forecasts",(GatewayState state)=>Results.Json(state.Forecasts));
 app.MapGet("/api/v1/history",(string? topic,int? limit,HistoryStore history,SnapshotCache cache)=>
     GatewayState.Intervals.ContainsKey(topic??"production")?Results.Json(history.Read(topic??"production",Math.Clamp(limit??60,1,300),cache.SessionId)):Results.BadRequest(new{error="unknown_topic"}));
-app.MapGet("/api/v1/sessions",(SnapshotCache cache,GatewayState state)=>
+app.MapGet("/api/v1/sessions",(SnapshotCache cache,GatewayState state,CollectorStartupProbe startup)=>
 {
     var processes=new List<object>();
     foreach(var p in Process.GetProcessesByName("factorio"))
     {
-        using(p)try {processes.Add(new{pid=p.Id,executable=p.MainModule?.FileName,window=p.MainWindowTitle,telemetry_associated=p.Id==state.SourceProcessId});}catch(Exception ex)when(ex is System.ComponentModel.Win32Exception or InvalidOperationException){processes.Add(new{pid=p.Id,error="process_details_unavailable"});}
+        using(p)try {processes.Add(new{pid=p.Id,executable=p.MainModule?.FileName,window=p.MainWindowTitle,telemetry_associated=p.Id==state.SourceProcessId,
+            collector_state=p.Id==state.SourceProcessId&&state.SourceKind=="game"&&cache.Get("status") is null?startup.Read(p.StartTime.ToUniversalTime()):null});}catch(Exception ex)when(ex is System.ComponentModel.Win32Exception or InvalidOperationException){processes.Add(new{pid=p.Id,error="process_details_unavailable"});}
     }
     return new{processes,telemetry_session=cache.SessionId,source_kind=state.SourceKind,mcp_connected=state.Connected};
 });
@@ -96,10 +115,13 @@ public sealed class GatewayState
         {
             if(row is null)continue;
             var produced=row["produced_per_minute"]!.GetValue<double>();var consumed=row["consumed_per_minute"]!.GetValue<double>();
-            if(consumed<=produced)continue;
+            var transport=TransportRates.Read(cache.Get("logistics"),row,DateTimeOffset.UtcNow);
+            if(transport.Available&&!transport.Ready)continue;
+            var supplied=produced+transport.Imported;var demand=consumed+transport.Exported;
+            if(demand<=supplied)continue;
             double? stock=complete?inventory.GetValueOrDefault(Key(row)):null;
-            var f=Forecast.Calculate(produced,consumed,stock,consumed*2,complete);
-            output.Add(new JsonObject{["name"]=row["name"]!.DeepClone(),["kind"]=row["kind"]!.DeepClone(),["surface"]=row["surface"]!.DeepClone(),["produced_per_minute"]=produced,["consumed_per_minute"]=consumed,["balance_per_minute"]=produced-consumed,["coverage_ratio"]=f.Coverage,["monitored_inventory_stock"]=stock,["reserve_minutes"]=f.ReserveMinutes,["empty_minutes"]=f.EmptyMinutes,["status"]=f.Status,["confidence"]=complete?"conditional_inventory_only":"insufficient_inventory_coverage",["recommendation"]=new JsonObject{["action"]="investigate_capacity_and_delivery",["additional_required_per_minute"]=Math.Ceiling(consumed*1.05-produced),["automatic_game_changes"]=false}});
+            var f=Forecast.Calculate(supplied,demand,stock,demand*2,complete);
+            output.Add(new JsonObject{["name"]=row["name"]!.DeepClone(),["kind"]=row["kind"]!.DeepClone(),["surface"]=row["surface"]!.DeepClone(),["produced_per_minute"]=produced,["consumed_per_minute"]=consumed,["imported_per_minute"]=transport.Ready?transport.Imported:null,["exported_per_minute"]=transport.Ready?transport.Exported:null,["balance_per_minute"]=supplied-demand,["coverage_ratio"]=f.Coverage,["monitored_inventory_stock"]=stock,["reserve_minutes"]=f.ReserveMinutes,["empty_minutes"]=f.EmptyMinutes,["status"]=f.Status,["confidence"]=complete?"conditional_inventory_only":"insufficient_inventory_coverage",["recommendation"]=new JsonObject{["action"]="investigate_capacity_and_delivery",["additional_required_per_minute"]=Math.Ceiling(demand*1.05-supplied),["automatic_game_changes"]=false}});
         }
         Volatile.Write(ref Forecasts,new JsonObject{["rows"]=output,["tick"]=p.Tick,["scope"]="Conditional on monitored inventories and constant 1-minute flows; not a claim about all factory stock. Demand inference and causal recommendations require further history.",["discovery_complete"]=complete});
     }
@@ -198,7 +220,7 @@ public sealed class McpCollector(IConfiguration config,SnapshotCache cache,Gatew
                     var previous=cache.Get(topic);
                     if(previous?.SessionId==snapshot.SessionId&&previous.Tick>=snapshot.Tick)continue;
                     var changedSession=cache.SessionId!=snapshot.SessionId;
-                    if(cache.Put(snapshot)){history.Save(snapshot);if(changedSession||topic is "production" or "machines")state.UpdateForecasts(cache);Interlocked.Increment(ref state.Revision);}
+                    if(cache.Put(snapshot)){history.Save(snapshot);if(changedSession||topic is "production" or "machines" or "logistics")state.UpdateForecasts(cache);Interlocked.Increment(ref state.Revision);}
                     state.LastError=null;
                 }
             }

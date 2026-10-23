@@ -2,8 +2,42 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {lua,lauxlib,lualib,to_luastring,to_jsstring}=require('D:/ChatGPT/Tools/FactorioLuaTest/node_modules/fengari');
 const fixture=fs.readFileSync(path.join(__dirname,'fixtures/collector.lua'),'utf8');
 const combat=fs.readFileSync(path.join(__dirname,'../mod/factory-telemetry/combat.lua'),'utf8');
-const collector='package.preload["combat"]=function()\n'+combat+'\nend\n'+fs.readFileSync(path.join(__dirname,'../mod/factory-telemetry/control.lua'),'utf8');
+const collector=['combat','spatial','native-map','space'].map(name=>'package.preload["'+name+'"]=function()\n'+fs.readFileSync(path.join(__dirname,'../mod/factory-telemetry/'+name+'.lua'),'utf8')+'\nend\n').join('')+fs.readFileSync(path.join(__dirname,'../mod/factory-telemetry/control.lua'),'utf8');
 const cases=[
+ ['Missing input diagnostics reuse existing inventory reads',`
+  defines.entity_status.item_ingredient_shortage=2;defines.inventory.assembling_machine_input=2;defines.inventory.assembling_machine_output=3
+  local e=make_entity(1,0);e.type='assembling-machine';e.name='assembling-machine-3';e.status=2;e.crafting_speed=1;e.fluidbox={}
+  e.get_recipe=function()return {name='iron-gear-wheel',ingredients={{name='iron-plate',type='item',amount=2}},products={{name='iron-gear-wheel',type='item',amount=1}},energy=.5},{name='rare'}end
+  entities_test={e};init_test();advance(360)
+  local cell=snapshots.machines.data.diagnostics.cells[1];assert(cell.missing_ingredients[1].name=='iron-plate');assert(cell.missing_ingredients[1].quality=='rare')
+ `],
+ ['Discovery visits the player area before an empty or remote chunk iterator',`
+  entities_test={make_entity(1,42)}
+  game.players={{position={x=32000,y=-64000},surface=surface}}
+  surface.get_chunks=function()return function()return nil end end
+  init_test();advance(120)
+  assert(snapshots.machines.data.sampled_entities==1,'player priority chunks must discover the factory before the global iterator')
+  assert(stock('iron-plate')==42,'priority discovery must reach the existing sampler')
+ `],
+ ['Factorio 2.1 uses the relocated profiler and fluid storage API',`
+  local e=make_entity(1,0);e.type='storage-tank';e.name='storage-tank';e.fluids_count=2
+  e.get_fluid=function(i)if i==1 then return {name='water',amount=125}end;return {name='steam',amount=75}end
+  setmetatable(e,{__index=function(_,key)if key=='fluidbox'then error('LuaEntity does not contain key fluidbox')end end})
+  entities_test={e};init_test();advance(720)
+  assert(stock('water')==125 and stock('steam')==75,'all fluid storages must be counted with the 2.1 API')
+  assert(snapshots.status.data.game_version=='2.1.23','actual game version must be exported')
+  assert(snapshots.status.data.mod_version=='0.4.1','actual mod version must be exported')
+  assert(max_reads<=16,'2.1 must retain the entity budget')
+ `,`
+  script.active_mods.base='2.1.23';script.active_mods['factory-telemetry']='0.4.1'
+  helpers.create_profiler=game.create_profiler;game.create_profiler=nil
+  setmetatable(game,{__index=function(_,key)if key=='create_profiler'then error('LuaGameScript does not contain key create_profiler')end end})
+ `],
+ ['Factorio 2.0 retains fluidbox inventory support',`
+  local e=make_entity(1,0);e.type='storage-tank';e.name='storage-tank';e.fluidbox={{name='water',amount=250}}
+  entities_test={e};init_test();advance(360)
+  assert(stock('water')==250,'2.0 fluidbox contents must still be collected')
+ `],
  ['Combat events use bounded exports and rebuilding updates pending losses',`
   local e=make_entity(1,0);e.type='wall';e.name='stone-wall';e.quality={name='normal'};e.prototype={items_to_place_this={{name='stone-wall',count=1}}};e.force.is_enemy=function(f)return f.name=='enemy'end
   entities_test={e};init_test();local enemy={name='enemy'}
@@ -83,9 +117,9 @@ const cases=[
   assert(snapshots.machines.data.oldest_sample_tick<=snapshots.machines.tick,'sample age must be exposed')
  `]
 ];
-for(const [name,test]of cases){
+for(const [name,test,setup='']of cases){
  const L=lauxlib.luaL_newstate();lualib.luaL_openlibs(L);
- const status=lauxlib.luaL_dostring(L,to_luastring(fixture+'\n'+collector+'\n'+test));
+ const status=lauxlib.luaL_dostring(L,to_luastring(fixture+'\n'+setup+'\n'+collector+'\n'+test));
  const error=status===lua.LUA_OK?'':to_jsstring(lua.lua_tostring(L,-1));lua.lua_close(L);
  assert.equal(status,lua.LUA_OK,`${name}: ${error}`);console.log('PASS '+name);
 }

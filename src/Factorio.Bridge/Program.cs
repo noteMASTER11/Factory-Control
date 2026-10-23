@@ -9,11 +9,12 @@ namespace Factorio.Bridge;
 
 public static class BridgeHost
 {
-    public static WebApplication Build(IReadOnlyDictionary<string,string?> settings, string url="http://127.0.0.1:18740")
+    public static WebApplication Build(IReadOnlyDictionary<string,string?> settings, string url="http://127.0.0.1:18740",ILoggerProvider? loggerProvider=null)
     {
 var builder=WebApplication.CreateBuilder(new WebApplicationOptions { Args=[], ApplicationName=typeof(BridgeHost).Assembly.FullName, ContentRootPath=AppContext.BaseDirectory });
 builder.Configuration.AddInMemoryCollection(settings);
 builder.Logging.ClearProviders();
+if(loggerProvider is not null)builder.Logging.AddProvider(loggerProvider).SetMinimumLevel(LogLevel.Debug);
 builder.Services.Configure<HostOptions>(options=>options.ShutdownTimeout=TimeSpan.FromSeconds(5));
 builder.WebHost.UseUrls(url);
 builder.Services.AddSingleton<SnapshotCache>();

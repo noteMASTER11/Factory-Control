@@ -11,10 +11,12 @@ public sealed class DesktopBackendTests
         var root=Path.Combine(@"D:\ChatGPT\Temp\FactorioMonitor","release-profile-"+Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(Path.Combine(root,"LiveGame"));
         var export=Path.Combine(root,"LiveGame","script-output","factory-telemetry");
-        File.WriteAllText(Path.Combine(root,"LiveGame","profile.json"),new JsonObject{["export_directory"]=export,["game_executable"]=@"D:\Games\Factorio\bin\x64\factorio.exe",["source_kind"]="game"}.ToJsonString());
+        File.WriteAllText(Path.Combine(root,"LiveGame","profile.json"),new JsonObject{["export_directory"]=export,["game_executable"]=@"D:\Games\Factorio\bin\x64\factorio.exe",["game_profile"]=@"D:\Games\Factorio\profile",["source_kind"]="game"}.ToJsonString());
         var options=BackendOptions.Load(["--data-root="+root]);
         Assert.Equal(root,options.DataRoot);Assert.Equal(export,options.TelemetryDirectory);Assert.Equal(@"D:\Games\Factorio\bin\x64\factorio.exe",options.GameExecutable);Assert.True(options.WatchGame);
         Assert.Equal(@"D:\Other\factorio.exe",BackendOptions.Load(["--data-root="+root,@"--game-executable=D:\Other\factorio.exe"]).GameExecutable);
+        Assert.Equal(@"D:\Games\Factorio\profile",options.GameProfile);
+        Assert.Null(BackendOptions.Load(["--data-root="+root,"--telemetry-directory="+export]).GameProfile);
     }
     [Fact]
     public async Task FailedGatewayStartupAlsoStopsBridge()

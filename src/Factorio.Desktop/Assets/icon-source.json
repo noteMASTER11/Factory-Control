@@ -1,0 +1,9 @@
+{
+  "asset": "factory-control-master.png",
+  "generator": "built-in image_gen",
+  "reference": "Factorio/data/core/graphics/factorio-icon@2x.png from the locally installed game",
+  "prompt": "Preserve the Factorio cogwheel silhouette, tooth positions, circular hole and face-on bevel. Replace rusty iron with polished rich metallic gold, warm amber shadows and pale-gold highlights. Add a small restrained specular glint on the upper-left bevel. Transparent background and central hole. No text, frame or extra objects. Keep the icon legible at 16 pixels.",
+  "icon_sizes_px": [16, 20, 24, 32, 40, 48, 64, 96, 128, 256],
+  "rebuild": "scripts/build-app-icon.py (Pillow)",
+  "usage": "Windows executable and native window icon only; UI and intro artwork are unchanged."
+}

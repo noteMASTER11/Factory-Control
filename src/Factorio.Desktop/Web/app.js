@@ -1,6 +1,6 @@
 import {startup,localeReady} from './startup.js';
 import { CrtOverlay } from './vfx/crt-overlay.js';
-import { Overview } from './overview.js';
+import { Overview } from './spatial-overview.js';
 import { Energy } from './energy.js';
 import { Production } from './production.js';
 import { Logistics } from './logistics.js';
@@ -13,9 +13,13 @@ import {hoverSelector} from './interactive.js';
 import {Damage} from './damage.js';
 import {CombatAlert} from './combat-alert.js';
 import { TabTransition } from './vfx/tab-transition.js';
+import {setDebugLogging} from './debug-log.js';
+import {LanguagePicker} from './language-picker.js';
 
 const $ = id => document.getElementById(id);
 const i18n = await localeReady;
+const languagePicker=new LanguagePicker(i18n);
+startup.onDone(()=>languagePicker.show());
 const t = (key, values) => i18n.text(key, values);
 const number = (value, decimal = false) => i18n.number(value, decimal);
 const empty = () => t('common.empty');
@@ -34,7 +38,7 @@ if(new URLSearchParams(location.search).get('renderer')!=='svg'){
   overlay??={enabled:false,setEnabled(){this.enabled=false;}};
 }else overlay=new CrtOverlay(document.querySelector('.console'),crtProfile,visualClock);
 startup.mark('renderer',window.pixiProbe||overlay instanceof CrtOverlay?'ready':'degraded');
-let snapshot = null, selectedPid = null, attachedPid = null, busy = false, failed = false, timer;
+let snapshot = null, selectedPid = null, attachedPid = null, busy = false, failed = false, processingFailed = false, timer;
 let windowState = { fullscreen:false };
 let lastReceived = 0;
 let screen='sessions';
@@ -42,23 +46,24 @@ let restored=false;
 let frame=null,renderedView=null,renderedRevision=-1,initialRequest=true,nativeError=null;
 const worker=new Worker(new URL('./telemetry-worker.js',import.meta.url),{type:'module'});
 const configure=(view,options)=>worker.postMessage({type:'configure',view,options});
-const overview=new Overview(i18n,scope=>configure('overview',{scope}));
+const overview=new Overview(i18n,options=>configure('overview',options),visualClock);
+document.addEventListener('visibilitychange',()=>{overview.setActive(screen==='overview'&&!document.hidden);production.setActive(screen==='production'&&!document.hidden);logistics.setActive(screen==='logistics'&&!document.hidden);});
 const energy=new Energy(i18n,options=>configure('energy',options));
-const production=new Production(i18n,options=>configure('production',options));
-const logistics=new Logistics(i18n,options=>configure('logistics',options));
+const production=new Production(i18n,options=>configure('production',options),visualClock);
+const logistics=new Logistics(i18n,options=>configure('logistics',options),visualClock);
 const research=new Research(i18n,options=>configure('research',options));
 const resources=new Resources(i18n,options=>configure('resources',options));
 const forecasts=new Forecasts(i18n,options=>configure('forecasts',options));
 const damage=new Damage(i18n,options=>configure('damage',options),()=>showScreen('overview'));
 
 const combatAlert=new CombatAlert(i18n,visualClock,episode=>{configure('damage',{episode});showScreen('damage');},{sound});
-let appliedScale,appliedEffects;
-export const settings=new Settings(i18n,value=>{sound.setChannels(value.channels);tabTransition.effects=value.effects;setCrtEnabled(value.crt);visualClock.request('ui.settings',()=>{const signature=JSON.stringify(value.effects);if(appliedEffects!==signature){overlay.applyEffects?.(value.effects);appliedEffects=signature;}if(appliedScale!==value.scale){appliedScale=value.scale;post({type:'settings.zoom',scale:value.scale});}});},{rgbDefault:crtProfile.pixi.rgbSplitPixels});
-export const telemetryState={statistics:{},renders:{sessions:0,overview:0,energy:0,production:0,logistics:0,research:0,resources:0,forecasts:0,damage:0},describe(){return {...this.statistics,renders:{...this.renders},visible:screen};}};
-worker.onerror=()=>{startup.mark('worker','degraded');failed=true;render();};
+let appliedScale,appliedEffects,appliedDebugLogs;
+export const settings=new Settings(i18n,value=>{if(appliedDebugLogs!==value.debugLogs){appliedDebugLogs=value.debugLogs;post({type:'settings.debugLogs',enabled:value.debugLogs});setDebugLogging(value.debugLogs);}sound.setChannels(value.channels);tabTransition.effects=value.effects;setCrtEnabled(value.crt);visualClock.request('ui.settings',()=>{const signature=JSON.stringify(value.effects);if(appliedEffects!==signature){overlay.applyEffects?.(value.effects);appliedEffects=signature;}if(appliedScale!==value.scale){appliedScale=value.scale;post({type:'settings.zoom',scale:value.scale});}});},{rgbDefault:crtProfile.pixi.rgbSplitPixels});
+export const telemetryState={statistics:{},renders:{sessions:0,overview:0,energy:0,production:0,logistics:0,research:0,resources:0,forecasts:0,damage:0},describe(){return {...this.statistics,renders:{...this.renders},visible:screen,map:overview.map.describe(),productionView:production.describe(),logisticsView:logistics.describe()};}};
+worker.onerror=event=>{console.error('Telemetry worker',event.message||'worker_error');startup.mark('worker','degraded');processingFailed=true;render();};
 worker.onmessage=({data})=>{
-  if(data.type==='error'){startup.mark('worker','degraded');failed=true;render();return;}
-  startup.mark('worker');
+  if(data.type==='error'){console.error('Telemetry worker',data.stack||data.message||data.error||'worker_error');startup.mark('worker','degraded');processingFailed=true;render();return;}
+  processingFailed=false;startup.mark('worker');
   snapshot=data.connection;frame=data;telemetryState.statistics=data.statistics;
   const processes=snapshot.sessions.processes||[];
   if(!processes.some(p=>p.pid===selectedPid))selectedPid=processes.find(p=>p.telemetry_associated)?.pid??processes[0]?.pid??null;
@@ -113,6 +118,8 @@ function age(topic) {
 }
 function stale(topic) { return !topic || topic.stale || age(topic) > Math.max(15, topic.topic === 'resources' ? 45 : 15); }
 function available(process) { return process?.telemetry_associated && !failed && snapshot?.status.connected && !stale(snapshot.status.topics?.status); }
+const collectorStates=new Set(['restart_required','disabled','not_installed','starting','awaiting_map','awaiting_export']);
+function collectorState(process){return process?.telemetry_associated&&collectorStates.has(process.collector_state)?process.collector_state:null;}
 function selected() { return snapshot?.sessions.processes.find(p => p.pid === selectedPid); }
 function select(pid) { selectedPid = pid; render(); }
 
@@ -124,12 +131,13 @@ function renderSessions() {
   body.replaceChildren();
   rows.forEach((p, index) => {
     const tr = document.createElement('tr');
-    tr.dataset.pid = p.pid; tr.dataset.associated = String(!!p.telemetry_associated);
+    tr.dataset.pid = p.pid; tr.dataset.associated = String(!!p.telemetry_associated);tr.dataset.ready=String(!!available(p));
     tr.tabIndex = p.pid === selectedPid ? 0 : -1;
     tr.setAttribute('aria-selected', String(p.pid === selectedPid));
     const source = p.telemetry_associated && snapshot.sessions.source_kind === 'validation_copy' ? t('sessions.copyHeadless') : p.window || t('sessions.noWindowTitle');
     const file = p.executable?.split(/[\\/]/).pop() || t('sessions.fileUnavailable');
-    const state = t(p.telemetry_associated ? (available(p) ? 'sessions.ready' : snapshot.status.topics?.status ? 'sessions.stale' : 'sessions.waitingCollector') : 'sessions.noCollector');
+    const activation=collectorState(p);
+    const state = t(p.telemetry_associated ? (available(p) ? 'sessions.ready' : snapshot.status.topics?.status ? 'sessions.stale' : activation?'sessions.collector.'+activation:'sessions.waitingCollector') : 'sessions.noCollector');
     [String(index+1), String(p.pid), file, source, state].forEach((value, i) => {
       const td = document.createElement('td'); td.textContent = value; td.title = i === 2 ? p.executable || value : value; tr.append(td);
     });
@@ -197,11 +205,12 @@ function renderConnection() {
   write('detail-age', show && topic ? t(stale(topic)?'details.staleAgeValue':'details.ageValue',{age:number(age(topic),true)}) : empty());
   const coverage = topic?.payload.coverage;
   write('detail-coverage', show && coverage ? coverage.discovery_complete ? t('details.discoveryComplete') : t('details.discoveryInProgress',{chunks:number(coverage.charted_chunks_scanned)}) : empty());
-  const note = t(!p ? 'details.selectProcess' : !show ? 'details.noCollector' : failed ? 'details.gatewayUnavailable' : !topic ? 'details.loadCollector' : !available(p) ? 'details.noFreshData' : status.source_kind === 'validation_copy' ? 'details.copyNotice' : 'details.gameNotice');
+  const activation=collectorState(p);
+  const note = t(!p ? 'details.selectProcess' : !show ? 'details.noCollector' : failed ? 'details.gatewayUnavailable' : !topic ? activation?'details.collector.'+activation:'details.loadCollector' : !available(p) ? 'details.noFreshData' : status.source_kind === 'validation_copy' ? 'details.copyNotice' : 'details.gameNotice');
   write('selection-note', note); $('selection-note').dataset.kind = available(p) && status.source_kind !== 'validation_copy' ? 'good' : 'notice';
   $('connect').disabled = !available(p);
   write('connect-label', t(attachedPid === selectedPid && attachedPid !== null ? 'connection.disconnect' : 'connection.connect'));
-  write('diagnostic-message', t(failed ? 'diagnostics.offline' : !show ? 'diagnostics.selectProcess' : stale(topic) ? 'diagnostics.stale' : 'diagnostics.cache'));
+  write('diagnostic-message', t(failed ? 'diagnostics.offline' : !show ? 'diagnostics.selectProcess' : !topic?'diagnostics.noTelemetry':stale(topic) ? 'diagnostics.stale' : 'diagnostics.cache'));
   write('connection-hint-title', attachedPid ? t('connection.attached',{pid:attachedPid}) : t('connection.localGateway'));
   write('connection-hint', t(attachedPid ? 'connection.attachedHint' : 'connection.cacheHint'));
   $('refresh').disabled=busy;
@@ -211,16 +220,23 @@ function renderConnection() {
 function showScreen(key){
   if(key!=='sessions'&&!attachedPid)return;
   screen=key;worker.postMessage({type:'select',view:key});render();
+  overview.setActive(key==='overview'&&!document.hidden);
+  production.setActive(key==='production'&&!document.hidden);
+  logistics.setActive(key==='logistics'&&!document.hidden);
   if(!startup.active)visualClock.request('ui.tab-open',()=>tabTransition.start($(key==='sessions'?'session-screen':key+'-screen'),t(key==='sessions'?'overview.sessions':key+'.tab')));
 }
 function renderNow(){
+  overview.setActive(screen==='overview'&&!document.hidden);
+  production.setActive(screen==='production'&&!document.hidden);
+  logistics.setActive(screen==='logistics'&&!document.hidden);
   if(attachedPid&&!snapshot?.sessions.processes.some(p=>p.pid===attachedPid&&p.telemetry_associated)){attachedPid=null;showScreen('sessions');}
   const status=snapshot?.status;
   document.querySelector('.console').dataset.view=screen;
-  if(!startup.active)combatAlert.accept(attachedPid&&frame?.alarm?frame.alarm:{session:status?.session_id,available:false,active:false,episodes:[]});
-  const state=failed?'offline':attachedPid?'live':status?.connected?'ready':'idle';
+  if(!startup.active&&!i18n.firstRun)combatAlert.accept(attachedPid&&frame?.alarm?frame.alarm:{session:status?.session_id,available:false,active:false,episodes:[]});
+  const state=failed?'offline':processingFailed?'processing':attachedPid?'live':status?.connected&&status.telemetry_ready?'ready':'idle';
   $('link-state').dataset.state=state;
-  write('link-text',t(state==='offline'?'connection.gatewayOffline':state==='live'?status.source_kind==='validation_copy'?'connection.liveCopy':'connection.liveGame':state==='ready'?'connection.ready':'connection.waitingMcp'));
+  const activation=collectorState(selected());
+  write('link-text',t(state==='offline'?'connection.gatewayOffline':state==='processing'?'connection.processingError':state==='live'?status.source_kind==='validation_copy'?'connection.liveCopy':'connection.liveGame':state==='ready'?'connection.ready':activation?'connection.collector.'+activation:'connection.waitingMcp'));
   for(const key of ['overview','energy','production','logistics','research','resources','forecasts','damage','sessions']){
     const button=$('nav-'+key),root=$(key==='sessions'?'session-screen':key+'-screen');
     if(root.hidden!==(screen!==key))root.hidden=screen!==key;
@@ -269,6 +285,7 @@ function setCrtEnabled(enabled) {
   $('vfx-toggle').setAttribute('aria-label',t(enabled ? 'vfx.disable' : 'vfx.enable'));
 }
 document.addEventListener('keydown', e => {
+  if(languagePicker.root.open)return;
   if (e.key === 'F11') { e.preventDefault(); if (!e.repeat) post({type:'window.toggleFullscreen'}); }
   if (e.key === 'Escape' && windowState.fullscreen) { e.preventDefault(); post({type:'window.exitFullscreen'}); }
   if (e.key === 'F1') { e.preventDefault(); showScreen('overview'); }

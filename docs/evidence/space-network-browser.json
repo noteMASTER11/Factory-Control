@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "platforms": 100,
+  "measurements": [
+    {
+      "width": 1152,
+      "height": 864,
+      "box": {
+        "x": 8,
+        "y": 128,
+        "width": 1136,
+        "height": 649
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "box": {
+        "x": 6,
+        "y": 124,
+        "width": 1012,
+        "height": 566
+      }
+    }
+  ],
+  "checks": [
+    "table/map subviews",
+    "dense fleet aggregation",
+    "mixed quality filters",
+    "platform-to-platform selection",
+    "passive hidden views",
+    "no browser errors"
+  ]
+}

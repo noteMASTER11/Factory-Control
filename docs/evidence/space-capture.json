@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "source": "explicit isolated copy of saboteur.zip; original player process unchanged",
+  "capture": "D:/ChatGPT/Temp/FactorioMonitor/space-probe-cbc0c92b34964606b4f8a4ce586f3c4c",
+  "collector": "0.6.0",
+  "platforms": 26,
+  "ports": 402,
+  "journalEvents": 512,
+  "journalDropped": 150,
+  "rateRows": 100,
+  "shipments": 79,
+  "maxPlatformAgeSeconds": 1.7166666666666666,
+  "flightEstimates": 10,
+  "logisticsBytes": 490688,
+  "errors": {},
+  "statisticsProbe": {
+    "delivered": 123,
+    "productionInputDelta": 0,
+    "consumptionOutputDelta": 0
+  },
+  "checks": [
+    "real mixed transport and per-quality counts",
+    "current quantities decoupled from spoilage scans",
+    "independent rates survive bounded journal rollover",
+    "controlled cargo appears in pad after delivery; no double counting in native production statistics",
+    "no collector errors"
+  ]
+}

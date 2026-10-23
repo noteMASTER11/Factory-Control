@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "checks": [
+    "14 platforms and per-quality cargo",
+    "bounded journal DOM",
+    "loading ETA",
+    "1152x864 and 1024x768 fit",
+    "ground/space toggle and passive hidden view",
+    "no page errors"
+  ]
+}

@@ -6,6 +6,14 @@ namespace Factorio.Tests;
 public sealed class ClientTelemetryTests
 {
     [Fact]
+    public void SpaceJournalAndQualitySurviveClientProjection()
+    {
+        var payload=JsonNode.Parse("""{"data":{"space":{"schema_version":1,"platforms":[],"ports":[],"events":[{"kind":"import","items":[{"name":"iron-plate","quality":"rare","count":30}]}]}}}""")!.AsObject();
+        var projected=ClientTelemetry.Project("logistics",payload);
+        Assert.Equal("rare",projected["data"]!["space"]!["events"]![0]!["items"]![0]!["quality"]!.GetValue<string>());
+        Assert.NotSame(payload["data"]!["space"],projected["data"]!["space"]);
+    }
+    [Fact]
     public void SummaryDropsRequesterDetailsWithoutMutatingDetailedSnapshot()
     {
         var payload=JsonNode.Parse("""{"coverage":{"discovery_complete":true},"data":{"networks":[{"id":3,"logistic_total":42,"items":[{"name":"iron-plate","count":10}]}],"trains":[{"id":7,"station":"A","schedule":{"records":[]}}],"requesters":[{"sections":[{"filters":[{"value":"iron-plate"}]}]},{"sections":[]}]}}""")!.AsObject();

@@ -1,9 +1,13 @@
 import {node,lineChart} from './charts.js';
+import {SpaceNetwork} from './space-network.js';
 const $=id=>document.getElementById(id),ns='http://www.w3.org/2000/svg';
 const svg=(tag,attrs={})=>{const n=document.createElementNS(ns,tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,v);return n;};
 const icons=await(await fetch('./icons/catalog.json')).json();
 export class Logistics {
- constructor(i18n,configure){this.i18n=i18n;this.t=(k,v)=>i18n.text(k,v);this.configure=configure;
+ constructor(i18n,configure,clock){this.i18n=i18n;this.t=(k,v)=>i18n.text(k,v);this.configure=configure;this.mode='ground';this.spaceView='table';this.active=false;this.tableRenders=0;
+  this.spaceMap=new SpaceNetwork(i18n,configure,clock,item=>this.resource(item));
+  for(const tab of document.querySelectorAll('[data-space-view]')){tab.addEventListener('click',()=>this.setSpaceView(tab.dataset.spaceView));tab.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();this.setSpaceView(this.spaceView==='map'?'table':'map');document.querySelector('[data-space-view="'+this.spaceView+'"]').focus();}});}
+  for(const tab of document.querySelectorAll('[data-logistics-view]'))tab.addEventListener('click',()=>{this.mode=tab.dataset.logisticsView;this.setMode();if(this.frame)this.render(this.frame,this.snapshot,this.age);});
   $('logistics-scope').addEventListener('change',()=>configure({scope:$('logistics-scope').value,network:'all',train:null}));
   $('logistics-network').addEventListener('change',()=>configure({network:$('logistics-network').value}));
   $('logistics-filter').addEventListener('change',()=>configure({filter:$('logistics-filter').value}));
@@ -11,6 +15,8 @@ export class Logistics {
   for(const b of document.querySelectorAll('[data-logistics-minutes]'))b.addEventListener('click',()=>configure({minutes:Number(b.dataset.logisticsMinutes)}));
  }
  n(v,decimal=false){return this.i18n.number(v,decimal);}
+ duration(seconds){return this.t(seconds>=60?'analysis.minutes':'analysis.seconds',{value:this.n(seconds/(seconds>=60?60:1),seconds>=60)});}
+ platformName(value){return value?.replace(/\[[^\]]*\]/g,'').trim()||value||this.t('common.empty');}
  compact(v){return v===null||v===undefined?this.t('common.empty'):Math.abs(v)>=1e6?this.t('overview.million',{value:this.n(v/1e6,true)}):Math.abs(v)>=1e4?this.t('overview.thousand',{value:this.n(v/1e3,true)}):this.n(v,v%1!==0);}
  name(v,kind){return this.i18n.prototype(v,kind);}
  state(t){return this.t(t.manual?'logistics.manual':this.i18n.has('logistics.train.'+t.state)?'logistics.train.'+t.state:'logistics.train.unknown');}
@@ -21,11 +27,17 @@ export class Logistics {
  empty(body,columns,key){const tr=body.insertRow(),td=tr.insertCell();td.colSpan=columns;td.className='empty';td.textContent=this.t(key);}
  row(body,values){const tr=body.insertRow();for(const v of values){const td=tr.insertCell();if(v instanceof Node)td.append(v);else td.textContent=v??this.t('common.empty');}return tr;}
  clickable(tr,select){tr.tabIndex=0;tr.addEventListener('click',select);tr.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select();}});}
- render(frame,snapshot,age){if(!frame)return;this.frame=frame;const s=frame.summary;
+ setActive(value){this.active=value;this.spaceMap.setActive(value&&this.mode==='space'&&this.spaceView==='map');}
+ setSpaceView(value){if(!['table','map'].includes(value))return;this.spaceView=value;this.setMode();if(this.frame)this.render(this.frame,this.snapshot,this.age);}
+ describe(){return {mode:this.mode,spaceView:this.spaceView,active:this.active,tableRenders:this.tableRenders,map:this.spaceMap.describe()};}
+ setMode(){for(const tab of document.querySelectorAll('[data-logistics-view]'))tab.setAttribute('aria-pressed',String(tab.dataset.logisticsView===this.mode));for(const item of document.querySelectorAll('#logistics-screen > [data-logistics-panel]'))item.hidden=item.dataset.logisticsPanel!==this.mode;$('logistics-network').hidden=this.mode==='space';$('logistics-screen').classList.toggle('space-mode',this.mode==='space');
+  $('space-table-view').hidden=this.mode!=='space'||this.spaceView!=='table';$('space-map-view').hidden=this.mode!=='space'||this.spaceView!=='map';document.querySelector('.space-network-filters').hidden=this.spaceView!=='map';for(const tab of document.querySelectorAll('[data-space-view]')){const selected=tab.dataset.spaceView===this.spaceView;tab.setAttribute('aria-selected',String(selected));tab.tabIndex=selected?0:-1;}this.spaceMap.setActive(this.active&&this.mode==='space'&&this.spaceView==='map');}
+ render(frame,snapshot,age){if(!frame)return;this.frame=frame;this.snapshot=snapshot;this.age=age;const s=frame.summary;this.setMode();
   this.options('logistics-scope',frame.scopes.map(s=>[s.id,this.t('overview.scopeValue',s)]),frame.scope.id);
   this.options('logistics-network',[['all',this.t('logistics.allNetworks')],...frame.networks.map(n=>[String(n.id),this.network(n)])],frame.options.network);
   $('logistics-filter').value=frame.options.filter||'missing';if(document.activeElement!==$('logistics-search'))$('logistics-search').value=frame.options.search||'';
   $('logistics-age').textContent=this.t(frame.fresh?'overview.snapshotAge':'overview.stale',{seconds:this.n(age(snapshot.status.topics.logistics),true)});$('logistics-age').className=frame.fresh?'muted':'warn';
+  if(this.mode==='space'){if(this.spaceView==='map')this.spaceMap.setModel(frame.space.network);else{this.tableRenders++;this.renderSpace(frame.space);}return;}
   const robotValue=(available,total)=>frame.available?this.t('logistics.availableTotal',{available:this.n(available),total:this.n(total)}):this.t('common.empty');
   $('logistics-robots').textContent=robotValue(s.logisticAvailable,s.logisticTotal);$('logistics-builders').textContent=robotValue(s.constructionAvailable,s.constructionTotal);
   $('logistics-open').textContent=frame.requestsAvailable?this.n(s.requests):this.t('common.empty');$('logistics-train-count').textContent=frame.available?this.n(s.trains):this.t('common.empty');$('logistics-moving').textContent=this.t('logistics.moving',{value:this.n(s.moving)});$('logistics-attention').textContent=frame.fresh?this.n(s.issues):this.t('common.empty');$('logistics-attention').className=s.issues?'warn':'good';
@@ -48,6 +60,20 @@ export class Logistics {
    const tr=this.row(issues,[type,object,description,this.waiting(issue.waitingTicks)]);tr.cells[0].className=issue.kind==='train'&&['no_path','path_lost'].includes(issue.state)?'bad':'warn';}
   if(!frame.issues.length)this.empty(issues,4,!frame.fresh?'logistics.noFreshIssues':'logistics.noIssues');
   $('logistics-issue-count').textContent=this.t('logistics.countIssues',{value:this.n(s.issues)});
+ }
+ renderSpace(space){
+  const host=$('space-platforms');host.replaceChildren();const detail=$('space-cargo');detail.replaceChildren();const events=$('space-events');events.replaceChildren();
+  $('space-status').textContent=this.t(!space?.available?'space.collectorRequired':space.overflow?'space.partial':!space.fresh?'overview.stale':'space.observed',{seconds:0});
+  if(!space?.available){this.empty(host,4,'space.noData');this.empty(detail,4,'space.noData');this.empty(events,5,'space.noData');return;}
+  for(const p of space.platforms){const record=(p.schedule?.records||[])[(p.schedule?.current||1)-1],where=p.location||[p.connection?.from,p.connection?.to].filter(Boolean).join(' → '),eta=p.stale?null:p.flight_eta_seconds;
+   const tr=this.row(host,[this.platformName(p.name),where||this.t('common.empty'),p.stale?this.t('space.stale'):p.paused?this.t('space.paused'):this.t(p.location?'space.orbit':'space.flying'),Number.isFinite(eta)?this.duration(eta):this.t('space.etaUnknown')]);tr.title=(p.schedule?.records||[]).map(r=>r.station).join(' → ');tr.setAttribute('aria-selected',String(p.id===space.selected?.id));this.clickable(tr,()=>this.configure({platform:p.id,spaceSelected:'platform:'+p.id}));
+  }
+  if(!space.platforms.length)this.empty(host,4,'space.noPlatforms');
+  for(const item of space.selected?.items||[]){const tr=this.row(detail,[this.resource(item),this.compact(item.count),item.remainingSeconds===null?this.t('common.empty'):this.duration(item.remainingSeconds),this.t(space.selected.stale?'space.stale':'space.measured')]);if(item.remainingSeconds===0)tr.cells[2].className='bad';}
+  if(!space.selected?.items.length)this.empty(detail,4,'logistics.emptyCargo');
+  let rendered=0;for(const event of space.events)for(const item of event.items||[]){if(rendered++>=200)break;const tr=this.row(events,[this.duration(Math.max(0,(space.tick-event.tick)/60)),this.t('space.event.'+event.kind),[event.origin,event.destination].filter(Boolean).join(' → '),this.resource(item),this.compact(item.count)]);if(!event.complete)tr.classList.add('warn');}
+  if(!space.events.length)this.empty(events,5,'space.noEvents');
+  const ports=$('space-ports');ports.replaceChildren();for(const p of space.ports){const eta=!p.stale&&Number.isFinite(p.loading_eta_seconds)?this.duration(p.loading_eta_seconds):this.t('space.etaUnknown');this.row(ports,[this.name(p.name,'entity'),p.target_platform?this.platformName(space.platforms.find(s=>s.id===p.target_platform)?.name):this.t('common.empty'),(p.items||[]).slice(0,3).map(i=>this.t('logistics.cargo',{name:this.name(i.name),count:this.compact(i.count)})).join(', ')||this.t('logistics.emptyCargo'),p.type==='rocket-silo'?eta:this.t('common.empty')]);}if(!space.ports.length)this.empty(ports,4,'space.noPorts');
  }
  map(frame){const host=$('logistics-map');host.replaceChildren();const trains=frame.trains.filter(t=>Number.isFinite(t.position?.x)&&Number.isFinite(t.position?.y));if(!trains.length){host.append(node('div',this.t('logistics.noPositions'),'chart-wait'));return;}
   const chart=svg('svg',{viewBox:'0 0 500 205',role:'group','aria-label':this.t('logistics.positions')});const xs=trains.map(t=>t.position.x),ys=trains.map(t=>t.position.y),minX=Math.min(...xs)-32,maxX=Math.max(...xs)+32,minY=Math.min(...ys)-32,maxY=Math.max(...ys)+32;const scale=Math.min(440/(maxX-minX),155/(maxY-minY)),x=v=>250+(v-(minX+maxX)/2)*scale,y=v=>98+(v-(minY+maxY)/2)*scale;

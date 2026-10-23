@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "before": {
+    "mode": "table",
+    "active": true,
+    "tableRenders": 1,
+    "mapRenders": 0,
+    "map": {
+      "draws": 0,
+      "fetches": 0,
+      "cached": 0,
+      "encodedBytes": 0,
+      "pending": 0,
+      "active": false
+    }
+  },
+  "after": {
+    "mode": "table",
+    "active": true,
+    "tableRenders": 4,
+    "mapRenders": 6,
+    "map": {
+      "draws": 11,
+      "fetches": 4,
+      "cached": 4,
+      "encodedBytes": 63136,
+      "pending": 0,
+      "active": false,
+      "scope": "1-5",
+      "visiblePages": 4,
+      "targetPages": 4
+    }
+  },
+  "checks": [
+    "table preserved",
+    "map subtab and keyboard navigation",
+    "shared resource and scope model",
+    "hidden table/map do not render",
+    "1152x864 and 1024x768 fit",
+    "UPS visible",
+    "native atlas images",
+    "producer filter",
+    "debug opt-in console forwarding",
+    "folder command"
+  ]
+}

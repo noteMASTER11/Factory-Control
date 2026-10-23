@@ -1,0 +1,23 @@
+const assert=require('node:assert/strict');
+(async()=>{
+ const {analyzeFactory}=await import('../src/Factorio.Desktop/Web/analysis-model.js');
+ const now=Date.now(),wrap=(data,tick=3600)=>({tick,written_at:new Date(now).toISOString(),payload:{data,coverage:{discovery_complete:true}}});
+ const cell=(id,x,extra={})=>({id,surface:'nauvis',force:'Newbies',surface_id:1,force_id:3,name:'electric-furnace',type:'furnace',status:'item_ingredient_shortage',recipe:'iron-plate',x,y:0,count:5,first_seen_tick:100,last_seen_tick:3600,examples:[{x:x*32+2,y:2}],...extra});
+ const topics={machines:wrap({diagnostics:{complete:true,cells:[cell('a',-1),cell('b',0),cell('c',10),cell('v',0,{surface:'vulcanus',surface_id:2}),cell('other',0,{force:'player',force_id:1}),cell('short',20,{first_seen_tick:3500}),cell('normal',30,{status:'full_output'})]},groups:[]})};
+ const model=analyzeFactory(topics,{},[],[],now);
+ assert.equal(model.issues.length,4,'adjacent cells merge, scopes stay separate, transient/routine idling excluded');
+ const joined=model.issues.find(r=>r.count===10);assert(joined);assert.equal(joined.mapScope,'1-3');assert.deepEqual(joined.bounds,{left:-32,top:0,right:32,bottom:32});
+ assert.equal(model.issues.filter(r=>r.surface==='vulcanus').length,1);
+ const once={machines:wrap({diagnostics:{cells:[cell('once',1,{last_seen_tick:100})]},groups:[]})};assert.equal(analyzeFactory(once,{},[],[],now).issues.length,0,'elapsed time without a repeated observation is not persistence');
+ const filtered=analyzeFactory(topics,{scope:JSON.stringify(['vulcanus','Newbies'])},[],[],now);assert.equal(filtered.issues.length,1);
+ topics.machines.payload.data.diagnostics.cells[0].status='working';topics.machines.payload.data.diagnostics.cells[1].status='working';
+ assert(!analyzeFactory(topics,{},[],[],now).issues.some(r=>r.id===joined.id),'recovered machines must leave the problem list');
+ topics.machines.written_at=new Date(now-60000).toISOString();assert.equal(analyzeFactory(topics,{},[],[],now).live,false,'old data must be explicit');
+ const row={surface:'nauvis',force:'Newbies',name:'iron-plate',kind:'item',produced:50,consumed:100};
+ const history=[0,1800,3600].map(tick=>({tick,rows:[row]}));
+ const global=analyzeFactory({production:wrap({rows:[{...row,produced_per_minute:50,consumed_per_minute:100}]})},{},history,[],now).issues[0];
+ assert(global&&!global.located&&global.bounds===null,'global imbalance must not fabricate a map location');
+ assert.equal(global.emptyMinutes,null,'absent inventory cannot produce a depletion time');
+ assert.equal(analyzeFactory({},{}).supported,false,'legacy/missing spatial telemetry is distinguishable');
+ console.log('Factory analysis model: all checks passed');
+})().catch(e=>{console.error(e);process.exitCode=1;});

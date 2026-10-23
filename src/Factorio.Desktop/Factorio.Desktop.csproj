@@ -2,9 +2,11 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType><TargetFramework>net10.0-windows</TargetFramework>
     <UseWPF>true</UseWPF><PlatformTarget>x64</PlatformTarget><ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>0.2.0</Version><Product>Factory Control</Product><Description>Factorio telemetry terminal for Windows</Description>
+    <ApplicationIcon>Assets/factory-control.ico</ApplicationIcon>
+    <Version>0.10.7</Version><AssemblyTitle>FactoryControl</AssemblyTitle><Product>FactoryControl</Product><Description>Factorio telemetry terminal for Windows</Description>
   </PropertyGroup>
   <ItemGroup><ProjectReference Include="../Factorio.Bridge/Factorio.Bridge.csproj" /><ProjectReference Include="../Factorio.Gateway/Factorio.Gateway.csproj" /></ItemGroup>
+  <ItemGroup><Resource Include="Assets/factory-control.ico" /></ItemGroup>
   <ItemGroup><PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4258.31" /><PackageReference Include="System.Management" Version="10.0.0" /></ItemGroup>
   <PropertyGroup Condition="'$(PortableBundle)' == 'true'">
     <PublishSingleFile>true</PublishSingleFile><SelfContained>true</SelfContained>

@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "manifestStatus": 200,
+  "binaryStatus": 200,
+  "bytes": 2048,
+  "format": "rgb565le",
+  "scopes": [
+    "nauvis",
+    "vulcanus",
+    "fulgora",
+    "gleba",
+    "aquilo",
+    "nauvis"
+  ],
+  "missingStatus": 404,
+  "worker": {
+    "packets": 3,
+    "revision": 7,
+    "session": "2580672862:1334835840:1:8518199d2595484a8f4d17e30ed7ab71",
+    "historySamples": 1,
+    "productionHistorySamples": 1,
+    "stockHistorySamples": 1,
+    "logisticsHistorySamples": 1,
+    "researchHistorySamples": 1,
+    "resourceCells": 0,
+    "resourceHistorySamples": 0,
+    "models": {
+      "overview": 2,
+      "energy": 1,
+      "production": 2,
+      "logistics": 2,
+      "research": 3,
+      "resources": 2,
+      "forecasts": 2,
+      "damage": 1
+    },
+    "activeView": "sessions",
+    "renders": {
+      "sessions": 6,
+      "overview": 0,
+      "energy": 0,
+      "production": 0,
+      "logistics": 0,
+      "research": 0,
+      "resources": 0,
+      "forecasts": 0,
+      "damage": 0
+    },
+    "visible": "sessions",
+    "map": {
+      "draws": 0,
+      "fetches": 0,
+      "cached": 0,
+      "pending": 0,
+      "active": false
+    }
+  },
+  "source": "explicit isolated captured files; no gameplay queries"
+}

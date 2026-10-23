@@ -5,7 +5,7 @@ local function copy(value)
  if type(value)~='table'then return value end
  local out={};for k,v in pairs(value)do out[k]=copy(v)end;return out
 end
-defines={events=setmetatable({},{__index=function(t,k)local n=0;for _ in pairs(t)do n=n+1 end;rawset(t,k,n+1);return n+1 end}),entity_status={working=1},train_state={},inventory={chest=1}}
+defines={events=setmetatable({},{__index=function(t,k)local n=0;for _ in pairs(t)do n=n+1 end;rawset(t,k,n+1);return n+1 end}),entity_status={working=1,item_ingredient_shortage=2},train_state={},inventory={chest=1}}
 script={active_mods={base='2.0.77'},on_init=function(f)init=f end,on_configuration_changed=function()end,on_event=function(id,f)if type(id)=='table'then for _,i in ipairs(id)do events[i]=f end else events[id]=f end end}
 local last_encoded
 helpers={table_to_json=function(doc)last_encoded=copy(doc);if doc.topic then snapshots[doc.topic]=last_encoded end;serialized_test[#serialized_test+1]={tick=game.tick,document=last_encoded};return '{}' end,write_file=function(path)files_test[path]=last_encoded end}

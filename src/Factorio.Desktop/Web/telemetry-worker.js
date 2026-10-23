@@ -7,5 +7,5 @@ onmessage=({data})=>{
   if(data.type==='configure')engine.configure(data.view,data.options);
   if(data.type==='clock')engine.rebuild();
   postMessage({type:'frame',...engine.frame()});
- }catch(error){postMessage({type:'error',message:error.message});}
+ }catch(error){postMessage({type:'error',message:error.message,stack:error.stack});}
 };

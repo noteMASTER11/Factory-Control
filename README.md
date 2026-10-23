@@ -6,21 +6,19 @@ A desktop control room for **Factorio on Windows x64**. Monitor production, powe
 
 ![Factory Control dashboard](docs/evidence/catalog-release-window.png)
 
-## Release status
+## Current release
 
-The published **0.2.0** release includes Factory Telemetry **0.4.0** for Factorio **2.0.77+** and a Russian interface. The features and installation defaults described below refer to the **current development sources**; they are not all included in that release.
-
-Development adds 11 interface languages, spatial diagnostics and native map views, Space Age transport monitoring, and separate telemetry packages for Factorio 2.0 and 2.1 experimental. The current collector source version is **0.6.2**. No newer desktop release is implied by this README.
+**[Factory Control 0.10.7](https://github.com/noteMASTER11/Factory-Control/releases/tag/v0.10.7)** includes Factory Telemetry **0.10.7**. Choose the complete download for **Factorio 2.0** or **Factorio 2.1 experimental**. Both include the desktop EXE, matching mod and installer.
 
 ## Requirements and installation
 
 - Windows x64 and Microsoft Edge WebView2 Runtime. The desktop executable bundles .NET.
-- Factorio purchased separately. Development collector packages target **2.0.77+** or **2.1.23+ experimental**; use the archive matching the game's branch. Quality and Space Age are optional dependencies.
+- Factorio purchased separately. Collector packages target **2.0.77+** or **2.1.23+ experimental**; use the archive matching the game's branch. Quality and Space Age are optional dependencies.
 - PowerShell 7 to run the installer.
 
-For a matching application/collector build:
+To install:
 
-1. Put `FactoryControl.exe`, the matching `factory-telemetry_<version>.zip` and `Install-FactoryControl.ps1` in one folder. The two game branches use the same ZIP filename, so keep their packages separate.
+1. Download and extract `FactoryControl-0.10.7-Factorio-2.0.zip` or `FactoryControl-0.10.7-Factorio-2.1.zip` from the release. Keep `FactoryControl.exe`, the included mod ZIP and `Install-FactoryControl.ps1` together. Do not extract the mod ZIP.
 2. Close Factorio completely and run the installer, replacing `<Factorio>` with your game installation folder:
 
    ```powershell
@@ -37,7 +35,7 @@ If installed files are present but the mod is disabled, enable it through Factor
 
 Application data, history, logs and profiles are kept in the configured data root. The installer creates a `Data` folder in the chosen installation; direct launches accept `--data-root=<folder>`.
 
-## Development features
+## Features
 
 | View | What it shows |
 |---|---|

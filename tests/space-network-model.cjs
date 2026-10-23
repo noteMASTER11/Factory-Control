@@ -1,0 +1,25 @@
+const assert=require('node:assert/strict');
+(async()=>{
+ const {spaceModel}=await import('../src/Factorio.Desktop/Web/space-model.js'),now=Date.now(),scope={surface:'nauvis',force:'Newbies'};
+ const item=(name,count,quality='normal')=>({name,count,quality}),p=(id,extra={})=>({id,name:'ship '+id,surface:'platform-'+id,force:scope.force,complete:true,sample_end_tick:7200,connection:{from:'gleba',to:'nauvis'},previous_location:'gleba',next_location:'nauvis',distance:.4,flight_eta_seconds:90,items:[item('iron-plate',100),item('iron-plate',9,'rare'),item('copper-plate',70)],schedule:{current:1,records:[{station:'aquilo'},{station:'nauvis'}]},...extra});
+ const data={schema_version:1,platforms:[p(1),p(2),p(3,{location:'nauvis',connection:null}),p(4,{location:'nauvis',connection:null}),p(9,{force:'other'})],ports:[{id:5,type:'rocket-silo',surface:'gleba',force:scope.force,target_platform:1,sample_end_tick:7200,loading_eta_seconds:20,complete:true,items:[item('iron-plate',43),item('copper-plate',17,'rare')]}],shipments:[{id:10,force:scope.force,origin:'platform-3',destination:'platform-4',stage:'transit',complete:true,eta_seconds:12,items:[item('iron-plate',43),item('copper-plate',17,'rare')]},{id:11,force:'other',origin:'gleba',destination:'nauvis',complete:true,items:[item('iron-plate',999)]}]};
+ const topic={tick:7200,written_at:new Date(now).toISOString(),payload:{data:{space:data}}},build=(options={},source=topic)=>spaceModel(source,scope,options,now).network;
+ let model=build();assert(model,'space model exposes the transport network');
+ assert.equal(model.selected.kind,'platform','default selection starts with a platform, not the first silo in the census');
+ assert.equal(model.entities.filter(e=>e.kind==='platform').length,4);assert.equal(model.entities.filter(e=>e.kind==='shipment').length,1);assert.equal(model.entities.filter(e=>e.kind==='loading').length,1);
+ const flight=model.entities.find(e=>e.id==='platform:1');assert.equal(flight.from,'gleba');assert.equal(flight.to,'nauvis','current connection is distinct from a later schedule destination');assert.equal(flight.progress,.4);assert.equal(flight.etaSeconds,90);assert.equal(flight.items.length,3);
+ assert(model.groups.some(g=>g.members.length===2&&g.kind==='flight'),'same-direction platforms aggregate');assert.equal(new Set(model.locations.map(p=>p.id)).size,model.locations.length);
+ const pod=model.entities.find(e=>e.id==='shipment:10');assert.equal(pod.from,'platform-3');assert.equal(pod.to,'platform-4');assert(pod.confirmed);assert.equal(pod.items[1].quality,'rare');assert.equal(pod.etaSeconds,12);
+ model=build({spaceResource:'iron-plate',spaceQuality:'rare',spaceSelected:'platform:1'});assert.equal(model.selected.id,'platform:1');assert.deepEqual(model.selected.filteredItems,[item('iron-plate',9,'rare')]);assert(!model.visibleEntities.some(e=>e.id==='shipment:10'));
+ model=build({spaceSelected:'shipment:10'});assert.equal(model.selected.id,'shipment:10');assert.equal(model.selected.items.length,2);
+ topic.observed_ups=30;assert.equal(build().entities.find(e=>e.id==='shipment:10').etaSeconds,24);topic.observed_ups=null;assert.equal(build().entities.find(e=>e.id==='platform:1').etaSeconds,null);delete topic.observed_ups;
+ data.platforms[0].paused=true;assert.equal(build().entities.find(e=>e.id==='platform:1').etaSeconds,null);data.platforms[0].paused=false;
+ model=build({}, {...topic,stale:true});assert(model.entities.every(e=>e.etaSeconds===null),'stale telemetry does not present a live arrival estimate');
+ const before=build().groups.map(g=>g.id);data.platforms.reverse();assert.deepEqual(build().groups.map(g=>g.id),before,'group identities and order do not depend on telemetry array order');
+ data.shipments.push({id:12,force:scope.force,origin:'nauvis',destination:'platform-3',items:[]},{id:13,force:scope.force,origin:'platform-3',destination:'nauvis',items:[]});
+ model=build();assert.equal(new Set([10,12,13].map(id=>model.groups.find(g=>g.members.includes('shipment:'+id)).id)).size,3,'platform transfers, ascent and descent remain directed and separate');
+ const cyclic=data.platforms.find(p=>p.id===1);cyclic.schedule={current:2,records:[{station:'nauvis'},{station:'fulgora'}]};
+ assert.deepEqual(build().entities.find(e=>e.id==='platform:1').plan.map(r=>r.station),['fulgora','nauvis'],'last schedule record wraps to the planned return leg');
+ assert.equal(build({},null).entities.length,0);
+ console.log('Space network model: scoped mixed cargo, current legs, grouping, transfers, filters and ETA pass');
+})().catch(e=>{console.error(e);process.exitCode=1});

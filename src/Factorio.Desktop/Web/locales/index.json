@@ -1,6 +1,16 @@
 {
-  "defaultLocale": "ru-RU",
+  "defaultLocale": "en-US",
   "locales": [
-    { "id": "ru-RU", "name": "Русский", "file": "ru-RU.json" }
+    { "id": "en-US", "name": "English", "file": "en-US.json" },
+    { "id": "de-DE", "name": "Deutsch", "file": "de-DE.json" },
+    { "id": "es-ES", "name": "Español", "file": "es-ES.json" },
+    { "id": "fr-FR", "name": "Français", "file": "fr-FR.json" },
+    { "id": "cs-CZ", "name": "Čeština", "file": "cs-CZ.json" },
+    { "id": "hu-HU", "name": "Magyar", "file": "hu-HU.json" },
+    { "id": "et-EE", "name": "Eesti", "file": "et-EE.json" },
+    { "id": "fi-FI", "name": "Suomi", "file": "fi-FI.json" },
+    { "id": "pt-PT", "name": "Português", "file": "pt-PT.json" },
+    { "id": "ru-RU", "name": "Русский", "file": "ru-RU.json" },
+    { "id": "uk-UA", "name": "Українська", "file": "uk-UA.json" }
   ]
 }

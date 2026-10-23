@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "fixtureChunks": 3072,
+  "coverage": {
+    "state": {
+      "draws": 11,
+      "fetches": 17,
+      "cached": 17,
+      "encodedBytes": 108316,
+      "pending": 0,
+      "active": true,
+      "scope": "1-1",
+      "visiblePages": 16,
+      "targetPages": 16
+    },
+    "chunks": 3072,
+    "images": 16
+  },
+  "during": {
+    "images": 16,
+    "state": {
+      "draws": 14,
+      "fetches": 19,
+      "cached": 17,
+      "encodedBytes": 108316,
+      "pending": 2,
+      "active": true,
+      "scope": "1-1",
+      "visiblePages": 16,
+      "targetPages": 16
+    }
+  },
+  "peakRequests": 2,
+  "requests": 33,
+  "checks": [
+    "entire rectangular viewport",
+    "stable pixels during pan and refresh",
+    "no repeated pan requests",
+    "two concurrent file reads maximum",
+    "inactive map stops requests"
+  ]
+}

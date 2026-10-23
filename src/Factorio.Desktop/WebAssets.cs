@@ -13,7 +13,7 @@ public static class WebAssets
         if (archive is null) return Path.Combine(AppContext.BaseDirectory, "Web");
         var hash = Convert.ToHexString(SHA256.HashData(archive));
         archive.Position = 0;
-        var root = Path.Combine(@"D:\ChatGPT\Cache\FactorioMonitor\Web", hash);
+        var root = Path.Combine(AppPaths.CacheRoot,"Web",hash);
         var complete = Path.Combine(root, ".complete");
         if (File.Exists(complete) && File.ReadAllText(complete) == hash) return root;
         Directory.CreateDirectory(root);

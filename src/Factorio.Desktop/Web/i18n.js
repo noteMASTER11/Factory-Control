@@ -1,12 +1,22 @@
+export function resolveLocale(catalog, requested) {
+  const id=typeof requested==='string'?requested.replaceAll('_','-').toLowerCase():'';
+  return catalog.locales.find(item=>item.id.toLowerCase()===id)
+    ?? catalog.locales.find(item=>id&&item.id.split('-')[0].toLowerCase()===id.split('-')[0])
+    ?? catalog.locales.find(item=>item.id===catalog.defaultLocale);
+}
 export class Localization {
-  static async load() {
+  static async load({systemLocale=Object.hasOwn(globalThis,'factorySystemLocale')?globalThis.factorySystemLocale:globalThis.navigator?.language}={}) {
     const catalog = await (await fetch('./locales/index.json')).json();
     let requested;
     try { requested = localStorage.getItem('factory-control.locale'); } catch { /* Default locale works without storage. */ }
-    const entry = catalog.locales.find(item => item.id === requested)
-      ?? catalog.locales.find(item => item.id === catalog.defaultLocale);
-    const strings = await (await fetch(`./locales/${entry.file}`)).json();
-    return new Localization(catalog, entry.id, strings);
+    const transient=catalog.locales.find(item=>item.id===new URLSearchParams(globalThis.location?.search).get('locale'));
+    const saved=catalog.locales.find(item=>item.id===requested);
+    let entry=transient??saved??resolveLocale(catalog,systemLocale);
+    let response=await fetch(`./locales/${entry.file}`);
+    if(!response.ok){entry=resolveLocale(catalog,null);response=await fetch(`./locales/${entry.file}`);}
+    if(!response.ok)throw new Error('locale_unavailable');
+    const strings=await response.json(),result=new Localization(catalog,entry.id,strings);
+    result.firstRun=!saved&&!transient;return result;
   }
   constructor(catalog, locale, strings) {
     this.catalog = catalog; this.locale = locale; this.strings = strings;
@@ -44,7 +54,9 @@ export class Localization {
   }
   select(locale) {
     if (!this.catalog.locales.some(item => item.id === locale)) return;
-    try { localStorage.setItem('factory-control.locale', locale); } catch { /* Selection is optional persistence. */ }
-    location.reload();
+    const url=new URL(location.href);url.searchParams.delete('locale');
+    try { localStorage.setItem('factory-control.locale', locale); }
+    catch { url.searchParams.set('locale',locale); /* Keep the selection for this window when storage is unavailable. */ }
+    if(url.href===location.href)location.reload();else location.replace(url.href);
   }
 }

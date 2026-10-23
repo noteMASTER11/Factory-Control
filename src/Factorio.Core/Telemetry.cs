@@ -69,7 +69,7 @@ public sealed class SnapshotCache
 public sealed class SnapshotFiles
 {
     private readonly RequesterPages requesterPages=new();
-    private static readonly HashSet<string> ArrayFields=["rows","groups","stocks","networks","accumulators","nameplate_generators","consumers","producers","trains","requesters","forces","queue","ingredients","products","examples","chunks","items","filters","sections","delivering","episodes","losses","placement"];
+    private static readonly HashSet<string> ArrayFields=["rows","groups","stocks","networks","accumulators","nameplate_generators","consumers","producers","trains","requesters","forces","queue","ingredients","products","examples","chunks","items","filters","sections","delivering","episodes","losses","placement","cells","tiles","scopes","platforms","ports","events","records","wait_conditions","shipments","durations","requests","flow_rates","missing_ingredients"];
     internal static void NormalizeArrays(JsonNode? node)
     {
         if(node is JsonObject obj)foreach(var pair in obj.ToArray())

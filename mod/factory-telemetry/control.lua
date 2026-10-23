@@ -1,6 +1,12 @@
 -- All world access is scheduled here. remote/MCP consumers only read finished JSON.
 local tracked = {}
-for _,n in ipairs({"assembling-machine","furnace","lab","mining-drill","boiler","generator","solar-panel","reactor","accumulator","electric-pole","roboport","container","logistic-container","storage-tank","cargo-wagon","fluid-wagon","locomotive","train-stop","rocket-silo"}) do tracked[n]=true end
+local api_major,api_minor=string.match(script.active_mods.base,"^(%d+)%.(%d+)")
+local modern_api=tonumber(api_major)>2 or (tonumber(api_major)==2 and tonumber(api_minor)>=1)
+local function create_profiler(stopped)
+  if modern_api then return helpers.create_profiler(stopped) end
+  return game.create_profiler(stopped)
+end
+for _,n in ipairs({"assembling-machine","furnace","lab","mining-drill","boiler","generator","solar-panel","reactor","accumulator","electric-pole","roboport","container","logistic-container","storage-tank","cargo-wagon","fluid-wagon","locomotive","train-stop","rocket-silo","cargo-landing-pad"}) do tracked[n]=true end
 local states,train_states={},{}
 for k,v in pairs(defines.entity_status) do states[v]=k end
 for k,v in pairs(defines.train_state) do train_states[v]=k end
@@ -22,8 +28,14 @@ local REQUEST_PAGE_ROWS=16
 local request_export,request_ref,request_started=nil,nil,nil
 local logistics_current=nil
 local Combat=require("combat")
+local Spatial=require("spatial")
+local NativeMap=require("native-map")
+local Space=require("space")
+local space=nil
 local combat=nil
-local priority_chunks,priority_cursor,scanned={},{},{}
+local spatial=Spatial.new()
+local native_map=nil
+local priority_chunks,priority_cursor,scanned={},1,{}
 
 local function problem(where,err)
   local x=errors[where] or {count=0}; x.count=x.count+1; x.last=tostring(err); errors[where]=x
@@ -34,25 +46,44 @@ local function guarded(where,fn)
   return ok
 end
 local function add_entity(e)
+  if native_map and e and e.valid and e.type=='radar' and e.force.name~='enemy' and e.force.name~='neutral' then native_map:track(e)end
   if e and e.valid and tracked[e.type] and e.unit_number and not seen[e.unit_number] then
     seen[e.unit_number]=true; entities[#entities+1]={entity=e,id=e.unit_number}
+    if native_map then native_map:track(e)end
+    if space then space:track(e)end
   end
 end
 local function boot()
   if loaded then return end
   storage.factory_telemetry=storage.factory_telemetry or {world_id=tostring(game.default_map_gen_settings.seed)..":"..tostring(game.tick),load=0}
   storage.factory_telemetry.load=storage.factory_telemetry.load+1
+  native_map=NativeMap.new(storage.factory_telemetry.world_id..":"..storage.factory_telemetry.load)
   combat=Combat.new(storage.factory_telemetry.combat);storage.factory_telemetry.combat=combat.state
+  space=Space.new(storage.factory_telemetry.space,game.tick);storage.factory_telemetry.space=space.state
   for _,s in pairs(game.surfaces) do surfaces[#surfaces+1]=s end
   for _,f in pairs(game.forces) do if f.name~="enemy" and f.name~="neutral" then forces[#forces+1]=f end end
-  -- Visit the active factory first; a huge old explored map can have tens of thousands of empty chunks.
-  for _,p in pairs(game.players) do
-    local x,y=math.floor(p.position.x/32),math.floor(p.position.y/32)
-    for radius=0,12 do for dx=-radius,radius do for dy=-radius,radius do
-      if math.abs(dx)==radius or math.abs(dy)==radius then priority_chunks[#priority_chunks+1]={surface=p.surface,x=x+dx,y=y+dy} end
-    end end end
+  -- Interleave known factory centres across planets before walking distant terrain.
+  local seeds,seeded={},{}
+  local function seed(s,position,player)
+    local x,y=math.floor(position.x/32),math.floor(position.y/32);local key=s.index..':'..x..':'..y
+    if not seeded[key] and #seeds<128 then seeded[key]=true;seeds[#seeds+1]={surface=s,x=x,y=y,player=player}end
   end
-  profile=game.create_profiler(true)
+  for _,p in pairs(game.players)do seed(p.surface,p.position,true)end
+  for _,f in ipairs(forces)do for _,networks in pairs(f.logistic_networks)do
+    for _,network in pairs(networks)do
+      if #seeds>=128 then break end
+      if network.valid then local cells=network.cells;local owner=cells[1] and cells[1].owner
+        if owner and owner.valid then seed(owner.surface,owner.position,false);break end
+      end
+    end
+  end end
+  if #seeds==0 then for _,s in ipairs(surfaces)do seed(s,{x=0,y=0},false)end end
+  local function ring(point,radius)
+    for dx=-radius,radius do for dy=-radius,radius do if math.abs(dx)==radius or math.abs(dy)==radius then priority_chunks[#priority_chunks+1]={surface=point.surface,x=point.x+dx,y=point.y+dy}end end end
+  end
+  for radius=0,4 do for _,point in ipairs(seeds)do ring(point,radius)end end
+  for radius=5,12 do for _,point in ipairs(seeds)do if point.player then ring(point,radius)end end end
+  profile=create_profiler(true)
   loaded=true
 end
 local function coverage()
@@ -69,6 +100,7 @@ local function emit_logistics()
   data.requester_count=#latest.requests
   data.requesters_ref=request_ref
   data.requesters_available=request_ref~=nil
+  data.space=space:snapshot(game.tick)
   emit("logistics",data)
 end
 local function request_export_step()
@@ -113,6 +145,7 @@ local function scan_step()
         local names={};for _,f in ipairs(forces) do names[#names+1]=f.name end
         for _,e in pairs(s.find_entities_filtered{area=area,force=names}) do add_entity(e) end
         local ores=s.find_entities_filtered{area=area,type="resource"}
+        native_map:discover(s,c,forces,first~=nil)
         if #ores>0 then
           local key=s.index..":"..c.x..":"..c.y
           if not chunk_keys[key] then chunk_keys[key]=true;chunks[#chunks+1]={surface=s,x=c.x,y=c.y,amounts={}} end
@@ -128,7 +161,8 @@ local inventory_names={
  ["container"]={"chest"},["logistic-container"]={"chest"},["cargo-wagon"]={"cargo_wagon"},
  ["assembling-machine"]={"assembling_machine_input","assembling_machine_output"},
  ["furnace"]={"furnace_source","furnace_result"},["lab"]={"lab_input"},
- ["rocket-silo"]={"assembling_machine_input","assembling_machine_output"}
+ ["rocket-silo"]={"assembling_machine_input","assembling_machine_output","rocket_silo_rocket"},
+ ["cargo-landing-pad"]={"cargo_landing_pad_main"}
 }
 local function stock_add(target,name,quality,count,kind,surface,force)
   if count==0 then return end
@@ -171,7 +205,7 @@ local function machines_export()
   emit("machines",{groups=values(rolling.groups),stocks=values(rolling.stocks),collection_mode="rolling",inventory_complete=scan_complete and rolling.sampled==#entities,
     sampled_entities=rolling.sampled,expected_entities=#entities,oldest_sample_tick=oldest,newest_sample_tick=game.tick,
     sample_start_tick=oldest,sample_end_tick=game.tick,sample_window_ticks=game.tick-oldest,
-    last_full_cycle_ticks=rolling.last_full_cycle_ticks,inventory_scope="containers, machine inputs/outputs, labs, tanks and wagons; excludes belts/pipes/hands/players; rolling non-atomic sample"})
+    diagnostics=spatial:snapshot(game.tick),last_full_cycle_ticks=rolling.last_full_cycle_ticks,inventory_scope="containers, machine inputs/outputs, labs, tanks and wagons; excludes belts/pipes/hands/players; rolling non-atomic sample"})
   rolling.last_emit=game.tick
 end
 local function entity_step()
@@ -189,8 +223,8 @@ local function entity_step()
       work.keep[#work.keep+1]=entry
       local surface,force=e.surface.name,e.force.name
       local status=states[e.status] or "unknown"
-      local recipe=nil
-      if e.type=="assembling-machine" or e.type=="furnace" or e.type=="rocket-silo" then recipe=e.get_recipe() end
+      local recipe,recipe_quality=nil,nil
+      if e.type=="assembling-machine" or e.type=="furnace" or e.type=="rocket-silo" then recipe,recipe_quality=e.get_recipe() end
       local key=surface.."|"..force.."|"..e.name.."|"..status.."|"..(recipe and recipe.name or "")
       local row=work.machines[key]
       if not row then
@@ -201,14 +235,21 @@ local function entity_step()
       if #row.examples<3 then row.examples[#row.examples+1]={unit_number=e.unit_number,x=e.position.x,y=e.position.y} end
       local speed=recipe and e.crafting_speed or 0
       row.total_crafting_speed=row.total_crafting_speed+speed
-      local entity_stocks={}
+      local entity_stocks,input_items={},{}
       for _,name in ipairs(inventory_names[e.type] or {}) do
         local id=defines.inventory[name]
         local inv=id and e.get_inventory(id)
-        if inv and inv.valid then for _,item in pairs(inv.get_contents()) do stock_add(entity_stocks,item.name,item.quality or "normal",item.count,"item",surface,force) end end
+        if inv and inv.valid then for _,item in pairs(inv.get_contents()) do
+          stock_add(entity_stocks,item.name,item.quality or "normal",item.count,"item",surface,force)
+          if name=='assembling_machine_input' or name=='furnace_source' or name=='lab_input' then input_items[item.name..'|'..(item.quality or 'normal')]=(input_items[item.name..'|'..(item.quality or 'normal')]or 0)+item.count end
+        end end
       end
       if e.type=="storage-tank" or e.type=="fluid-wagon" or recipe then
-        for i=1,#e.fluidbox do local f=e.fluidbox[i];if f then stock_add(entity_stocks,f.name,"normal",f.amount,"fluid",surface,force) end end
+        if modern_api then
+          for i=1,e.fluids_count do local f=e.get_fluid(i);if f then stock_add(entity_stocks,f.name,"normal",f.amount,"fluid",surface,force) end end
+        else
+          for i=1,#e.fluidbox do local f=e.fluidbox[i];if f then stock_add(entity_stocks,f.name,"normal",f.amount,"fluid",surface,force) end end
+        end
       end
       if e.type=="accumulator" then
         local k=surface.."|"..force
@@ -233,8 +274,16 @@ local function entity_step()
         end
       end
       rolling_update(entry.id,key,row,speed,entity_stocks)
-    end);if not sampled then rolling_remove(entry.id) end
-    else rolling_remove(entry.id);seen[entry.id]=nil end
+      local missing=nil
+      if status=='item_ingredient_shortage' and recipe then
+        missing={};local quality=recipe_quality and recipe_quality.name or 'normal'
+        for _,ingredient in ipairs(recipe.ingredients)do if ingredient.type=='item' and (input_items[ingredient.name..'|'..quality]or 0)<ingredient.amount then missing[#missing+1]={name=ingredient.name,type='item',quality=quality}end end
+      elseif status=='missing_science_packs' and e.force.current_research then
+        missing={};for _,ingredient in ipairs(e.force.current_research.research_unit_ingredients)do if (input_items[ingredient.name..'|normal']or 0)<ingredient.amount then missing[#missing+1]={name=ingredient.name,type='item',quality='normal'}end end
+      end
+      spatial:observe(e,status,recipe and recipe.name or nil,game.tick,missing)
+    end);if not sampled then rolling_remove(entry.id);spatial:remove(entry.id)end
+    else rolling_remove(entry.id);spatial:remove(entry.id);seen[entry.id]=nil end
   end
 end
 
@@ -346,12 +395,15 @@ end)
 script.on_event(defines.events.on_surface_created,function(e)
   surfaces[#surfaces+1]=game.surfaces[e.surface_index];scan_complete=false
 end)
+script.on_event(defines.events.on_force_created,function(e)if e.force.name~='enemy' and e.force.name~='neutral'then forces[#forces+1]=e.force end end)
 script.on_event(defines.events.on_tick,function()
   boot()
-  local timer=game.create_profiler()
+  local timer=create_profiler()
   if game.tick%2==0 then guarded("discovery",scan_step) end
   guarded("entities",entity_step)
   guarded("request_export",request_export_step)
+  guarded("space",function()space:step(game.tick,forces)end)
+  guarded("native_map",function()native_map:step(game.tick,game.is_multiplayer(),game.tick%6==3 and game.connected_players or nil)end)
   if game.tick-rolling.last_emit>=120 then guarded("machines_export",machines_export) end
   if game.tick%2==1 then
     if not flow_job and game.tick-last_flow>=120 then guarded("flow_start",flow_start) end
@@ -365,14 +417,19 @@ script.on_event(defines.events.on_tick,function()
   if game.tick-last_research>=300 then guarded("research",research) end
   if game.tick%10==7 then guarded("resource_step",resource_step) end
   if game.tick-last_resources>=600 then guarded("resources_export",resources_export) end
-  if game.tick%120==0 then emit("combat",combat:snapshot(game.tick));emit("status",{game_version=script.active_mods.base,mod_version="0.4.0",players=#game.connected_players,coverage=coverage(),errors=errors,budgets={entities_per_step=ENTITY_BUDGET,entity_step_every_ticks=1,requester_rows_per_tick=REQUEST_PAGE_ROWS,max_chunk_queries_per_step=1,flow_rows_per_step=4},read_only=true}) end
+  if game.tick%120==0 then emit("combat",combat:snapshot(game.tick));emit("status",{game_version=script.active_mods.base,mod_version=script.active_mods["factory-telemetry"],players=#game.connected_players,coverage=coverage(),errors=errors,budgets={entities_per_step=ENTITY_BUDGET,entity_step_every_ticks=1,requester_rows_per_tick=REQUEST_PAGE_ROWS,max_chunk_queries_per_step=1,flow_rows_per_step=4},read_only=true}) end
   timer.stop();profile.add(timer);profile_ticks=profile_ticks+1
   if profile_ticks>=300 then
     profile.divide(profile_ticks)
     helpers.write_file("factory-telemetry/profile.txt",{"","tick=",game.tick," average_collector_tick=",profile,"\n"},true,game.is_multiplayer() and 0 or nil)
-    profile=game.create_profiler(true);profile_ticks=0
+    profile=create_profiler(true);profile_ticks=0
   end
 end)
+-- Cargo callbacks are observational. Event inventories have a separate hard slot budget.
+for event,kind in pairs({on_cargo_pod_started_ascending='launching',on_cargo_pod_finished_ascending='departed',on_cargo_pod_finished_descending='landing',on_cargo_pod_delivered_cargo='delivered'})do
+ if defines.events[event]then script.on_event(defines.events[event],function(e)boot();local timer=create_profiler();guarded('space_event',function()space:pod(kind,e.cargo_pod,e.tick)end);timer.stop();profile.add(timer)end)end
+end
+script.on_event(defines.events.on_rocket_launch_ordered,function(e)boot();local timer=create_profiler();guarded('space_launch',function()local pod=e.rocket and e.rocket.valid and e.rocket.attached_cargo_pod;if pod then space:pod('launching',pod,e.tick)end end);timer.stop();profile.add(timer)end)
 remote.add_interface("factory_telemetry",{snapshot=function(topic) return encoded[topic] end})
 commands.add_command("factory-telemetry-status","Show collector coverage",function(c)
   local text=helpers.table_to_json(coverage());if c.player_index then game.get_player(c.player_index).print(text) else rcon.print(text) end

@@ -1,5 +1,7 @@
 import {materialOrder} from './overview-model.js';
 import {seriesPoints} from './energy-model.js';
+import {productionMapModel} from './production-map-model.js';
+import {transferRates} from './space-model.js';
 export const resourceKey=r=>[r.kind||r.type||'item',r.name,r.quality||'normal'].join('|');
 const match=(r,s)=>r.surface===s.surface&&r.force===s.force;
 const fresh=(topic,now)=>!!topic&&now-Date.parse(topic.written_at)<=15000;
@@ -11,15 +13,19 @@ export function productionModel(topics,scope,options,flowHistory=[],stockHistory
  const flowsFresh=fresh(production,now),machinesFresh=fresh(machines,now);
  const inventoryComplete=stockSample(machines||{tick:0,payload:{data:{}}}).complete;
  const usableInventory=inventoryComplete&&machinesFresh;
+ const transport=transferRates(topics.logistics,scope,options.rateWindow,now);
  const stocks=new Map();for(const s of data.stocks||[])if(match(s,scope))stocks.set(resourceKey(s),(stocks.get(resourceKey(s))||0)+s.count);
  const rank=new Map(materialOrder.map((name,i)=>[name,i]));
- const allRows=(production?.payload.data.rows||[]).filter(r=>match(r,scope)).map(r=>{
-  const {produced,consumed}=rates(r,options.rateWindow),balance=produced===null||consumed===null?null:produced-consumed;
+ const sourceRows=(production?.payload.data.rows||[]).filter(r=>match(r,scope));
+ if(transport.ready)for(const row of transport.rows.values())if(!sourceRows.some(r=>resourceKey(r)===row.id))sourceRows.push({...row,...scope,produced_per_minute:row.quality==="normal"?0:null,consumed_per_minute:row.quality==="normal"?0:null,produced_per_minute_10m:row.quality==="normal"?0:null,consumed_per_minute_10m:row.quality==="normal"?0:null});
+ const allRows=sourceRows.map(r=>{
+  const {produced,consumed}=rates(r,options.rateWindow),flow=transport.rows.get(resourceKey(r)),imported=transport.ready?(flow?.imported||0):null,exported=transport.ready?(flow?.exported||0):null;
+  const localBalance=produced===null||consumed===null?null:produced-consumed,balance=localBalance===null?null:localBalance+(transport.includeInBalance?imported-exported:0);
   const stock=usableInventory?(stocks.get(resourceKey(r))||0):null;
-  return {id:resourceKey(r),name:r.name,kind:r.kind,quality:r.quality||'normal',produced,consumed,balance,stock,coverage:consumed>0&&produced!==null?produced/consumed*100:null,emptyMinutes:flowsFresh&&stock!==null&&balance<-.01?stock/-balance:null};
+  return {id:resourceKey(r),name:r.name,kind:r.kind,quality:r.quality||'normal',produced,consumed,imported,exported,localBalance,balance,stock,coverage:consumed>0&&produced!==null?(produced+(transport.includeInBalance?imported:0))/(consumed+(transport.includeInBalance?exported:0))*100:null,emptyMinutes:flowsFresh&&stock!==null&&balance<-.01?stock/-balance:null};
  });
  const search=(options.search||'').toLocaleLowerCase(),searchNames=new Set(options.searchNames||[]);
- const rows=allRows.filter(r=>(!search||r.name.toLocaleLowerCase().includes(search)||searchNames.has(r.name))&&(options.filter!=='deficit'||r.balance<-.01)&&(options.filter!=='item'||r.kind==='item')&&(options.filter!=='fluid'||r.kind==='fluid')&&(options.filter!=='active'||r.produced>0||r.consumed>0));
+ const rows=allRows.filter(r=>(!search||r.name.toLocaleLowerCase().includes(search)||searchNames.has(r.name))&&(options.filter!=='deficit'||r.balance<-.01)&&(options.filter!=='item'||r.kind==='item')&&(options.filter!=='fluid'||r.kind==='fluid')&&(options.filter!=='active'||r.produced>0||r.consumed>0||r.imported>0||r.exported>0));
  rows.sort((a,b)=>(rank.get(a.name)??999)-(rank.get(b.name)??999)||a.name.localeCompare(b.name)||a.quality.localeCompare(b.quality));
  const selected=rows.find(r=>r.id===options.selected)||rows.find(r=>r.balance<-.01)||rows[0]||null;
  const groups=(data.groups||[]).filter(r=>match(r,scope));
@@ -37,5 +43,6 @@ export function productionModel(topics,scope,options,flowHistory=[],stockHistory
  const stockPoints=selected?seriesPoints(stockHistory.filter(p=>p.complete&&p.tick>=since&&p.tick<=Math.max(tick,stockTick)).map(p=>({tick:p.tick,value:p.stocks.filter(r=>match(r,scope)&&resourceKey(r)===selected.id).reduce((sum,r)=>sum+r.count,0)}))):[];
  const relevant=selected?[...new Set([...selectedGroups,...consumers])]:groups;
  const blockers=relevant.filter(g=>g.status!=='working'&&g.count>0).sort((a,b)=>b.count-a.count);
- return {scope,options:{...options,searchNames:undefined,selected:selected?.id||null},rows,selected,selectedGroups,blockers:blockers.slice(0,30),blockerCount:blockers.length,chain:{inputs,outputs},history,stockHistory:stockPoints,tick,stockTick,historyCount:history.length,fresh:flowsFresh,machinesFresh,inventoryComplete,usableInventory,sampleWindowSeconds:(data.sample_window_ticks||0)/60,total:allRows.length,deficits:allRows.filter(r=>r.balance<-.01).length};
+ const mapResource=rows.find(r=>r.id===options.mapResource)||null;
+ return {scope,options:{...options,searchNames:undefined,selected:selected?.id||null,mapResource:mapResource?.id||'all'},map:productionMapModel(data.groups,scope,mapResource,options),rows,selected,selectedGroups,blockers:blockers.slice(0,30),blockerCount:blockers.length,chain:{inputs,outputs},history,stockHistory:stockPoints,tick,stockTick,historyCount:history.length,fresh:flowsFresh,machinesFresh,inventoryComplete,usableInventory,sampleWindowSeconds:(data.sample_window_ticks||0)/60,total:allRows.length,deficits:allRows.filter(r=>r.balance<-.01).length};
 }

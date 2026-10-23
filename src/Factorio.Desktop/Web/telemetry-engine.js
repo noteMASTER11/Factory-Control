@@ -1,5 +1,5 @@
-import {summarize,scopesFrom} from './overview-model.js';
-import {energyModel,powerPoint,seriesPoints} from './energy-model.js';
+import {scopesFrom} from './overview-model.js';
+import {energyModel,powerPoint} from './energy-model.js';
 import {productionModel,flowSample,stockSample} from './production-model.js';
 import {UpsEstimator} from './ups.js';
 import {logisticsModel,logisticsSample,LogisticsObservations} from './logistics-model.js';
@@ -7,6 +7,7 @@ import {researchModel,researchSample} from './research-model.js';
 import {damageModel,combatStatus} from './combat-model.js';
 import {ResourceTracker,resourcesModel} from './resources-model.js';
 import {forecastsModel} from './forecasts-model.js';
+import {analyzeFactory} from './analysis-model.js';
 
 export class TelemetryEngine {
  constructor(){this.topics={};this.status={};this.sessions={processes:[]};this.history=[];this.productionHistory=[];this.stockHistory=[];this.logisticsHistory=[];this.researchHistory=[];this.resourceTracker=new ResourceTracker();this.logisticsObservations=new LogisticsObservations();this.ups=new UpsEstimator();this.view='sessions';this.options={overview:{},energy:{network:'all',minutes:15},production:{filter:'active',search:'',units:'minute',rateWindow:'1m',minutes:15},logistics:{network:'all',filter:'missing',search:'',minutes:15},resources:{resource:'all',sort:'reserve',minutes:30},forecasts:{window:5,horizon:30,reserveMinutes:5,filter:'risks',supplyPercent:0,demandPercent:0},research:{surface:'all',filter:'all',minutes:15},damage:{}};this.models={};this.signatures={};this.counts={overview:0,energy:0,production:0,logistics:0,research:0,resources:0,forecasts:0};this.packetCount=0;}
@@ -37,9 +38,15 @@ export class TelemetryEngine {
  select(view){if(['sessions','overview','energy','production','logistics','research','resources','forecasts','damage'].includes(view))this.view=view;}
  configure(view,options){if(!this.options[view])return;Object.assign(this.options[view],options);this.rebuild();}
  rebuild(){
+  if(this.topics.logistics)this.topics.logistics.observed_ups=this.ups.value();
   this.scopes=scopesFrom(this.topics);
   for(const view of ['overview','energy','production','logistics','research','resources','forecasts']){
    const options=this.options[view];
+   if(view==='overview'){
+    const signature=JSON.stringify([options,['machines','production','combat','logistics'].map(k=>[k,this.topics[k]?.tick,Date.now()-Date.parse(this.topics[k]?.written_at)>15000]),this.productionHistory.at(-1)?.tick]);
+    if(this.signatures[view]===signature)continue;this.signatures[view]=signature;
+    this.models.overview=analyzeFactory(this.topics,options,this.productionHistory,this.stockHistory);Object.assign(options,this.models.overview.options);this.counts.overview++;continue;
+   }
    if(view==='resources'){
     const topic=this.topics.resources,signature=JSON.stringify([options,topic?.tick,!!topic&&(topic.stale||Date.now()-Date.parse(topic.written_at)>30000)]);
     if(this.signatures[view]===signature)continue;this.signatures[view]=signature;
@@ -53,11 +60,10 @@ export class TelemetryEngine {
    if(!this.scopes.some(s=>s.id===options.scope))options.scope=this.scopes[0]?.id;
    const scope=this.scopes.find(s=>s.id===options.scope);
    if(!scope){this.models[view]=null;continue;}
-   const dependencies=view==='energy'?['power']:view==='production'?['production','machines','status']:view==='forecasts'?['production','machines']:view==='logistics'?['logistics']:Object.keys(this.topics);
+   const dependencies=view==='energy'?['power']:view==='production'?['production','machines','status','logistics']:view==='forecasts'?['production','machines','logistics']:view==='logistics'?['logistics']:Object.keys(this.topics);
    const signature=JSON.stringify([options,this.scopes,dependencies.map(k=>[k,this.topics[k]?.tick,Date.now()-Date.parse(this.topics[k]?.written_at)>15000]),(view==='production'||view==='forecasts')?[this.productionHistory.at(-1)?.tick,this.stockHistory.at(-1)?.tick]:view==='logistics'?this.logisticsHistory.at(-1)?.tick:this.history.at(-1)?.tick]);
    if(this.signatures[view]===signature)continue;this.signatures[view]=signature;
-   if(view==='overview')this.models.overview={scopes:this.scopes,scope:options.scope,model:summarize(this.topics,scope),history:seriesPoints(this.history.map(p=>{const v=powerPoint(p,scope);return {tick:p.tick,production:v.production,consumption:v.consumption};}),180)};
-   else if(view==='energy'){if(options.network!=='all'&&!powerPoint(this.topics.power,scope).networks.some(n=>String(n.id)===options.network))options.network='all';this.models.energy={scopes:this.scopes,scope:options.scope,...energyModel(this.topics,scope,options,this.history)};}
+   if(view==='energy'){if(options.network!=='all'&&!powerPoint(this.topics.power,scope).networks.some(n=>String(n.id)===options.network))options.network='all';this.models.energy={scopes:this.scopes,scope:options.scope,...energyModel(this.topics,scope,options,this.history)};}
    else if(view==='production'){this.models.production={scopes:this.scopes,...productionModel(this.topics,scope,options,this.productionHistory,this.stockHistory),ups:this.ups.value()};options.selected=this.models.production.selected?.id||null;}
    else if(view==='forecasts'){this.models.forecasts={scopes:this.scopes,...forecastsModel(this.topics,scope,options,this.productionHistory,this.stockHistory)};const {searchNames,...normalized}=this.models.forecasts.options;Object.assign(options,normalized);}
    else {this.models.logistics={scopes:this.scopes,...logisticsModel(this.topics,scope,options,this.logisticsHistory,this.logisticsObservations)};options.network=this.models.logistics.options.network;options.train=this.models.logistics.selectedTrain?.id??null;}

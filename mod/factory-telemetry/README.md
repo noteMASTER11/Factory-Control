@@ -2,7 +2,7 @@
 
 A bounded, incremental telemetry collector for Factorio. It adds no prototypes and does not change production, resources, player commands or game rules. Its technical state is stored under `storage.factory_telemetry`.
 
-Current development version: **0.6.2**. The published Factory Control 0.2.0 desktop release contains collector 0.4.0 instead.
+Current version: **0.10.7**, released together with Factory Control **0.10.7**.
 
 ## Compatibility and installation
 

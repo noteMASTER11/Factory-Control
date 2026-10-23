@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "platforms": 25,
+  "packetSamples": [
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "checks": [
+    "live game data persists through five refreshes",
+    "worker errors retain last valid view",
+    "worker error is distinct from gateway outage",
+    "automatic recovery on next valid frame",
+    "no unexpected browser errors"
+  ]
+}

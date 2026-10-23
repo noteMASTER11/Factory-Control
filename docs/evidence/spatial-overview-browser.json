@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "source": "explicit isolated capture of saboteur.zip",
+  "capture": "D:/ChatGPT/Temp/FactorioMonitor/native-map-probe-cdb25788a6d4484b9c42c7f4a0073af3/script-output/factory-telemetry",
+  "issues": 4,
+  "before": {
+    "selected": "machine:nauvis|Newbies|assembling-machine-3|item_ingredient_shortage|automation-science-pack|-234|213",
+    "map": {
+      "draws": 3,
+      "fetches": 2,
+      "cached": 1,
+      "encodedBytes": 41620,
+      "pending": 1,
+      "active": true,
+      "scope": "1-5",
+      "visiblePages": 1,
+      "targetPages": 2
+    }
+  },
+  "after": {
+    "draws": 9,
+    "fetches": 5,
+    "cached": 5,
+    "encodedBytes": 137108,
+    "pending": 0,
+    "active": false,
+    "scope": "1-5",
+    "visiblePages": 3,
+    "targetPages": 3
+  },
+  "checks": [
+    "native chart binaries decode and render",
+    "select issue",
+    "map pan and zoom",
+    "return to issue",
+    "critical filter",
+    "1152x864 and 1024x768 fit",
+    "inactive map stops rendering and fetching",
+    "bounded bitmap cache",
+    "no page errors"
+  ]
+}

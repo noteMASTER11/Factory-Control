@@ -1,5 +1,6 @@
 import {resourceKey} from './production-model.js';
 import {seriesPoints} from './energy-model.js';
+import {transferRates} from './space-model.js';
 const match=(r,s)=>r.surface===s.surface&&r.force===s.force;
 const fresh=(topic,now)=>!!topic&&!topic.stale&&now-Date.parse(topic.written_at)<=15000;
 const bounded=(v,fallback,min,max)=>Number.isFinite(Number(v))?Math.max(min,Math.min(max,Number(v))):fallback;
@@ -18,10 +19,13 @@ export function forecastsModel(topics,scope,options={},flowHistory=[],stockHisto
  const flowsFresh=fresh(production,now),machinesFresh=fresh(machines,now),inventoryComplete=machines?.payload.coverage?.discovery_complete===true&&(md.collection_mode!=='rolling'||md.inventory_complete===true),usableInventory=inventoryComplete&&machinesFresh;
  const stocks=new Map();for(const r of md.stocks||[])if(match(r,scope))stocks.set(resourceKey(r),(stocks.get(resourceKey(r))||0)+r.count);
  const current=flowMap(production?.payload.data.rows,scope),samples=flowHistory.filter(p=>p.tick<=flowTick&&p.tick>=flowTick-window*3600).map(p=>({tick:p.tick,rows:flowMap(p.rows,scope)})).sort((a,b)=>a.tick-b.tick);
- const all=[...current.values()].map(r=>{const t=trend(r.id,r,samples,flowTick,window),stock=usableInventory?(stocks.get(r.id)||0):null,reserve=t.consumed*reserveMinutes,persistent=flowsFresh&&t.stable&&t.balance<-.01&&r.produced-r.consumed<-.01&&t.negativeShare>=.8,canProject=flowsFresh&&t.ready&&stock!==null;
+ const transport=transferRates(topics.logistics,scope,'1m',now);
+ const all=[...current.values()].map(r=>{const t=trend(r.id,r,samples,flowTick,window),flow=transport.rows.get(r.id),transportAffected=transport.available&&(!transport.ready||!!flow&&(flow.imported>0||flow.exported>0));
+  if(transportAffected){t.ready=false;t.stable=false;t.balance=transport.includeInBalance?r.produced-r.consumed+(flow?.imported||0)-(flow?.exported||0):null;}
+  const stock=usableInventory?(stocks.get(r.id)||0):null,reserve=t.consumed*reserveMinutes,persistent=flowsFresh&&t.stable&&t.balance<-.01&&r.produced-r.consumed<-.01&&t.negativeShare>=.8,canProject=flowsFresh&&t.ready&&stock!==null;
   const untilZero=canProject&&t.balance<-.01?stock/-t.balance:null,untilReserve=untilZero!==null?Math.max(0,(stock-reserve)/-t.balance):null;
   const priority=!flowsFresh?'unknown':!t.ready?'observing':t.balance<-.01?persistent&&untilZero!==null&&untilZero<=5?'critical':persistent&&untilReserve!==null&&untilReserve<=horizon?'high':'watch':r.produced-r.consumed<-.01||stock!==null&&t.consumed>0&&stock<reserve?'watch':'ok';
-  return {...r,...t,currentProduced:r.produced,currentConsumed:r.consumed,currentBalance:r.produced-r.consumed,stock,reserve,untilZero,untilReserve,persistent,canProject,priority,basis:!flowsFresh?'stale':!t.ready?'warming':(r.produced-r.consumed<-.01)!==(t.balance<-.01)?'variable':t.stable?'stable':'variable',coverage:t.consumed>0?t.produced/t.consumed*100:null,addRate:Math.max(0,Math.ceil(t.consumed*1.05-t.produced))};
+  return {...r,...t,currentProduced:r.produced,currentConsumed:r.consumed,currentBalance:r.produced-r.consumed,stock,reserve,untilZero,untilReserve,persistent,canProject,priority,basis:transportAffected?'transport':!flowsFresh?'stale':!t.ready?'warming':(r.produced-r.consumed<-.01)!==(t.balance<-.01)?'variable':t.stable?'stable':'variable',coverage:t.consumed>0?t.produced/t.consumed*100:null,addRate:transportAffected?null:Math.max(0,Math.ceil(t.consumed*1.05-t.produced))};
  }).filter(r=>r.currentProduced>0||r.currentConsumed>0||r.stock>0);
  const rank={critical:0,high:1,watch:2,observing:3,unknown:4,ok:5};all.sort((a,b)=>rank[a.priority]-rank[b.priority]||(a.untilReserve??Infinity)-(b.untilReserve??Infinity)||a.balance-b.balance||a.name.localeCompare(b.name));
  const filter=['all','risks','deficit','horizon'].includes(options.filter)?options.filter:'risks',search=(options.search||'').toLocaleLowerCase(),searchNames=new Set(options.searchNames||[]);

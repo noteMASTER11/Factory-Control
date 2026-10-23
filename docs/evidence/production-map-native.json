@@ -1,0 +1,113 @@
+{
+  "passed": true,
+  "source": "current player session",
+  "resource": "item|rocket-part|normal",
+  "active": {
+    "packets": 12,
+    "revision": 77,
+    "session": "2580672862:1335208405:1:65521f833d8c40c7b84623f2c436caa3",
+    "historySamples": 9,
+    "productionHistorySamples": 5,
+    "stockHistorySamples": 7,
+    "logisticsHistorySamples": 7,
+    "researchHistorySamples": 7,
+    "resourceCells": 555,
+    "resourceHistorySamples": 203,
+    "models": {
+      "overview": 12,
+      "energy": 9,
+      "production": 20,
+      "logistics": 8,
+      "research": 10,
+      "resources": 6,
+      "forecasts": 9,
+      "damage": 12
+    },
+    "activeView": "production",
+    "renders": {
+      "sessions": 2,
+      "overview": 2,
+      "energy": 0,
+      "production": 18,
+      "logistics": 0,
+      "research": 0,
+      "resources": 0,
+      "forecasts": 0,
+      "damage": 0
+    },
+    "visible": "production",
+    "map": {
+      "draws": 13,
+      "fetches": 9,
+      "cached": 9,
+      "encodedBytes": 75772,
+      "pending": 0,
+      "active": false,
+      "scope": "4-5",
+      "visiblePages": 6,
+      "targetPages": 6
+    },
+    "productionView": {
+      "mode": "map",
+      "active": true,
+      "tableRenders": 9,
+      "mapRenders": 15,
+      "map": {
+        "draws": 42,
+        "fetches": 15,
+        "cached": 15,
+        "encodedBytes": 542188,
+        "pending": 0,
+        "active": true,
+        "scope": "1-5",
+        "visiblePages": 6,
+        "targetPages": 6
+      }
+    }
+  },
+  "hidden": {
+    "mode": "table",
+    "active": true,
+    "tableRenders": 10,
+    "mapRenders": 15,
+    "map": {
+      "draws": 43,
+      "fetches": 15,
+      "cached": 15,
+      "encodedBytes": 542188,
+      "pending": 0,
+      "active": false,
+      "scope": "1-5",
+      "visiblePages": 6,
+      "targetPages": 6
+    }
+  },
+  "afterHidden": {
+    "mode": "table",
+    "active": true,
+    "tableRenders": 11,
+    "mapRenders": 15,
+    "map": {
+      "draws": 43,
+      "fetches": 15,
+      "cached": 15,
+      "encodedBytes": 542188,
+      "pending": 0,
+      "active": false,
+      "scope": "1-5",
+      "visiblePages": 6,
+      "targetPages": 6
+    }
+  },
+  "logFile": "D:\\ChatGPT\\Projects\\FactorioMonitor\\Data\\logs\\FactoryControl-20261023-133749-267-24688-caff.log",
+  "debugRestored": true,
+  "checks": [
+    "all resources first option and selectable",
+    "existing table retained",
+    "native production atlas and observed machine markers",
+    "inactive map stays idle",
+    "browser debug/info/warn/error in native log",
+    "embedded ASP.NET Debug in same file",
+    "disable stops subsequent browser logs"
+  ]
+}

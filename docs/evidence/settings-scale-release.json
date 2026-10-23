@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "held": {
+    "applies": 0,
+    "committed": 100,
+    "draft": 170,
+    "saved": null
+  },
+  "released": {
+    "applies": 1,
+    "value": 170,
+    "saved": 170
+  },
+  "keyboardCommit": true
+}

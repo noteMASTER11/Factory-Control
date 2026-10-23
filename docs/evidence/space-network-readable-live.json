@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "source": "one cached HTTP telemetry read, no game queries",
+  "mode": "space",
+  "spaceView": "map",
+  "active": true,
+  "tableRenders": 1,
+  "map": {
+    "active": true,
+    "draws": 3,
+    "motionFrames": 3,
+    "moving": false,
+    "buttons": 44,
+    "groups": 22,
+    "entities": 541,
+    "selected": "shipment:22147925004",
+    "camera": {
+      "x": 1600,
+      "y": 1108,
+      "scale": 0.9
+    }
+  },
+  "errors": []
+}

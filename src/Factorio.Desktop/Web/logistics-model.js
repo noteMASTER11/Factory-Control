@@ -1,4 +1,5 @@
 import {seriesPoints} from './energy-model.js';
+import {spaceModel} from './space-model.js';
 const match=(r,s)=>r.surface===s.surface&&r.force===s.force;
 const fresh=(t,now)=>!!t&&!t.stale&&now-Date.parse(t.written_at)<=15000;
 const key=r=>JSON.stringify([r.surface,r.force,r.name,r.quality||'normal']);
@@ -36,5 +37,5 @@ export function logisticsModel(topics,scope,options={},history=[],observations=n
  summary.issues=issues.length;
  const minutes=options.minutes||15;
  const points=seriesPoints(history.filter(p=>p.tick>=tick-minutes*3600&&p.tick<=tick).map(p=>{const rows=p.networks.filter(n=>match(n,scope)&&(network==='all'||String(n.id)===network));return {tick:p.tick,busy:sum(rows,'logistic_total')-sum(rows,'logistic_available'),construction:sum(rows,'construction_total')-sum(rows,'construction_available')};}));
- return {scope,options:{...options,network,train:selectedTrain?.id??null,searchNames:undefined},tick,fresh:isFresh,available:!!topic,requestsAvailable,requestFresh,requestAgeTicks,requests:visibleRequests,requestsCount:requests.length,groupsTotal:data.request_groups_total??requests.length,unsupportedFilters:data.unsupported_filters||0,networks,selectedNetworks,trains,selectedTrain,summary,issues:issues.slice(0,60),history:points,minutes};
+ return {space:spaceModel(topic,scope,options,now),scope,options:{...options,network,train:selectedTrain?.id??null,searchNames:undefined},tick,fresh:isFresh,available:!!topic,requestsAvailable,requestFresh,requestAgeTicks,requests:visibleRequests,requestsCount:requests.length,groupsTotal:data.request_groups_total??requests.length,unsupportedFilters:data.unsupported_filters||0,networks,selectedNetworks,trains,selectedTrain,summary,issues:issues.slice(0,60),history:points,minutes};
 }

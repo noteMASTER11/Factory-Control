@@ -1,0 +1,56 @@
+{
+  "iron_plates": 42,
+  "collector_errors": {},
+  "player_save_used": false,
+  "fixture": "separate synthetic 64x64 map with Space Age",
+  "charted_pixels_validated": false,
+  "live_base_validated": false,
+  "source_directory": "D:\\ChatGPT\\Temp\\FactorioMonitor\\experimental-smoke-c3b4118533fa45768a21c0501811a1d7",
+  "indexed_entities": 6,
+  "chart_api_available": true,
+  "mod": "0.4.1",
+  "water": 125,
+  "game": "2.1.23",
+  "topics": [
+    {
+      "topic": "status",
+      "tick": 1800,
+      "bytes": 851
+    },
+    {
+      "topic": "power",
+      "tick": 1849,
+      "bytes": 948
+    },
+    {
+      "topic": "production",
+      "tick": 1801,
+      "bytes": 475
+    },
+    {
+      "topic": "machines",
+      "tick": 1800,
+      "bytes": 2357
+    },
+    {
+      "topic": "logistics",
+      "tick": 1898,
+      "bytes": 635
+    },
+    {
+      "topic": "research",
+      "tick": 1800,
+      "bytes": 414
+    },
+    {
+      "topic": "resources",
+      "tick": 1800,
+      "bytes": 485
+    },
+    {
+      "topic": "combat",
+      "tick": 1800,
+      "bytes": 447
+    }
+  ]
+}

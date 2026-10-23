@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "checkedAt": "2026-10-23T11:08:58.579Z",
+  "header": "ОНЛАЙН / ИГРА",
+  "collector": "0.6.1",
+  "pendingCollector": "0.6.2",
+  "note": "new collector needs game restart; this checks current native client and cached transport",
+  "map": {
+    "draws": 76,
+    "fetches": 15,
+    "cached": 15,
+    "encodedBytes": 381548,
+    "pending": 0,
+    "active": true,
+    "scope": "1-5",
+    "visiblePages": 4,
+    "targetPages": 4
+  }
+}

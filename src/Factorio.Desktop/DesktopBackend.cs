@@ -15,30 +15,28 @@ namespace Factorio.Desktop;
 
 public sealed record BackendOptions(string DataRoot, string TelemetryDirectory, string SourceKind = "game",
     bool WatchGame = true, string BridgeUrl = "http://127.0.0.1:18740", string GatewayUrl = "http://127.0.0.1:18741",
-    string GameExecutable = @"D:\SteamLibrary\steamapps\common\Factorio\bin\x64\Factorio.exe")
+    string GameExecutable = "", string? GameProfile = null)
 {
     public static BackendOptions Load(string[] arguments)
     {
         string? Argument(string name) => arguments.FirstOrDefault(a => a.StartsWith(name + "=", StringComparison.Ordinal))?[(name.Length + 1)..];
-        const string releaseRoot = @"D:\ChatGPT\Projects\FactoryControl\Data";
-        const string developmentRoot = @"D:\ChatGPT\Projects\FactorioMonitor\Data";
-        var defaultRoot = File.Exists(Path.Combine(releaseRoot,"LiveGame","profile.json")) ? releaseRoot
-            : File.Exists(Path.Combine(developmentRoot,"LiveGame","profile.json")) ? developmentRoot : releaseRoot;
-        var root = Path.GetFullPath(Argument("--data-root") ?? defaultRoot);
+        var root = Path.GetFullPath(Argument("--data-root") ?? AppPaths.DataRoot);
         var live = Path.Combine(root, "LiveGame");
         var profilePath = Path.Combine(live, "profile.json");
         var profile = File.Exists(profilePath) ? JsonNode.Parse(File.ReadAllText(profilePath)) : null;
+        var gameProfile=profile?["game_profile"]?.GetValue<string>()??Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),"Factorio");
+        var executable=Argument("--game-executable")??profile?["game_executable"]?.GetValue<string>();
         var export = Path.GetFullPath(Argument("--telemetry-directory") ?? profile?["export_directory"]?.GetValue<string>()
-            ?? Path.Combine(root, "Factorio", "script-output", "factory-telemetry"));
+            ?? Path.Combine(gameProfile,"script-output","factory-telemetry"));
         return new(root, export, Argument("--source-kind") ?? profile?["source_kind"]?.GetValue<string>() ?? "game",
-            WatchGame: profile is not null && Argument("--telemetry-directory") is null,
-            GameExecutable: Path.GetFullPath(Argument("--game-executable") ?? profile?["game_executable"]?.GetValue<string>()
-                ?? @"D:\SteamLibrary\steamapps\common\Factorio\bin\x64\Factorio.exe"));
+            WatchGame: Argument("--telemetry-directory") is null,
+            GameExecutable: string.IsNullOrWhiteSpace(executable)?string.Empty:Path.GetFullPath(executable),
+            GameProfile: Argument("--telemetry-directory") is null ? gameProfile : null);
     }
 }
 
 // The two hosts keep separate DI scopes/caches, but share the desktop's lifetime and PID.
-public sealed class DesktopBackend(BackendOptions options) : IAsyncDisposable
+public sealed class DesktopBackend(BackendOptions options,RuntimeLogs? logs=null) : IAsyncDisposable
 {
     private readonly CancellationTokenSource lifetime = new();
     private WebApplication? bridge, gateway;
@@ -52,17 +50,18 @@ public sealed class DesktopBackend(BackendOptions options) : IAsyncDisposable
         {
             ["Telemetry:Directory"] = options.TelemetryDirectory,
             ["Telemetry:SourceKind"] = options.SourceKind,
+            ["Telemetry:GameProfile"] = options.GameProfile,
             ["History:Path"] = Path.Combine(options.DataRoot, "history.db"),
-            ["Logging:LogLevel:Default"] = "Warning"
+            ["Logging:LogLevel:Default"] = logs is null?"Warning":"Debug"
         };
         try
         {
             if (options.WatchGame) watcher = WatchGameAsync(lifetime.Token);
-            bridge = BridgeHost.Build(settings, options.BridgeUrl);
+            bridge = BridgeHost.Build(settings, options.BridgeUrl,logs?.CreateProvider());
             await bridge.StartAsync(cancellationToken);
             BridgeAddress = bridge.Urls.Single();
             settings["Bridge:Endpoint"] = BridgeAddress + "/mcp";
-            gateway = GatewayHost.Build(settings, options.GatewayUrl,bridge.Services.GetRequiredService<ITelemetrySource>());
+            gateway = GatewayHost.Build(settings, options.GatewayUrl,bridge.Services.GetRequiredService<ITelemetrySource>(),logs?.CreateProvider());
             await gateway.StartAsync(cancellationToken);
             GatewayAddress = gateway.Urls.Single();
         }
@@ -95,7 +94,7 @@ public sealed class DesktopBackend(BackendOptions options) : IAsyncDisposable
                         try
                         {
                             var executable = row["ExecutablePath"] as string;
-                            if (executable is null || !string.Equals(executable, options.GameExecutable, StringComparison.OrdinalIgnoreCase)) continue;
+                            if (executable is null || (options.GameExecutable.Length>0&&!string.Equals(executable, options.GameExecutable, StringComparison.OrdinalIgnoreCase))) continue;
                             var command = row["CommandLine"] as string;
                             if (command is null || Regex.IsMatch(command, @"--config|--start-server|--benchmark", RegexOptions.IgnoreCase)) continue;
                             using var process = Process.GetProcessById(Convert.ToInt32(row["ProcessId"]));

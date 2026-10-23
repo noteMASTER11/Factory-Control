@@ -1,15 +1,8 @@
-$env:DOTNET_ROOT = 'D:\ChatGPT\Tools\dotnet'
-$env:DOTNET_CLI_HOME = 'D:\ChatGPT\Cache\DotnetHome'
-$env:NUGET_PACKAGES = 'D:\ChatGPT\Cache\NuGet\packages'
-$env:NUGET_HTTP_CACHE_PATH = 'D:\ChatGPT\Cache\NuGet\http'
-$env:NUGET_SCRATCH = 'D:\ChatGPT\Temp\FactorioMonitor\nuget'
-$env:TEMP = 'D:\ChatGPT\Temp\FactorioMonitor'
-$env:TMP = $env:TEMP
-$env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = '1'
-$env:DOTNET_CLI_TELEMETRY_OPTOUT = '1'
-$env:DOTNET_GENERATE_ASPNET_CERTIFICATE = 'false'
-$env:DOTNET_BUNDLE_EXTRACT_BASE_DIR = 'D:\ChatGPT\Temp\FactorioMonitor\bundles'
-$env:PYTHONDONTWRITEBYTECODE = '1'
-$env:PYTHONUTF8 = '1'
-$env:NPM_CONFIG_CACHE = 'D:\ChatGPT\Cache\npm'
-$env:PATH = $env:DOTNET_ROOT + ';D:\ChatGPT\Tools\node;' + $env:PATH
+# Optional machine-local toolchain/cache paths. Never ship personal paths.
+$taskLocalEnvironment=Join-Path $PSScriptRoot 'env.local.ps1'
+if(Test-Path -LiteralPath $taskLocalEnvironment){. $taskLocalEnvironment}
+$env:DOTNET_CLI_TELEMETRY_OPTOUT='1'
+$env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE='1'
+$env:DOTNET_GENERATE_ASPNET_CERTIFICATE='false'
+$env:PYTHONDONTWRITEBYTECODE='1'
+$env:PYTHONUTF8='1'

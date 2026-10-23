@@ -6,15 +6,18 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
+using Microsoft.Extensions.Logging;
 
 namespace Factorio.Desktop;
 
 public sealed class MonitorWindow : Window
 {
     private const string Origin = "https://factory.local";
+    private const string MapOrigin = "https://maps.factory.local";
     private readonly WebView2 browser = new();
     private readonly HttpClient http = new() { BaseAddress = new Uri("http://127.0.0.1:18741"), Timeout = TimeSpan.FromSeconds(4) };
     private readonly CancellationTokenSource lifetime = new();
@@ -27,12 +30,15 @@ public sealed class MonitorWindow : Window
     private long? telemetryRevision;
     private string? telemetrySession;
     private string? historySession;
+    private readonly RuntimeLogs? logs;
 
-    public MonitorWindow(string[] arguments, Task? backendReady = null)
+    public MonitorWindow(string[] arguments, Task? backendReady = null,RuntimeLogs? logs=null)
     {
         this.arguments = arguments;
+        this.logs=logs;
         this.backendReady = backendReady ?? Task.CompletedTask;
         Title = Localization.Text("app.title");
+        Icon = BitmapFrame.Create(new Uri("pack://application:,,,/Assets/factory-control.ico"));
         Width = 1168; Height = 903; MinWidth = 800; MinHeight = 600;
         Background = new SolidColorBrush(Color.FromRgb(6, 15, 23));
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -58,10 +64,11 @@ public sealed class MonitorWindow : Window
 
     private async void Initialize(object sender, RoutedEventArgs e)
     {
+        logs?.Write(LogLevel.Debug,"webview","Initializing WebView2");
         try
         {
             var webAssets = Task.Run(WebAssets.Prepare);
-            var profile = @"D:\ChatGPT\Cache\FactorioMonitor\WebView2";
+            var profile = Path.Combine(AppPaths.CacheRoot,"WebView2");
             Directory.CreateDirectory(profile);
             var options = new CoreWebView2EnvironmentOptions();
             var browserArguments = new List<string>();
@@ -73,22 +80,28 @@ public sealed class MonitorWindow : Window
             options.AdditionalBrowserArguments=string.Join(" ",browserArguments);
             var environment = await CoreWebView2Environment.CreateAsync(null, profile, options);
             await browser.EnsureCoreWebView2Async(environment);
+            await browser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
+                "Object.defineProperty(window,'factorySystemLocale',{value:"+JsonSerializer.Serialize(Localization.SystemLocale)+",writable:false});");
             browser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
             browser.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
             browser.CoreWebView2.Settings.IsStatusBarEnabled = false;
             browser.CoreWebView2.Settings.IsZoomControlEnabled = false;
             browser.CoreWebView2.SetVirtualHostNameToFolderMapping("factory.local",
                 await webAssets, CoreWebView2HostResourceAccessKind.Deny);
+            // Folder-mapped hosts bypass WebResourceRequested. Map transport uses an unmapped local origin.
+            browser.CoreWebView2.AddWebResourceRequestedFilter(MapOrigin+"/api/v1/map/*",CoreWebView2WebResourceContext.All,CoreWebView2WebResourceRequestSourceKinds.Document);
+            browser.CoreWebView2.WebResourceRequested+=MapResource;
             browser.CoreWebView2.NavigationStarting += (_, args) =>
             { if (!IsLocal(args.Uri)) args.Cancel = true; };
             browser.CoreWebView2.NewWindowRequested += (_, args) => args.Handled = true;
             browser.CoreWebView2.WebMessageReceived += ReceiveMessage;
-            browser.CoreWebView2.NavigationCompleted += (_, _) =>
-            { settingsOpen=false;ready = true; PublishWindowState(); browser.Focus(); };
+            browser.CoreWebView2.NavigationCompleted += (_, args) =>
+            {if(logs?.Enabled==true)logs.Write(LogLevel.Debug,"webview",$"Navigation completed: success={args.IsSuccess}, status={args.WebErrorStatus}");settingsOpen=false;ready = true; PublishWindowState(); browser.Focus(); };
             browser.Source = new Uri(Origin + "/index.html"+(arguments.Contains("--svg-fallback")?"?renderer=svg":""));
         }
         catch (Exception ex) when (ex is not OutOfMemoryException)
         {
+            logs?.Write(LogLevel.Error,"webview","WebView2 initialization failed",ex);
             Content = new System.Windows.Controls.TextBlock
             {
                 Text = Localization.Text("native.initError", "detail", ex.Message),
@@ -100,6 +113,27 @@ public sealed class MonitorWindow : Window
     private static bool IsLocal(string uri) => Uri.TryCreate(uri, UriKind.Absolute, out var u)
         && u.Scheme == "https" && u.Host == "factory.local" && u.Port == 443;
 
+    private async void MapResource(object? sender,CoreWebView2WebResourceRequestedEventArgs args)
+    {
+        if(!Uri.TryCreate(args.Request.Uri,UriKind.Absolute,out var uri)||uri.Scheme!="https"||uri.Host!="maps.factory.local"||uri.Port!=443
+            ||!uri.AbsolutePath.StartsWith("/api/v1/map/",StringComparison.Ordinal)||args.Request.Method!="GET")return;
+        using var deferral=args.GetDeferral();
+        try
+        {
+            await backendReady.WaitAsync(lifetime.Token);
+            using var response=await http.GetAsync(uri.PathAndQuery,lifetime.Token);
+            var bytes=await response.Content.ReadAsByteArrayAsync(lifetime.Token);
+            if(logs?.Enabled==true)logs.Write(LogLevel.Debug,"map",$"GET {uri.AbsolutePath}: {(int)response.StatusCode}, {bytes.Length} bytes");
+            var contentType=response.Content.Headers.ContentType?.ToString()??"application/octet-stream";
+            var headers=$"Content-Type: {contentType}\r\nAccess-Control-Allow-Origin: {Origin}\r\nCache-Control: {response.Headers.CacheControl?.ToString()??"no-store"}";
+            args.Response=browser.CoreWebView2.Environment.CreateWebResourceResponse(new MemoryStream(bytes,false),(int)response.StatusCode,response.ReasonPhrase??"",headers);
+        }
+        catch(Exception ex)when(ex is HttpRequestException or TaskCanceledException or InvalidOperationException)
+        {
+            if(!lifetime.IsCancellationRequested)args.Response=browser.CoreWebView2.Environment.CreateWebResourceResponse(Stream.Null,503,"Unavailable",$"Access-Control-Allow-Origin: {Origin}\r\nCache-Control: no-store");
+        }
+    }
+
     private async void ReceiveMessage(object? sender, CoreWebView2WebMessageReceivedEventArgs args)
     {
         if (!IsLocal(args.Source)) return;
@@ -109,6 +143,17 @@ public sealed class MonitorWindow : Window
             using var document = JsonDocument.Parse(args.WebMessageAsJson);
             var message = document.RootElement;
             var command = message.GetProperty("type").GetString();
+            if(command!="debug.log"&&logs?.Enabled==true)logs.Write(LogLevel.Debug,"webview.message",command??"unknown");
+            if(command=="settings.debugLogs"){logs?.SetEnabled(message.TryGetProperty("enabled",out var debug)&&debug.ValueKind==JsonValueKind.True);return;}
+            if(command=="settings.logs.open"){
+                if(logs is not null){Directory.CreateDirectory(logs.DirectoryPath);System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(logs.DirectoryPath){UseShellExecute=true});}
+                return;
+            }
+            if(command=="debug.log"){
+                if(logs?.Enabled==true&&message.TryGetProperty("level",out var level)&&level.ValueKind==JsonValueKind.String&&Enum.TryParse<LogLevel>(level.GetString(),true,out var severity)&&message.TryGetProperty("message",out var text)&&text.ValueKind==JsonValueKind.String)
+                    logs.Write(severity,"browser",text.GetString()??"");
+                return;
+            }
             if(command=="settings.dialog"){settingsOpen=message.TryGetProperty("open",out var open)&&open.ValueKind==JsonValueKind.True;return;}
             if(command=="settings.zoom"){
                 if(message.TryGetProperty("scale",out var scale)&&scale.TryGetInt32(out var percent))browser.ZoomFactor=Math.Clamp(percent,70,175)/100.0;
@@ -151,8 +196,8 @@ public sealed class MonitorWindow : Window
             }
             finally { reading = false; }
         }
-        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException or InvalidOperationException or KeyNotFoundException)
-        { if (!lifetime.IsCancellationRequested) Send(new { type = "api.reply", id, error = "gateway_unavailable" }); }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException or InvalidOperationException or KeyNotFoundException or IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception)
+        {logs?.Write(LogLevel.Error,"webview.message","Native request failed",ex);if (!lifetime.IsCancellationRequested) Send(new { type = "api.reply", id, error = "gateway_unavailable" }); }
     }
 
     private void ChangeFullscreen(bool toggle)

@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "source": "isolated save copy; original game untouched",
+  "capture": "D:/ChatGPT/Temp/FactorioMonitor/space-probe-7e0c871f5f34455794312723183c048f",
+  "collector": "0.6.1",
+  "origin": "platform-24",
+  "destination": "platform-25",
+  "items": [
+    {
+      "name": "iron-plate",
+      "quality": "normal",
+      "count": 43
+    },
+    {
+      "name": "iron-plate",
+      "quality": "rare",
+      "count": 9
+    },
+    {
+      "name": "copper-plate",
+      "quality": "rare",
+      "count": 17
+    }
+  ],
+  "errors": {},
+  "checks": [
+    "actual mixed cargo delivery between platform hubs",
+    "quantities and qualities preserved in independent import/export counters",
+    "no false planetary imports",
+    "full active schedule metadata when supported"
+  ]
+}

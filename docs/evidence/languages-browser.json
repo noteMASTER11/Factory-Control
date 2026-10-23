@@ -1,0 +1,103 @@
+{
+  "passed": true,
+  "locales": 11,
+  "measurements": [
+    {
+      "locale": "en-US",
+      "width": 1024,
+      "height": 768,
+      "right": 1012,
+      "bottom": 756,
+      "scroll": 1024
+    },
+    {
+      "locale": "de-DE",
+      "width": 1024,
+      "height": 768,
+      "right": 1012,
+      "bottom": 756,
+      "scroll": 1024
+    },
+    {
+      "locale": "es-ES",
+      "width": 1024,
+      "height": 768,
+      "right": 1012,
+      "bottom": 756,
+      "scroll": 1024
+    },
+    {
+      "locale": "fr-FR",
+      "width": 1024,
+      "height": 768,
+      "right": 1012,
+      "bottom": 756,
+      "scroll": 1024
+    },
+    {
+      "locale": "cs-CZ",
+      "width": 1024,
+      "height": 768,
+      "right": 1012,
+      "bottom": 756,
+      "scroll": 1024
+    },
+    {
+      "locale": "hu-HU",
+      "width": 1024,
+      "height": 768,
+      "right": 1012,
+      "bottom": 756,
+      "scroll": 1024
+    },
+    {
+      "locale": "et-EE",
+      "width": 1024,
+      "height": 768,
+      "right": 1012,
+      "bottom": 756,
+      "scroll": 1024
+    },
+    {
+      "locale": "fi-FI",
+      "width": 1024,
+      "height": 768,
+      "right": 1012,
+      "bottom": 756,
+      "scroll": 1024
+    },
+    {
+      "locale": "pt-PT",
+      "width": 1024,
+      "height": 768,
+      "right": 1012,
+      "bottom": 756,
+      "scroll": 1024
+    },
+    {
+      "locale": "ru-RU",
+      "width": 1024,
+      "height": 768,
+      "right": 1012,
+      "bottom": 756,
+      "scroll": 1024
+    },
+    {
+      "locale": "uk-UA",
+      "width": 1024,
+      "height": 768,
+      "right": 1012,
+      "bottom": 756,
+      "scroll": 1024
+    }
+  ],
+  "checks": [
+    "after splash",
+    "Windows language matching",
+    "English fallback",
+    "native language names without flags",
+    "saved choice",
+    "settings selector",
+    "JSON translations"
+  ]
+}

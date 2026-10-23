@@ -7,7 +7,7 @@ const assert=require('node:assert/strict');
  engine.accept(packet(100,'a',true));engine.select('sessions');
  engine.accept(packet(200));engine.accept(packet(200));engine.accept(packet(300));
  assert.equal(engine.describe().historySamples,3,'Repeated topics must not duplicate history');
- assert(engine.describe().models.energy>=3&&engine.describe().models.overview>=3,'Inactive models must advance');
+ assert(engine.describe().models.energy>=3&&engine.describe().models.overview>=1,'Inactive models must advance when their dependencies change');
  const hidden=engine.frame();assert.equal(hidden.view,'sessions');assert.equal(hidden.model,null,'Inactive view models must not be sent to the UI');
  engine.select('energy');const frame=engine.frame();
  assert.equal(frame.model.current.production,120);assert.equal(frame.model.current.capacity,2000);

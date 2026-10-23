@@ -34,6 +34,7 @@ public static class ClientTelemetry
             data[field]=rows;
         }
         LogisticsProjection.Requests(data,source,requesterSummary);
+        if(source?["space"] is JsonObject space)data["space"]=space.DeepClone();
         result["data"]=data;return result;
     }
 
